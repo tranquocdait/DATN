@@ -33,8 +33,8 @@ public class DataLoader implements CommandLineRunner {
         // pass = secret123
         admin.setPassword("$2a$10$f7RMh3epXApK615P84.VpO.ElgRgkBXwba1rph974t6ur6QfAtGZG");
         admin.setFullName("admin");
-        admin.setBirthDate(LocalDate.now());
-        admin.setGender(true);
+       // admin.setBirthDate(LocalDate.now());
+        //admin.setGender(true);
         admin.setRole("ROLE_ADMIN");
 
         adminRepository.save(admin);

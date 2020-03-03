@@ -2,9 +2,7 @@ package com.tranquocdai.freshmarket.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
@@ -14,12 +12,13 @@ import java.time.LocalDate;
 public class User {
 
     @Id
-    @GeneratedValue
-    private Long id;
+    @Column(name="user_id")
+    private String userID;
 
     @NotEmpty
     @JsonIgnore
     @Size(min = 2)
+    @Column(name="user_name")
     private String userName;
 
     @NotEmpty
@@ -31,21 +30,37 @@ public class User {
     @Size(min = 2)
     private String fullName;
 
-    private Boolean gender;
-    @Past
-    private LocalDate birthDate;
+    @OneToOne
+    @JoinColumn(name = "role_id")
+    private RoleUser roleUser;
 
     private String role;
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 
     public User() {
     }
 
-    public Long getId() {
-        return id;
+    public String getUserID() {
+        return userID;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
+
+    public RoleUser getRoleUser() {
+        return roleUser;
+    }
+
+    public void setRoleUser(RoleUser roleUser) {
+        this.roleUser = roleUser;
     }
 
     public String getUserName() {
@@ -73,27 +88,4 @@ public class User {
         this.fullName = fullName;
     }
 
-    public Boolean getGender() {
-        return gender;
-    }
-
-    public void setGender(Boolean gender) {
-        this.gender = gender;
-    }
-
-    public LocalDate getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(LocalDate birthDate) {
-        this.birthDate = birthDate;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
 }
