@@ -52,7 +52,7 @@ public class TokenAuthenticationServiceImpl implements TokenAuthenticationServic
             response.addHeader(HEADER_STRING, Jwt);
             ObjectMapper mapper = new ObjectMapper();
             String json = "";
-            if (userRepository.findByUserName(username).get().getRole().equals("ROLE_TOURIST")) {
+            if (userRepository.findByUserName(username).get().getRoleUser().getRoleName().equals("ROLE_TOURIST")) {
                // json = mapper.writeValueAsString(touristRepository.findByUserName(username).get());
             } else {
                 json = mapper.writeValueAsString(adminRepository.findByUserName(username).get());
@@ -75,7 +75,7 @@ public class TokenAuthenticationServiceImpl implements TokenAuthenticationServic
             if (username != null) {
                 List<GrantedAuthority> role = new ArrayList<>();
                 role.add(new SimpleGrantedAuthority(
-                        userRepository.findByUserName(username).get().getRole()
+                        userRepository.findByUserName(username).get().getRoleUser().getRoleName()
                 ));
                 return new UsernamePasswordAuthenticationToken(username, null, role);
             }

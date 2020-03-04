@@ -3,6 +3,7 @@ package com.tranquocdai.freshmarket.bootstrap;
 import com.tranquocdai.freshmarket.model.Admin;
 import com.tranquocdai.freshmarket.model.Category;
 import com.tranquocdai.freshmarket.model.Province;
+import com.tranquocdai.freshmarket.model.RoleUser;
 import com.tranquocdai.freshmarket.repository.AdminRepository;
 import com.tranquocdai.freshmarket.repository.CategoryRepository;
 import com.tranquocdai.freshmarket.repository.ProvinceRepository;
@@ -35,9 +36,13 @@ public class DataLoader implements CommandLineRunner {
         admin.setFullName("admin");
        // admin.setBirthDate(LocalDate.now());
         //admin.setGender(true);
-        admin.setRole("ROLE_ADMIN");
+        RoleUser roleUser=new RoleUser();
+        roleUser.setRoleID("1");
+        roleUser.setRoleName("admin");
+        admin.setRoleUser(roleUser);
+        //admin.setRole("ROLE_ADMIN");
 
-        adminRepository.save(admin);
+        //adminRepository.save(admin);
         //add province
         Province hanoi = new Province();
         hanoi.setNameProvince("Hà Nội");

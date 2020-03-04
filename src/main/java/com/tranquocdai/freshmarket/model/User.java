@@ -9,49 +9,37 @@ import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "User")
 public class User {
 
     @Id
-    @Column(name="user_id")
-    private String userID;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="User_ID")
+    private Integer userID;
 
-    @NotEmpty
-    @JsonIgnore
     @Size(min = 2)
-    @Column(name="user_name")
+    @Column(name="User_Name")
     private String userName;
 
-    @NotEmpty
     @JsonIgnore
     @Size(min = 8)
+    @Column(name="Password")
     private String password;
 
-    @NotEmpty
     @Size(min = 2)
+    @Column(name="Full_Name")
     private String fullName;
 
-    @OneToOne
-    @JoinColumn(name = "role_id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "role_ID", referencedColumnName = "role_ID")
     private RoleUser roleUser;
 
-    private String role;
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public User() {
-    }
-
-    public String getUserID() {
+    public Integer getUserID() {
         return userID;
     }
 
-    public void setUserID(String userID) {
+    public void setUserID(Integer userID) {
         this.userID = userID;
     }
 
