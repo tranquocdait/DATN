@@ -1,9 +1,9 @@
 package com.tranquocdai.freshmarket.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tranquocdai.freshmarket.repository.AdminRepository;
 import com.tranquocdai.freshmarket.repository.UserRepository;
 
+import com.tranquocdai.freshmarket.response.SuccessfulResponse;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,22 +23,12 @@ import java.util.List;
 
 @Service
 public class TokenAuthenticationServiceImpl implements TokenAuthenticationService {
-    private static final long EXPIRATION_TIME = 1000 * 3600 * 24 * 7; // 7 days
+    private static final long EXPIRATION_TIME = 1000 * 3600 * 24 ; // 1 days
     private static final String HEADER_STRING = "Authorization";
     private static final String SECRET_KEY = "secret";
 
     @Autowired
     private UserRepository userRepository;
-
-    //@Autowired
-    //private TouristRepository touristRepository;
-
-    @Autowired
-    private AdminRepository adminRepository;
-
-    @Autowired
-    private StorageService storageService;
-
     public void addAuthentication(HttpServletResponse response, String username) {
         String Jwt = Jwts.builder()
                 .setSubject(username)
@@ -51,13 +41,9 @@ public class TokenAuthenticationServiceImpl implements TokenAuthenticationServic
             PrintWriter writer = response.getWriter();
             response.addHeader(HEADER_STRING, Jwt);
             ObjectMapper mapper = new ObjectMapper();
-            String json = "";
-            if (userRepository.findByUserName(username).get().getRoleUser().getRoleName().equals("ROLE_TOURIST")) {
-               // json = mapper.writeValueAsString(touristRepository.findByUserName(username).get());
-            } else {
-                json = mapper.writeValueAsString(adminRepository.findByUserName(username).get());
-            }
+            String json=mapper.writeValueAsString(new SuccessfulResponse(Jwt));
             writer.print(json);
+
             writer.flush();
         } catch (IOException e) {
             e.printStackTrace();

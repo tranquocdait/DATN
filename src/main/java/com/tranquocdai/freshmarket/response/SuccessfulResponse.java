@@ -7,8 +7,8 @@ public class SuccessfulResponse {
     public SuccessfulResponse() {
     }
 
-    public SuccessfulResponse(String status, Object data) {
-        this.status = status;
+    public SuccessfulResponse(Object data) {
+        this.status = "success";
         this.data = data;
     }
 

@@ -6,19 +6,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Province {
+public class StatusPurchase {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String nameProvince;
-
-    public Province() {
-    }
-
-    public Province(Long id, String nameProvince) {
-        this.id = id;
-        this.nameProvince = nameProvince;
-    }
+    private String status;
 
     public Long getId() {
         return id;
@@ -28,11 +20,11 @@ public class Province {
         this.id = id;
     }
 
-    public String getNameProvince() {
-        return nameProvince;
+    public String getStatus() {
+        return status;
     }
 
-    public void setNameProvince(String nameProvince) {
-        this.nameProvince = nameProvince;
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

@@ -9,8 +9,8 @@ public class ErrorResponse {
     public ErrorResponse() {
     }
 
-    public ErrorResponse(String status, Map<String, String> messages) {
-        this.status = status;
+    public ErrorResponse( Map<String, String> messages) {
+        this.status = "error";
         this.messages = messages;
     }
 

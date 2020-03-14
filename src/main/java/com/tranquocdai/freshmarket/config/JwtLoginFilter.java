@@ -1,7 +1,7 @@
 package com.tranquocdai.freshmarket.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tranquocdai.freshmarket.model.UserDTO;
+import com.tranquocdai.freshmarket.dto.UserDTO;
 import com.tranquocdai.freshmarket.service.TokenAuthenticationService;
 
 import org.springframework.beans.factory.annotation.Autowired;

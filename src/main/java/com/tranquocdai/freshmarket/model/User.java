@@ -13,15 +13,14 @@ import java.time.LocalDate;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="User_ID")
-    private Integer userID;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id")
+    private Long userID;
 
     @Size(min = 2)
     @Column(name="User_Name")
     private String userName;
 
-    @JsonIgnore
     @Size(min = 8)
     @Column(name="Password")
     private String password;
@@ -30,16 +29,25 @@ public class User {
     @Column(name="Full_Name")
     private String fullName;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "role_ID", referencedColumnName = "role_ID")
+    @OneToOne(targetEntity = RoleUser.class)
     private RoleUser roleUser;
 
+    @OneToOne(targetEntity = Avatar.class)
+    private Avatar avatar;
 
-    public Integer getUserID() {
+    public Avatar getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(Avatar avatar) {
+        this.avatar = avatar;
+    }
+
+    public Long getUserID() {
         return userID;
     }
 
-    public void setUserID(Integer userID) {
+    public void setUserID(Long userID) {
         this.userID = userID;
     }
 

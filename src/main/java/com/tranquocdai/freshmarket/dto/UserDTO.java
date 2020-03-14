@@ -1,4 +1,12 @@
-package com.tranquocdai.freshmarket.model;
+package com.tranquocdai.freshmarket.dto;
+
+import com.tranquocdai.freshmarket.model.Avatar;
+import com.tranquocdai.freshmarket.model.Post;
+import com.tranquocdai.freshmarket.model.RoleUser;
+
+import javax.persistence.*;
+import javax.validation.constraints.Size;
+import java.util.Optional;
 
 public class UserDTO {
     private String userName;
