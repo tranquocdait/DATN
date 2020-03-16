@@ -29,8 +29,30 @@ public class User {
     @Column(name="Full_Name")
     private String fullName;
 
+    @Size(min = 9)
+    private String phoneNumber;
+
+    @Size(min = 2)
+    private String email;
+
     @OneToOne(targetEntity = RoleUser.class)
     private RoleUser roleUser;
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     @OneToOne(targetEntity = Avatar.class)
     private Avatar avatar;

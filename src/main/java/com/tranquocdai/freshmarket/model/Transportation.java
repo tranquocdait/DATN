@@ -9,9 +9,6 @@ public class Transportation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(targetEntity = TransportationType.class)
-    private TransportationType transportationType;
-
     private LocalDateTime dateOfShipment;
 
     private LocalDateTime dateOfReceipt;
@@ -27,14 +24,6 @@ public class Transportation {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public TransportationType getTransportationType() {
-        return transportationType;
-    }
-
-    public void setTransportationType(TransportationType transportationType) {
-        this.transportationType = transportationType;
     }
 
     public LocalDateTime getDateOfShipment() {

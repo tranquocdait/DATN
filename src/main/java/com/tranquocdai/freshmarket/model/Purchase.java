@@ -22,6 +22,16 @@ public class Purchase {
     @OneToOne(targetEntity = Post.class)
     private Post post;
 
+    @OneToOne(targetEntity = TransportationType.class)
+    private TransportationType transportationType;
+
+    public TransportationType getTransportationType() {
+        return transportationType;
+    }
+
+    public void setTransportationType(TransportationType transportationType) {
+        this.transportationType = transportationType;
+    }
     public Long getId() {
         return id;
     }

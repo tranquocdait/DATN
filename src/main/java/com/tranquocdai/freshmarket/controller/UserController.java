@@ -63,6 +63,8 @@ public class UserController {
             user.setUserName(addUserDTO.getUserName());
             user.setFullName(addUserDTO.getFullName());
             user.setPassword(passwordEncoder.encode(addUserDTO.getPassword()));
+            user.setEmail(addUserDTO.getEmail());
+            user.setPhoneNumber(addUserDTO.getPhoneNumber());
             user.setRoleUser(roleUser);
             userRepository.save(user);
             User result = userRepository.findByUserName(addUserDTO.getUserName()).get();
@@ -87,6 +89,8 @@ public class UserController {
             User user = baseService.getUser(authentication).get();
             user.setFullName(updateUserDTO.getFullName());
             user.setPassword(passwordEncoder.encode(updateUserDTO.getPassword()));
+            user.setEmail(updateUserDTO.getEmail());
+            user.setPhoneNumber(updateUserDTO.getPhoneNumber());
             user.setRoleUser(roleUser);
             userRepository.save(user);
             User result = baseService.getUser(authentication).get();
@@ -110,20 +114,25 @@ public class UserController {
         }
     }
 
-//@DeleteMapping("/users/{userID}")
-//    public ResponseEntity readUser(@PathVariable("userID") Long userID){
-//        try {
-//            Optional<User> user=baseService.getUser(authentication);
-//            return new ResponseEntity(new SuccessfulResponse(user), HttpStatus.OK);
-//        }
-//        catch(Exception ex){
-//            Map<String, String> errors = new HashMap<>();
-//            errors.put("message", "get data not successfully");
-//            return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
-//        }
-//    }
+    @DeleteMapping("/users/{userID}")
+    public ResponseEntity deleteUser(@PathVariable("userID") Long userID) {
+        try {
+            if (!userRepository.findById(userID).isPresent()) {
+                Map<String, String> errors = new HashMap<>();
+                errors.put("message", "username has not existed");
+                return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
+            }
+            userRepository.deleteById(userID);
+            return new ResponseEntity(new SuccessfulResponse("delete successfully"), HttpStatus.OK);
+        } catch (Exception ex) {
+            Map<String, String> errors = new HashMap<>();
+            errors.put("message", "get data not successfully");
+            return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
+        }
+    }
 }
-class AddUserDTO{
+
+class AddUserDTO {
     @NotEmpty
     @Size(min = 2)
     private String userName;
@@ -135,7 +144,29 @@ class AddUserDTO{
     @NotEmpty
     private String fullName;
 
+    @Size(min = 9)
+    private String phoneNumber;
+
+    @Size(min = 2)
+    private String email;
+
     private Long roleID;
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public String getUserName() {
         return userName;
@@ -169,14 +200,37 @@ class AddUserDTO{
         this.roleID = roleID;
     }
 }
-class UpdateUserDTO{
+
+class UpdateUserDTO {
     @NotEmpty
     @Size(min = 8)
     private String password;
 
     private String fullName;
 
+    @Size(min = 9)
+    private String phoneNumber;
+
+    @Size(min = 2)
+    private String email;
+
     private Long roleID;
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public String getPassword() {
         return password;

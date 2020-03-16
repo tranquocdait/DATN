@@ -15,11 +15,13 @@ public class Post {
 
     private String description;
 
-    private String unitPrice;
+    private Double unitPrice;
 
-    private String districtId;
+    private Long districtId;
 
     private String address;
+
+    private Double weightOfItem;
 
     private LocalDateTime dateOfPost;
 
@@ -29,8 +31,8 @@ public class Post {
     @OneToOne(targetEntity = CalculationUnit.class)
     private CalculationUnit calculationUnit;
 
-    @OneToOne(targetEntity = TypePost.class)
-    private TypePost typePost;
+    /*@OneToOne(targetEntity = TypePost.class)
+    private TypePost typePost;*/
 
     @OneToOne(targetEntity = Category.class)
     private Category category;
@@ -40,6 +42,14 @@ public class Post {
 
     @OneToOne(targetEntity = Province.class)
     private Province province;
+
+    public Double getWeightOfItem() {
+        return weightOfItem;
+    }
+
+    public void setWeightOfItem(Double weightOfItem) {
+        this.weightOfItem = weightOfItem;
+    }
 
     public Province getProvince() {
         return province;
@@ -81,19 +91,19 @@ public class Post {
         this.description = description;
     }
 
-    public String getUnitPrice() {
+    public Double getUnitPrice() {
         return unitPrice;
     }
 
-    public void setUnitPrice(String unitPrice) {
+    public void setUnitPrice(Double unitPrice) {
         this.unitPrice = unitPrice;
     }
 
-    public String getDistrictId() {
+    public Long getDistrictId() {
         return districtId;
     }
 
-    public void setDistrictId(String districtId) {
+    public void setDistrictId(Long districtId) {
         this.districtId = districtId;
     }
 
@@ -129,13 +139,13 @@ public class Post {
         this.dateOfPost = dateOfPost;
     }
 
-    public TypePost getTypePost() {
+   /* public TypePost getTypePost() {
         return typePost;
     }
 
     public void setTypePost(TypePost typePost) {
         this.typePost = typePost;
-    }
+    }*/
 
     public Category getCategory() {
         return category;
