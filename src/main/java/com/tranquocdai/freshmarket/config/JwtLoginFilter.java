@@ -1,7 +1,7 @@
 package com.tranquocdai.freshmarket.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tranquocdai.freshmarket.dto.UserDTO;
+import com.tranquocdai.freshmarket.dto.UserLoginDTO;
 import com.tranquocdai.freshmarket.service.TokenAuthenticationService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
                 .collect(Collectors.joining(System.lineSeparator()));
 
         ObjectMapper object = new ObjectMapper();
-        UserDTO user = object.readValue(requestBody, UserDTO.class);
+        UserLoginDTO user = object.readValue(requestBody, UserLoginDTO.class);
 
         return getAuthenticationManager().authenticate(
                 new UsernamePasswordAuthenticationToken(user.getUserName(),

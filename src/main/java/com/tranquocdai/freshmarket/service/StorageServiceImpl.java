@@ -18,22 +18,21 @@ public class StorageServiceImpl implements StorageService {
 
     @Override
     public String store(String base64) {
-        String fileId = "";
         try {
             Map<String, String> result = cloudinary.uploader().upload(base64, ObjectUtils.emptyMap());
-            fileId = result.get("public_id");
+            return result.get("secure_url");
 
         } catch (IOException e) {
-            e.printStackTrace();
+           throw new RuntimeException("Error");
         }
-        return cloudinary.url().generate(fileId);
     }
 
     @Override
     public void delete(String fileUrl) {
         String[] splittedUrl = fileUrl.split("/");
         try {
-            cloudinary.uploader().destroy(splittedUrl[splittedUrl.length - 1], ObjectUtils.emptyMap());
+            String[] splittedId=splittedUrl[splittedUrl.length-1].split("\\.");
+            cloudinary.uploader().destroy(splittedId[0], ObjectUtils.emptyMap());
         } catch (IOException e) {
             e.printStackTrace();
         }

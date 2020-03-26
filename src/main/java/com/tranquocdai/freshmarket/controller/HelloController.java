@@ -1,5 +1,6 @@
 package com.tranquocdai.freshmarket.controller;
 
+import com.tranquocdai.freshmarket.config.Constants;
 import com.tranquocdai.freshmarket.model.Avatar;
 import com.tranquocdai.freshmarket.model.RoleUser;
 import com.tranquocdai.freshmarket.repository.AvatarRepository;
@@ -31,11 +32,17 @@ public class HelloController {
         List<RoleUser> userList=roleResponsitory.findAll();
         return ResponseEntity.ok(userList);
     }
-    @PostMapping("/images")
+    @PostMapping("/images/add")
     public ResponseEntity testLoadImage(@RequestBody String imageBase64){
         String newImageUrl = storageService.store(imageBase64);
         Avatar avatar=new Avatar();
+        avatar.setUrl(newImageUrl);
         Object result = avatarRepository.save(avatar);
         return ResponseEntity.ok(result);
+    }
+    @PostMapping("/images/delete")
+    public ResponseEntity deleteImage(@RequestBody String url){
+        storageService.delete(url);
+        return ResponseEntity.ok(Constants.URL_AVATAR_DEFAULT);
     }
 }

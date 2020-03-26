@@ -1,5 +1,6 @@
 package com.tranquocdai.freshmarket.bootstrap;
 
+import com.tranquocdai.freshmarket.config.Constants;
 import com.tranquocdai.freshmarket.model.*;
 import com.tranquocdai.freshmarket.repository.*;
 
@@ -29,6 +30,11 @@ public class DataLoader implements CommandLineRunner {
     @Autowired
     private TypePostRepository typePostRepository;
 
+    @Autowired
+    AvatarRepository avatarRepository;
+
+    @Autowired
+    ImagePostRepository imagePostRepository;
 
 
     @Override
@@ -45,6 +51,16 @@ public class DataLoader implements CommandLineRunner {
         roleResponsitory.save(roleUser);
         admin.setRoleUser(roleUser);
         adminRepository.save(admin);
+        //add image default
+        Avatar avatar=new Avatar();
+        avatar.setId(Constants.ID_IMAGE_DEFAULT);
+        avatar.setUrl(Constants.URL_AVATAR_DEFAULT);
+        avatarRepository.save(avatar);
+
+        ImagePost imagePost=new ImagePost();
+        imagePost.setId(Constants.ID_IMAGE_DEFAULT);
+        imagePost.setUrl(Constants.URL_POST_DEFAULT);
+        imagePostRepository.save(imagePost);
 
         //add role
         RoleUser dn=new RoleUser();

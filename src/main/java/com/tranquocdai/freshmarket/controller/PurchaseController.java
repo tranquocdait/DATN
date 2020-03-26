@@ -1,6 +1,7 @@
 package com.tranquocdai.freshmarket.controller;
 
-import com.tranquocdai.freshmarket.dto.PostDTO;
+import com.tranquocdai.freshmarket.dto.PurchaseAddDTO;
+import com.tranquocdai.freshmarket.dto.PurchaseUpdateDTO;
 import com.tranquocdai.freshmarket.model.*;
 import com.tranquocdai.freshmarket.repository.*;
 import com.tranquocdai.freshmarket.response.ErrorResponse;
@@ -12,9 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.OneToOne;
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -47,6 +46,12 @@ public class PurchaseController {
     @GetMapping("/purchases/{postId}")
     public ResponseEntity readAllPurchase(@PathVariable("postId") Long id) {
         try {
+            if (!postRepository.findById(id).isPresent()) {
+                Map<String, String> errors = new HashMap<>();
+                errors.put("message", "post id is not existed");
+                return new ResponseEntity(new ErrorResponse(errors),
+                        HttpStatus.NOT_FOUND);
+            }
             Post post = postRepository.findById(id).get();
             Collection<Purchase> purchaseList = purchaseRepository.findAllByPost(post);
             return new ResponseEntity(new SuccessfulResponse(purchaseList), HttpStatus.OK);
@@ -58,17 +63,17 @@ public class PurchaseController {
     }
 
     @PostMapping("/purchases/create")
-    public ResponseEntity createPost(Authentication authentication, @Valid @RequestBody AddPurchaseDTO addPurchaseDTO) {
+    public ResponseEntity createPurchase(Authentication authentication, @Valid @RequestBody PurchaseAddDTO purchaseAddDTO) {
         try {
             User user = baseService.getUser(authentication).get();
-            Post post = postRepository.findById(addPurchaseDTO.getPostId()).get();
-            StatusPurchase statusPurchase = statusPurchaseRepository.findById(addPurchaseDTO.getStatusPurchaseId()).get();
+            Post post = postRepository.findById(purchaseAddDTO.getPostId()).get();
+            StatusPurchase statusPurchase = statusPurchaseRepository.findById(purchaseAddDTO.getStatusPurchaseId()).get();
             Purchase purchase = new Purchase();
             purchase.setBuyer(user);
             purchase.setStatusPurchase(statusPurchase);
             purchase.setDateOfOrder(LocalDateTime.now());
             purchase.setPost(post);
-            purchase.setPurchaseNumber(addPurchaseDTO.getPurchaseNumber());
+            purchase.setPurchaseNumber(purchaseAddDTO.getPurchaseNumber());
             purchaseRepository.save(purchase);
             return new ResponseEntity(new SuccessfulResponse(purchase), HttpStatus.OK);
         } catch (Exception ex) {
@@ -77,20 +82,42 @@ public class PurchaseController {
             return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
         }
     }
-
-    @PutMapping("/purchases")
-    public ResponseEntity updatePost(Authentication authentication, @Valid @RequestBody UpdatePurchaseDTO updatePurchaseDTO) {
+    @PutMapping("/purchases/update")
+    public ResponseEntity updatePurchase(Authentication authentication, @Valid @RequestBody PurchaseUpdateDTO purchaseUpdateDTO) {
         try {
             if (!baseService.getUser(authentication).isPresent()) {
                 Map<String, String> errors = new HashMap<>();
                 errors.put("message", "username has not existed");
                 return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
             }
-            Purchase purchase = purchaseRepository.findById(updatePurchaseDTO.getPurchaseId()).get();
-            if (updatePurchaseDTO.getPurchaseNumber() != null)
-                purchase.setPurchaseNumber(updatePurchaseDTO.getPurchaseNumber());
-            if(updatePurchaseDTO.getStatusPurchaseId()!=null) {
-                StatusPurchase statusPurchase=statusPurchaseRepository.findById(updatePurchaseDTO.getPurchaseId()).get();
+            Purchase purchase = purchaseRepository.findById(purchaseUpdateDTO.getPurchaseId()).get();
+            if (purchaseUpdateDTO.getPurchaseNumber() != null)
+                purchase.setPurchaseNumber(purchaseUpdateDTO.getPurchaseNumber());
+            if(purchaseUpdateDTO.getStatusPurchaseId()!=null) {
+                StatusPurchase statusPurchase=statusPurchaseRepository.findById(purchaseUpdateDTO.getPurchaseId()).get();
+                purchase.setStatusPurchase(statusPurchase);
+            }
+            purchaseRepository.save(purchase);
+            return new ResponseEntity(new SuccessfulResponse(purchase), HttpStatus.OK);
+        } catch (Exception ex) {
+            Map<String, String> errors = new HashMap<>();
+            errors.put("message", "get data not successfully");
+            return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
+        }
+    }
+    @PutMapping("/purchases/{purchaseId}")
+    public ResponseEntity updatePurchase(@Valid @RequestBody PurchaseUpdateDTO purchaseUpdateDTO,@PathVariable("purchaseId") Long purchaseId) {
+        try {
+            if (!purchaseRepository.findById(purchaseId).isPresent()) {
+                Map<String, String> errors = new HashMap<>();
+                errors.put("message", "username has not existed");
+                return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
+            }
+            Purchase purchase = purchaseRepository.findById(purchaseId).get();
+            if (purchaseUpdateDTO.getPurchaseNumber() != null)
+                purchase.setPurchaseNumber(purchaseUpdateDTO.getPurchaseNumber());
+            if(purchaseUpdateDTO.getStatusPurchaseId()!=null) {
+                StatusPurchase statusPurchase=statusPurchaseRepository.findById(purchaseUpdateDTO.getPurchaseId()).get();
                 purchase.setStatusPurchase(statusPurchase);
             }
             purchaseRepository.save(purchase);
@@ -117,69 +144,4 @@ public class PurchaseController {
             return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
         }
     }
-}
-
-class AddPurchaseDTO {
-    private Double purchaseNumber;
-
-    private Long postId;
-
-    private Long statusPurchaseId;
-
-    public Long getStatusPurchaseId() {
-        return statusPurchaseId;
-    }
-
-    public void setStatusPurchaseId(Long statusPurchaseId) {
-        this.statusPurchaseId = statusPurchaseId;
-    }
-
-    public Double getPurchaseNumber() {
-        return purchaseNumber;
-    }
-
-    public void setPurchaseNumber(Double purchaseNumber) {
-        this.purchaseNumber = purchaseNumber;
-    }
-
-    public Long getPostId() {
-        return postId;
-    }
-
-    public void setPostId(Long postId) {
-        this.postId = postId;
-    }
-}
-
-class UpdatePurchaseDTO {
-    private Long purchaseId;
-
-    private Double purchaseNumber;
-
-    private Long statusPurchaseId;
-
-    public Long getPurchaseId() {
-        return purchaseId;
-    }
-
-    public void setPurchaseId(Long purchaseId) {
-        this.purchaseId = purchaseId;
-    }
-
-    public Long getStatusPurchaseId() {
-        return statusPurchaseId;
-    }
-
-    public void setStatusPurchaseId(Long statusPurchaseId) {
-        this.statusPurchaseId = statusPurchaseId;
-    }
-
-    public Double getPurchaseNumber() {
-        return purchaseNumber;
-    }
-
-    public void setPurchaseNumber(Double purchaseNumber) {
-        this.purchaseNumber = purchaseNumber;
-    }
-
 }

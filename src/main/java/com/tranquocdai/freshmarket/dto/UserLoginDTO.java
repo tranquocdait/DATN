@@ -8,14 +8,14 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.Optional;
 
-public class UserDTO {
+public class UserLoginDTO {
     private String userName;
     private String password;
 
-    public UserDTO() {
+    public UserLoginDTO() {
     }
 
-    public UserDTO(String userName, String password) {
+    public UserLoginDTO(String userName, String password) {
         this.userName = userName;
         this.password = password;
     }

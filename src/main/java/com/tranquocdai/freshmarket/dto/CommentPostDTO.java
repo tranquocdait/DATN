@@ -13,13 +13,44 @@ import java.util.Optional;
 public class CommentPostDTO {
     private Long id;
 
-    private User user;
+    private String username;
 
-    private Post post;
-
-    private LocalDateTime dateOfComment;
+    private Long postID;
 
     private String content;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public Long getPostID() {
+        return postID;
+    }
+
+    public void setPostID(Long postID) {
+        this.postID = postID;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     public static ArrayList<CommentPost> converCommentPost(Collection<CommentPost> posts){
         ArrayList<CommentPost> postArrayList=new ArrayList<>(posts);
         postArrayList.forEach((element)->{

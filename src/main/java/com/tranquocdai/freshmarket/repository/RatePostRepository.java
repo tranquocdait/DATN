@@ -1,7 +1,7 @@
 package com.tranquocdai.freshmarket.repository;
 
-import com.tranquocdai.freshmarket.model.CommentPost;
 import com.tranquocdai.freshmarket.model.Post;
+import com.tranquocdai.freshmarket.model.RatePost;
 import com.tranquocdai.freshmarket.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -10,7 +10,8 @@ import java.util.Collection;
 import java.util.Optional;
 
 @Repository
-public interface CommentPostRepository extends JpaRepository<CommentPost,Long> {
-    Collection<CommentPost> findByPost(Post post);
-    Optional<CommentPost> findByIdAndUser(Long id, User user);
+public interface RatePostRepository extends JpaRepository<RatePost,Long> {
+    Collection<RatePost> findByPost(Post post);
+    Optional<RatePost> findByIdAndUser(Long id, User user);
+    Optional<RatePost> findByPostAndUser(Post post, User user);
 }

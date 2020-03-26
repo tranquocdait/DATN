@@ -1,14 +1,19 @@
 package com.tranquocdai.freshmarket.controller;
 
-import com.tranquocdai.freshmarket.dto.UserDTO;
+import com.tranquocdai.freshmarket.config.Constants;
+import com.tranquocdai.freshmarket.dto.UserAddDTO;
+import com.tranquocdai.freshmarket.dto.UpdateUserDTO;
 import com.tranquocdai.freshmarket.dto.UserInfoDTO;
+import com.tranquocdai.freshmarket.model.Avatar;
 import com.tranquocdai.freshmarket.model.RoleUser;
 import com.tranquocdai.freshmarket.model.User;
+import com.tranquocdai.freshmarket.repository.AvatarRepository;
 import com.tranquocdai.freshmarket.repository.RoleResponsitory;
 import com.tranquocdai.freshmarket.repository.UserRepository;
 import com.tranquocdai.freshmarket.response.ErrorResponse;
 import com.tranquocdai.freshmarket.response.SuccessfulResponse;
 import com.tranquocdai.freshmarket.service.BaseService;
+import com.tranquocdai.freshmarket.service.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +22,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +41,12 @@ public class UserController {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    @Autowired
+    AvatarRepository avatarRepository;
+
+    @Autowired
+    StorageService storageService;
+
     @GetMapping("/users")
     public ResponseEntity getAllUser() {
         try {
@@ -51,23 +60,32 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public ResponseEntity createUser(@Valid @RequestBody AddUserDTO addUserDTO) {
+    public ResponseEntity createUser(@Valid @RequestBody UserAddDTO userAddDTO) {
         try {
-            if (userRepository.findByUserName(addUserDTO.getUserName()).isPresent()) {
+            if (userRepository.findByUserName(userAddDTO.getUserName()).isPresent()) {
                 Map<String, String> errors = new HashMap<>();
                 errors.put("message", "username has existed");
                 return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
             }
-            RoleUser roleUser = roleResponsitory.findByRoleID(addUserDTO.getRoleID()).get();
+            RoleUser roleUser = roleResponsitory.findByRoleID(userAddDTO.getRoleID()).get();
             User user = new User();
-            user.setUserName(addUserDTO.getUserName());
-            user.setFullName(addUserDTO.getFullName());
-            user.setPassword(passwordEncoder.encode(addUserDTO.getPassword()));
-            user.setEmail(addUserDTO.getEmail());
-            user.setPhoneNumber(addUserDTO.getPhoneNumber());
+            user.setUserName(userAddDTO.getUserName());
+            user.setFullName(userAddDTO.getFullName());
+            user.setPassword(passwordEncoder.encode(userAddDTO.getPassword()));
+            user.setEmail(userAddDTO.getEmail());
+            user.setPhoneNumber(userAddDTO.getPhoneNumber());
             user.setRoleUser(roleUser);
+            Avatar avatar = new Avatar();
+            if (userAddDTO.getImageBase64()!=null) {
+                String newImageUrl = storageService.store(userAddDTO.getImageBase64());
+                avatar.setUrl(newImageUrl);
+                avatarRepository.save(avatar);
+            }else {
+                avatar=avatarRepository.findById(Constants.ID_IMAGE_DEFAULT).get();
+            }
+            user.setAvatar(avatar);
             userRepository.save(user);
-            User result = userRepository.findByUserName(addUserDTO.getUserName()).get();
+            User result = userRepository.findByUserName(userAddDTO.getUserName()).get();
             UserInfoDTO userDTO = UserInfoDTO.converUser(result);
             return new ResponseEntity(new SuccessfulResponse(userDTO), HttpStatus.OK);
         } catch (Exception ex) {
@@ -76,7 +94,47 @@ public class UserController {
             return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
         }
     }
-
+    @PutMapping("/users/{usersID}")
+    public ResponseEntity updateUserByID(@Valid @RequestBody UpdateUserDTO updateUserDTO,@PathVariable("usersID") Long usersID) {
+        try {
+            if (!userRepository.findById(usersID).isPresent()) {
+                Map<String, String> errors = new HashMap<>();
+                errors.put("message", "username has not existed");
+                return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
+            }
+            User user = userRepository.findById(usersID).get();
+            user.setFullName(updateUserDTO.getFullName());
+            user.setPassword(passwordEncoder.encode(updateUserDTO.getPassword()));
+            user.setEmail(updateUserDTO.getEmail());
+            user.setPhoneNumber(updateUserDTO.getPhoneNumber());
+            RoleUser roleUser=roleResponsitory.findById(updateUserDTO.getRoleID()).get();
+            user.setRoleUser(roleUser);
+            if (updateUserDTO.getImageBase64()!=null) {
+                Avatar avatar=user.getAvatar();
+                if(Constants.URL_POST_DEFAULT.equals(avatar.getUrl())){
+                    Avatar avatarNew=new Avatar();
+                    String newImageUrl = storageService.store(updateUserDTO.getImageBase64());
+                    avatarNew.setUrl(newImageUrl);
+                    avatarRepository.save(avatarNew);
+                    user.setAvatar(avatarNew);
+                }else {
+                    storageService.delete(avatar.getUrl());
+                    String newImageUrl = storageService.store(updateUserDTO.getImageBase64());
+                    avatar.setUrl(newImageUrl);
+                    avatarRepository.save(avatar);
+                    user.setAvatar(avatar);
+                }
+            }
+            userRepository.save(user);
+            User result = userRepository.findById(usersID).get();
+            UserInfoDTO userDTO = UserInfoDTO.converUser(result);
+            return new ResponseEntity(new SuccessfulResponse(userDTO), HttpStatus.OK);
+        } catch (Exception ex) {
+            Map<String, String> errors = new HashMap<>();
+            errors.put("message", "create user not successfully");
+            return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
+        }
+    }
     @PutMapping("/users")
     public ResponseEntity updateUser(Authentication authentication, @Valid @RequestBody UpdateUserDTO updateUserDTO) {
         try {
@@ -92,6 +150,22 @@ public class UserController {
             user.setEmail(updateUserDTO.getEmail());
             user.setPhoneNumber(updateUserDTO.getPhoneNumber());
             user.setRoleUser(roleUser);
+            if (updateUserDTO.getImageBase64()!=null) {
+                Avatar avatar=user.getAvatar();
+                if(Constants.URL_POST_DEFAULT.equals(avatar.getUrl())){
+                    Avatar avatarNew=new Avatar();
+                    String newImageUrl = storageService.store(updateUserDTO.getImageBase64());
+                    avatarNew.setUrl(newImageUrl);
+                    avatarRepository.save(avatarNew);
+                    user.setAvatar(avatarNew);
+                }else {
+                    storageService.delete(avatar.getUrl());
+                    String newImageUrl = storageService.store(updateUserDTO.getImageBase64());
+                    avatar.setUrl(newImageUrl);
+                    avatarRepository.save(avatar);
+                    user.setAvatar(avatar);
+                }
+            }
             userRepository.save(user);
             User result = baseService.getUser(authentication).get();
             return new ResponseEntity(new SuccessfulResponse(UserInfoDTO.converUser(result)), HttpStatus.OK);
@@ -129,130 +203,5 @@ public class UserController {
             errors.put("message", "get data not successfully");
             return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
         }
-    }
-}
-
-class AddUserDTO {
-    @NotEmpty
-    @Size(min = 2)
-    private String userName;
-
-    @NotEmpty
-    @Size(min = 8)
-    private String password;
-
-    @NotEmpty
-    private String fullName;
-
-    @Size(min = 9)
-    private String phoneNumber;
-
-    @Size(min = 2)
-    private String email;
-
-    private Long roleID;
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    public Long getRoleID() {
-        return roleID;
-    }
-
-    public void setRoleID(Long roleID) {
-        this.roleID = roleID;
-    }
-}
-
-class UpdateUserDTO {
-    @NotEmpty
-    @Size(min = 8)
-    private String password;
-
-    private String fullName;
-
-    @Size(min = 9)
-    private String phoneNumber;
-
-    @Size(min = 2)
-    private String email;
-
-    private Long roleID;
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    public Long getRoleID() {
-        return roleID;
-    }
-
-    public void setRoleID(Long roleID) {
-        this.roleID = roleID;
     }
 }
