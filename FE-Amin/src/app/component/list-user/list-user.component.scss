@@ -1,0 +1,38 @@
+table {
+    width: 100%;
+}
+
+th.mat-sort-header-sorted {
+    color: black;
+}
+
+.round {
+    margin-left: 10px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+}
+
+.star {
+    font-size: 1.5rem;
+    color: #b0c4de;
+}
+
+.filled {
+    color: #FFFF00;
+}
+
+.bad {
+    color: #deb0b0;
+}
+
+.filled.bad {
+    color: #ff1e1e;
+}
+
+.container {
+    display: contents;
+}
+
+#add-user {
+    float: right;
+}

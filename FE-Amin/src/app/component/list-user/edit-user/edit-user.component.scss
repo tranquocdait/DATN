@@ -1,0 +1,17 @@
+.close {
+    padding: 4px 13px;
+    margin: 0;
+    opacity: 1 !important;
+    padding-bottom: 8px;
+    text-shadow: unset;
+    background-color: white;
+    &:hover {
+        background-color: red;
+        color: #fff;
+    }
+}
+
+#btn {
+    margin-top: -23px;
+    margin-right: -19px;
+}
