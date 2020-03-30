@@ -11,6 +11,9 @@ export class LocalStoreManager {
     public setToken(token: string) {
         localStorage.setItem(this.reservedKeys.token, token);
     }
+    public removeToken() {
+        localStorage.removeItem(this.reservedKeys.token);
+    }
     public getToken() : string {
         return localStorage.getItem(this.reservedKeys.token);
     }

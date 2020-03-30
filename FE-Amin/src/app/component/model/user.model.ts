@@ -1,12 +1,13 @@
+import { RoleElement } from "./role.model";
+
 export class UserElement {
     constructor () {
     }
     userId: string;
     userName: string;
     password: string;
-    role: string;
+    role: RoleElement;
     fullName: string;
-    address: string;
     phoneNumber: string;
     email: string;
     avatarURL:string;

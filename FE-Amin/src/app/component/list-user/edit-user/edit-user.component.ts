@@ -51,7 +51,7 @@ export class EditUserComponent implements OnInit {
     this.editForm = this.formBuilder.group({
       userId: [this.data.data.userId, Validators.required],
       userName: [this.data.data.userName, Validators.required],
-      role: [this.data.data.role, Validators.required],
+      role: [this.data.data.role.roleID, Validators.required],
       fullName: [this.data.data.fullName, Validators.required],
       // address: [this.data.data.address, Validators.required],
       phoneNumber: [this.data.data.phoneNumber, Validators.required],

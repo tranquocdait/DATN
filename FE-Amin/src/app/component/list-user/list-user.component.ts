@@ -8,14 +8,6 @@ import { DeleteUserComponent } from './delete-user/delete-user.component';
 import { element } from 'protractor';
 import { EndpointFactory } from '../../services/endpoint-factory.service';
 
-
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
-
 @Component({
   selector: 'app-list-user',
   templateUrl: './list-user.component.html',
@@ -24,7 +16,7 @@ export interface PeriodicElement {
 export class ListUserComponent implements OnInit {
   dataSource: MatTableDataSource<UserElement>;
   dataList: UserElement[] = null;
-  displayedColumns: string[] = ['avatar', 'userId', 'userName', 'fullName', 'phoneNumber', 'email', 'edit', 'delete'];
+  displayedColumns: string[] = ['avatar', 'userId', 'userName', 'role', 'fullName', 'phoneNumber', 'email', 'edit', 'delete'];
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   currentRate = 1.5;
   constructor(private modalService: NgbModal, private changeDetectorRefs: ChangeDetectorRef, private endpointFactory: EndpointFactory) {
@@ -45,7 +37,7 @@ export class ListUserComponent implements OnInit {
           let user = new UserElement();
           user.userId = element.userID;
           user.userName = element.userName;
-          //user.address=element.address;
+          user.role=element.roleUser;
           user.avatarURL = element.avatar.url;
           user.fullName = element.fullName;
           user.phoneNumber = element.phoneNumber;
@@ -102,7 +94,7 @@ export class ListUserComponent implements OnInit {
           let user = new UserElement();
           user.userId = element.userID;
           user.userName = element.userName;
-          //user.address=element.address;
+          user.role=element.roleUser;
           user.avatarURL = element.avatar.url;
           user.fullName = element.fullName;
           user.phoneNumber = element.phoneNumber;

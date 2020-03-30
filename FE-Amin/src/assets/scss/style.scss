@@ -28,3 +28,23 @@ File: scss
         width: 420px !important;
     }
 }
+
+.td-number{
+    padding-right: 20px !important;
+}
+table {
+    width: 100%;
+}
+
+th.mat-sort-header-sorted {
+    color: black;
+}
+
+.round {
+    margin-left: 10px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+}
+.container {
+    display: contents;
+}

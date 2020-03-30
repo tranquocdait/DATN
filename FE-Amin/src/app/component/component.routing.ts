@@ -11,7 +11,8 @@ export const ComponentsRoutes: Routes = [
 		children: [
 			{
 				path: 'list-item',
-				component: ListItemComponent
+				component: ListItemComponent,
+				 pathMatch: 'full'
 			},
 			{
 				path: 'list-post',
@@ -19,7 +20,8 @@ export const ComponentsRoutes: Routes = [
 			},
 			{
 				path: 'list-user',
-				component: ListUserComponent
+				component: ListUserComponent,
+				pathMatch: 'full'
 			}
 		]
 	}
