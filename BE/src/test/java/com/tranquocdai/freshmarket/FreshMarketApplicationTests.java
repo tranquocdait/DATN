@@ -1,4 +1,4 @@
-package com.ledinhtuyenbkdn.travelnow;
+package com.tranquocdai.freshmarket;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
