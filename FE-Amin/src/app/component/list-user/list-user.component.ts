@@ -5,7 +5,6 @@ import { UserElement } from '../model/user.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { EditUserComponent } from './edit-user/edit-user.component';
 import { DeleteUserComponent } from './delete-user/delete-user.component';
-import { element } from 'protractor';
 import { EndpointFactory } from '../../services/endpoint-factory.service';
 
 @Component({

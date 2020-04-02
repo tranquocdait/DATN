@@ -16,7 +16,7 @@ import { EditPostComponent } from './edit-post/edit-post.component';
 export class ListPostComponent implements OnInit {
   dataSource: MatTableDataSource<PostElement>;
   dataList: PostElement[] = null;
-  displayedColumns: string[] = ['imageURL','postId', 'postName', 'userName', 'description', 'unitPrice', 'address', 'dateOfPost', 'province', 'category', 'edit', 'delete'];
+  displayedColumns: string[] = ['imageURL','postId', 'postName', 'userName', 'description', 'unitPrice', 'address', 'dateOfPost', 'province', 'category',"calculationUnit", 'edit', 'delete'];
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   constructor(private modalService: NgbModal, private changeDetectorRefs: ChangeDetectorRef, private endpointFactory: EndpointFactory) {
 
@@ -41,9 +41,12 @@ export class ListPostComponent implements OnInit {
           post.unitPrice = element.unitPrice;
           post.address=element.address;
           post.dateOfPost=new Date(element.dateOfPost[0],element.dateOfPost[1],element.dateOfPost[2]);
-          post.province = element.province.nameProvince;
+          post.province = element.province;
           post.imageURL = element.imagePost.url;
-          post.category = element.category.nameCategory;
+          post.imageURL = element.imagePost.url;
+          post.category = element.category;
+          post.description = element.description;
+          post.calculationUnit = element.calculationUnit;
           temp.push(post);
 
         });
@@ -59,7 +62,7 @@ export class ListPostComponent implements OnInit {
     }, 1000);
 
   }
-  deleteUser(element: any) {
+  deletePost(element: any) {
     const modalRef = this.modalService.open(DeletePostComponent, { size: 'lg', windowClass: 'delete-modal', centered: true });
     modalRef.componentInstance.data = { data: element }
     modalRef.componentInstance.output.subscribe((res) => {
@@ -69,7 +72,7 @@ export class ListPostComponent implements OnInit {
     });
   }
 
-  editUser(element: any) {
+  editPost(element: any) {
     const modalRef = this.modalService.open(EditPostComponent, { size: 'lg', windowClass: 'edit-modal', centered: true });
     modalRef.componentInstance.data = { data: element, type: 'edit' };
     modalRef.componentInstance.output.subscribe((res) => {
@@ -79,23 +82,26 @@ export class ListPostComponent implements OnInit {
     });
   }
 
-  searchUser(search: string) {
-    this.endpointFactory.getEndPoint("users/search?keySearch="+search).subscribe(data => {
+  searcPost(search: string) {
+    this.endpointFactory.getEndPoint("posts/search?keySearch="+search).subscribe(data => {
       if (data.status === "success") {
         const temp = [];
         data.data.forEach((element, index) => {
           let post = new PostElement();
-          post.postId = element.postId;
-          post.userName = element.userName;
+          post.postId = element.id;
           post.postName = element.postName;
+          post.userName = element.user.userName;
+          post.userElement = element.user;
           post.unitPrice = element.unitPrice;
           post.address=element.address;
-          post.dateOfPost=element.dateOfPost;
+          post.dateOfPost=new Date(element.dateOfPost[0],element.dateOfPost[1],element.dateOfPost[2]);
           post.province = element.province;
           post.imageURL = element.imagePost.url;
-          post.category = element.nameCategory;
+          post.imageURL = element.imagePost.url;
+          post.category = element.category;
+          post.description = element.description;
+          post.calculationUnit = element.calculationUnit;
           temp.push(post);
-
         });
         this.dataList = temp;
         this.setDataSource();

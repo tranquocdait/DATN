@@ -14,7 +14,7 @@ export class AppComponent {
     this.getCheckLogin();
   }
   getCheckLogin(){
-    if(this.localStoreManager.getToken()==null){this.router.navigateByUrl('/login');}
+    if(this.localStoreManager.getToken()===null){this.router.navigateByUrl('/login');}
     this.checkLogin=true;
     this.uncheckLogin=false;
   }

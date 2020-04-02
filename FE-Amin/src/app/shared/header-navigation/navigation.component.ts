@@ -17,17 +17,17 @@ export class NavigationComponent implements AfterViewInit {
   @Output() toggleSidebar = new EventEmitter<void>();
 
   public config: PerfectScrollbarConfigInterface = {};
-  constructor(private modalService: NgbModal,private router: Router,private localStoreManager:LocalStoreManager) {}
+  constructor(private modalService: NgbModal, private router: Router, private localStoreManager: LocalStoreManager) { }
 
   public showSearch = false;
 
   // This is for Notifications
-  
-  logout(){
+
+  logout() {
     this.localStoreManager.removeToken();
     //location.reload();
     this.router.navigateByUrl('/login');
   }
 
-  ngAfterViewInit() {}
+  ngAfterViewInit() { }
 }

@@ -70,10 +70,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
        http.authorizeRequests()
             .antMatchers(HttpMethod.POST, "/login").permitAll()
-//                .antMatchers(HttpMethod.POST, "/tourists").permitAll()
+//               .antMatchers(HttpMethod.POST, "/tourists").permitAll()
 //                .antMatchers(HttpMethod.GET, "/tourists/{id}").permitAll()
 //                .antMatchers(HttpMethod.PUT, "/tourists/{id}").hasRole("TOURIST")
-//                .antMatchers(HttpMethod.GET, "/admins").hasRole("ADMIN")
+//               .antMatchers(HttpMethod.GET, "/admins").hasRole("ADMIN")
 //                //Category crud
 //                .antMatchers(HttpMethod.GET, "/categories").permitAll()
 //                .antMatchers(HttpMethod.POST, "/categories").hasRole("ADMIN")

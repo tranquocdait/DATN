@@ -22,9 +22,9 @@ export const ROUTES: RouteInfo[] = [
         submenu: []
     },
     {
-        path: '/component/list-item',
-        title: 'Đơn hàng',
-        icon: 'mdi mdi-library-books',
+        path: '/component/list-post',
+        title: 'Bài đăng',
+        icon: 'mdi mdi-equal',
         class: '',
         label: '',
         labelClass: '',
@@ -32,9 +32,9 @@ export const ROUTES: RouteInfo[] = [
         submenu: []
     },
     {
-        path: '/component/list-post',
-        title: 'Bài đăng',
-        icon: 'mdi mdi-equal',
+        path: '/component/list-item',
+        title: 'Đơn hàng',
+        icon: 'mdi mdi-library-books',
         class: '',
         label: '',
         labelClass: '',

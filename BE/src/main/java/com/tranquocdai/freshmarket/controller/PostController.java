@@ -99,7 +99,17 @@ public class PostController {
             return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
         }
     }
-
+    @GetMapping("/posts/search")
+    public ResponseEntity getAllTourist(@RequestParam(value = "keySearch", defaultValue = "") String keyword) {
+        try {
+            List<Post> postList = postRepository.findByPostNameContains(keyword);
+            return new ResponseEntity(new SuccessfulResponse(PostDTO.convertListPost(postList)), HttpStatus.OK);
+        } catch (Exception ex) {
+            Map<String, String> errors = new HashMap<>();
+            errors.put("message", "get data not successfully");
+            return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
+        }
+    }
     @PostMapping("/posts/create")
     public ResponseEntity createPost(Authentication authentication, @Valid @RequestBody PostDTO postAddDTO) {
         try {
@@ -236,7 +246,7 @@ public class PostController {
         }
     }
 
-    @DeleteMapping("/users/{postID}/posts")
+    @DeleteMapping("/posts/{postID}")
     public ResponseEntity deletePost(@PathVariable("postID") Long postID) {
         try {
             if (!postRepository.findById(postID).isPresent()) {

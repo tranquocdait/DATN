@@ -14,4 +14,5 @@ export class PostElement {
     province: string;
     imageURL:string;
     category: string;
+    calculationUnit: string;
 }
