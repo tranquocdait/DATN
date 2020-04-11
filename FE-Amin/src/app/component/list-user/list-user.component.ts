@@ -33,10 +33,10 @@ export class ListUserComponent implements OnInit {
       if (data.status === "success") {
         const temp = [];
         data.data.forEach((element, index) => {
-          let user = new UserElement();
+          const user = new UserElement();
           user.userId = element.userID;
           user.userName = element.userName;
-          user.role=element.roleUser;
+          user.role = element.roleUser;
           user.avatarURL = element.avatar.url;
           user.fullName = element.fullName;
           user.phoneNumber = element.phoneNumber;
@@ -45,7 +45,7 @@ export class ListUserComponent implements OnInit {
 
         });
         this.dataList = temp;
-      };
+      }
     }
     );
   }
@@ -86,14 +86,14 @@ export class ListUserComponent implements OnInit {
   }
 
   searchUser(search: string) {
-    this.endpointFactory.getEndPoint("users/search?keySearch="+search).subscribe(data => {
+    this.endpointFactory.getEndPoint("users/search?keySearch=" + search).subscribe(data => {
       if (data.status === "success") {
         const temp = [];
         data.data.forEach((element, index) => {
           let user = new UserElement();
           user.userId = element.userID;
           user.userName = element.userName;
-          user.role=element.roleUser;
+          user.role = element.roleUser;
           user.avatarURL = element.avatar.url;
           user.fullName = element.fullName;
           user.phoneNumber = element.phoneNumber;

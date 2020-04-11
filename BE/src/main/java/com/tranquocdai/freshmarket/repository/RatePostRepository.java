@@ -7,11 +7,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface RatePostRepository extends JpaRepository<RatePost,Long> {
-    Collection<RatePost> findByPost(Post post);
+    List<RatePost> findByPost(Post post);
     Optional<RatePost> findByIdAndUser(Long id, User user);
     Optional<RatePost> findByPostAndUser(Post post, User user);
 }

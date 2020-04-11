@@ -23,7 +23,7 @@ export const ROUTES: RouteInfo[] = [
     },
     {
         path: '/component/list-post',
-        title: 'Bài đăng',
+        title: 'Post',
         icon: 'mdi mdi-equal',
         class: '',
         label: '',
@@ -33,7 +33,7 @@ export const ROUTES: RouteInfo[] = [
     },
     {
         path: '/component/list-item',
-        title: 'Đơn hàng',
+        title: 'Purchase',
         icon: 'mdi mdi-library-books',
         class: '',
         label: '',

@@ -5,6 +5,7 @@ import com.tranquocdai.freshmarket.model.Post;
 import com.tranquocdai.freshmarket.model.User;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,6 +18,7 @@ public class CommentPostDTO {
 
     private Long postID;
 
+    @NotEmpty
     private String content;
 
     public Long getId() {

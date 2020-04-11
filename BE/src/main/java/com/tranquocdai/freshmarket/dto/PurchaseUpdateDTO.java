@@ -1,10 +1,14 @@
 package com.tranquocdai.freshmarket.dto;
 
+import javax.validation.constraints.NotEmpty;
+
 public class PurchaseUpdateDTO {
     private Long purchaseId;
 
+    @NotEmpty
     private Double purchaseNumber;
 
+    @NotEmpty
     private Long statusPurchaseId;
 
     public Long getPurchaseId() {

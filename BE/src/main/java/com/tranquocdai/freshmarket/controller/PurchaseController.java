@@ -1,5 +1,6 @@
 package com.tranquocdai.freshmarket.controller;
 
+import com.tranquocdai.freshmarket.dto.PostDTO;
 import com.tranquocdai.freshmarket.dto.PurchaseAddDTO;
 import com.tranquocdai.freshmarket.dto.PurchaseUpdateDTO;
 import com.tranquocdai.freshmarket.model.*;
@@ -42,7 +43,17 @@ public class PurchaseController {
             return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
         }
     }
-
+    @GetMapping("/purchases/search")
+    public ResponseEntity getPurchaseBySearch(@RequestParam(value = "keySearch", defaultValue = "") Long keyword) {
+        try {
+            Optional<Purchase>  purchaseList= purchaseRepository.findById(keyword);
+            return new ResponseEntity(new SuccessfulResponse(purchaseList), HttpStatus.OK);
+        } catch (Exception ex) {
+            Map<String, String> errors = new HashMap<>();
+            errors.put("message", "get data not successfully");
+            return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
+        }
+    }
     @GetMapping("/purchases/{postId}")
     public ResponseEntity readAllPurchase(@PathVariable("postId") Long id) {
         try {
@@ -94,7 +105,7 @@ public class PurchaseController {
             if (purchaseUpdateDTO.getPurchaseNumber() != null)
                 purchase.setPurchaseNumber(purchaseUpdateDTO.getPurchaseNumber());
             if(purchaseUpdateDTO.getStatusPurchaseId()!=null) {
-                StatusPurchase statusPurchase=statusPurchaseRepository.findById(purchaseUpdateDTO.getPurchaseId()).get();
+                StatusPurchase statusPurchase = statusPurchaseRepository.findById(purchaseUpdateDTO.getStatusPurchaseId()).get();
                 purchase.setStatusPurchase(statusPurchase);
             }
             purchaseRepository.save(purchase);
@@ -117,7 +128,7 @@ public class PurchaseController {
             if (purchaseUpdateDTO.getPurchaseNumber() != null)
                 purchase.setPurchaseNumber(purchaseUpdateDTO.getPurchaseNumber());
             if(purchaseUpdateDTO.getStatusPurchaseId()!=null) {
-                StatusPurchase statusPurchase=statusPurchaseRepository.findById(purchaseUpdateDTO.getPurchaseId()).get();
+                StatusPurchase statusPurchase=statusPurchaseRepository.findById(purchaseUpdateDTO.getStatusPurchaseId()).get();
                 purchase.setStatusPurchase(statusPurchase);
             }
             purchaseRepository.save(purchase);

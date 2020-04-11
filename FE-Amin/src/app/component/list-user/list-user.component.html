@@ -14,7 +14,7 @@
 </div>
 <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 table-hover">
     <ng-container matColumnDef="avatar">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> </th>
+        <th mat-header-cell *matHeaderCellDef > </th>
         <tr mat-cell *matCellDef="let element">
             <span class="round"><img src="{{element.avatarURL}}" alt="user" width="50"></span>
         </tr>

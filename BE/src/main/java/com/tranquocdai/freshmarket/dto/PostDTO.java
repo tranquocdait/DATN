@@ -131,14 +131,4 @@ public class PostDTO {
         this.address = address;
     }
 
-    public static ArrayList<Post> convertListPost(Collection<Post> posts){
-        ArrayList<Post> postArrayList=new ArrayList<>(posts);
-        postArrayList.forEach((element)->element.getUser().setPassword(""));
-        return postArrayList;
-    }
-    public static Post converPost(Optional<Post> post){
-        Post result=post.get();
-        result.getUser().setPassword("");
-        return result;
-    }
 }

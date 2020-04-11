@@ -32,8 +32,9 @@ export class ListPostComponent implements OnInit {
     this.endpointFactory.getEndPoint("posts").subscribe(data => {
       if (data.status === "success") {
         const temp = [];
-        data.data.forEach((element, index) => {
+        data.data.forEach((elementInfo, index) => {
           let post = new PostElement();
+          const element=elementInfo.post;
           post.postId = element.id;
           post.postName = element.postName;
           post.userName = element.user.userName;
@@ -86,8 +87,9 @@ export class ListPostComponent implements OnInit {
     this.endpointFactory.getEndPoint("posts/search?keySearch="+search).subscribe(data => {
       if (data.status === "success") {
         const temp = [];
-        data.data.forEach((element, index) => {
+        data.data.forEach((elementInfo, index) => {
           let post = new PostElement();
+          const element=elementInfo.post;
           post.postId = element.id;
           post.postName = element.postName;
           post.userName = element.user.userName;

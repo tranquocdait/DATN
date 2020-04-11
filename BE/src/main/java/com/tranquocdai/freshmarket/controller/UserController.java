@@ -59,8 +59,9 @@ public class UserController {
             return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
         }
     }
+
     @GetMapping("/users/search")
-    public ResponseEntity getAllTourist(@RequestParam(value = "keySearch", defaultValue = "") String keyword) {
+    public ResponseEntity getAllUserBySearch(@RequestParam(value = "keySearch", defaultValue = "") String keyword) {
         try {
             List<User> userList = userRepository.findByFullNameContains(keyword);
             List<User> userListPipe = new ArrayList<>();
@@ -75,6 +76,7 @@ public class UserController {
             return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
         }
     }
+
     @PostMapping("/users")
     public ResponseEntity createUser(@Valid @RequestBody UserDTO userAddDTO) {
         try {
@@ -92,12 +94,12 @@ public class UserController {
             user.setPhoneNumber(userAddDTO.getPhoneNumber());
             user.setRoleUser(roleUser);
             Avatar avatar = new Avatar();
-            if (userAddDTO.getImageBase64()!=null) {
+            if (userAddDTO.getImageBase64() != null || "".equals(userAddDTO.getImageBase64())) {
                 String newImageUrl = storageService.store(userAddDTO.getImageBase64());
                 avatar.setUrl(newImageUrl);
                 avatarRepository.save(avatar);
-            }else {
-                avatar=avatarRepository.findById(Constants.ID_IMAGE_DEFAULT).get();
+            } else {
+                avatar = avatarRepository.findById(Constants.ID_IMAGE_DEFAULT).get();
             }
             user.setAvatar(avatar);
             userRepository.save(user);
@@ -110,8 +112,9 @@ public class UserController {
             return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
         }
     }
+
     @PutMapping("/users/{usersID}")
-    public ResponseEntity updateUserByID(@Valid @RequestBody UserDTO updateUserDTO,@PathVariable("usersID") Long usersID) {
+    public ResponseEntity updateUserByID(@Valid @RequestBody UserDTO updateUserDTO, @PathVariable("usersID") Long usersID) {
         try {
             if (!userRepository.findById(usersID).isPresent()) {
                 Map<String, String> errors = new HashMap<>();
@@ -123,17 +126,17 @@ public class UserController {
             user.setPassword(passwordEncoder.encode(updateUserDTO.getPassword()));
             user.setEmail(updateUserDTO.getEmail());
             user.setPhoneNumber(updateUserDTO.getPhoneNumber());
-            RoleUser roleUser=roleResponsitory.findById(updateUserDTO.getRoleID()).get();
+            RoleUser roleUser = roleResponsitory.findById(updateUserDTO.getRoleID()).get();
             user.setRoleUser(roleUser);
-            if (updateUserDTO.getImageBase64()!=null) {
-                Avatar avatar=user.getAvatar();
-                if(Constants.URL_POST_DEFAULT.equals(avatar.getUrl())){
-                    Avatar avatarNew=new Avatar();
+            if (updateUserDTO.getImageBase64() != null && !"".equals(updateUserDTO.getImageBase64())) {
+                Avatar avatar = user.getAvatar();
+                if (Constants.URL_POST_DEFAULT.equals(avatar.getUrl())) {
+                    Avatar avatarNew = new Avatar();
                     String newImageUrl = storageService.store(updateUserDTO.getImageBase64());
                     avatarNew.setUrl(newImageUrl);
                     avatarRepository.save(avatarNew);
                     user.setAvatar(avatarNew);
-                }else {
+                } else {
                     storageService.delete(avatar.getUrl());
                     String newImageUrl = storageService.store(updateUserDTO.getImageBase64());
                     avatar.setUrl(newImageUrl);
@@ -151,6 +154,7 @@ public class UserController {
             return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
         }
     }
+
     @PutMapping("/users")
     public ResponseEntity updateUser(Authentication authentication, @Valid @RequestBody UserDTO updateUserDTO) {
         try {
@@ -166,15 +170,15 @@ public class UserController {
             user.setEmail(updateUserDTO.getEmail());
             user.setPhoneNumber(updateUserDTO.getPhoneNumber());
             user.setRoleUser(roleUser);
-            if (updateUserDTO.getImageBase64()!=null) {
-                Avatar avatar=user.getAvatar();
-                if(Constants.URL_POST_DEFAULT.equals(avatar.getUrl())){
-                    Avatar avatarNew=new Avatar();
+            if (updateUserDTO.getImageBase64() != null && "".equals(updateUserDTO.getImageBase64())) {
+                Avatar avatar = user.getAvatar();
+                if (Constants.URL_POST_DEFAULT.equals(avatar.getUrl())) {
+                    Avatar avatarNew = new Avatar();
                     String newImageUrl = storageService.store(updateUserDTO.getImageBase64());
                     avatarNew.setUrl(newImageUrl);
                     avatarRepository.save(avatarNew);
                     user.setAvatar(avatarNew);
-                }else {
+                } else {
                     storageService.delete(avatar.getUrl());
                     String newImageUrl = storageService.store(updateUserDTO.getImageBase64());
                     avatar.setUrl(newImageUrl);

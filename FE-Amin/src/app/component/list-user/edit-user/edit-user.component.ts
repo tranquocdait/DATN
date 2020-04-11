@@ -30,7 +30,6 @@ export class EditUserComponent implements OnInit {
         if (data.status === 'success') {
           this.roleList = data.data;
         }
-        ;
       }
     );
   }
@@ -75,8 +74,8 @@ export class EditUserComponent implements OnInit {
   }
 
   changeToBase64(event) {
-    let files = event.target.files;
-    let reader = new FileReader();
+    const files = event.target.files;
+    const reader = new FileReader();
     reader.onload = this._handleReaderLoaded.bind(this);
     reader.readAsDataURL(files[0]);
   }
@@ -86,13 +85,13 @@ export class EditUserComponent implements OnInit {
   }
 
   onSubmit() {
-    let params: any = {
+    const params: any = {
       userName: this.editForm.value['userName'],
       fullName: this.editForm.value['fullName'],
       imageBase64: this.imageBase64,
       password: this.editForm.value['password'],
       phoneNumber: this.editForm.value['phoneNumber'],
-      roleID: parseInt(this.editForm.value['role']),
+      roleID: Number.parseInt(this.editForm.value['role']),
       email: this.editForm.value['email'],
     };
     if (this.data.type !== 'edit') {
@@ -101,7 +100,7 @@ export class EditUserComponent implements OnInit {
             this.output.emit('success');
             this.activeModal.close();
           }
-          ;
+        }, error => {
         }
       );
     } else {
@@ -110,7 +109,6 @@ export class EditUserComponent implements OnInit {
             this.output.emit('success');
             this.activeModal.close();
           }
-          ;
         }
       );
     }

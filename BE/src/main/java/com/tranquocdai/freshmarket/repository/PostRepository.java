@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post,Long> {
-    Collection<Post> findByUser(User user);
+    List<Post> findByUser(User user);
     Optional<Post> findByUserAndId(User user,Long id);
     List<Post> findByPostNameContains(String keySearch);
 }

@@ -11,11 +11,11 @@
         <form [formGroup]="editForm" (ngSubmit)="onSubmit()" class="text-center" style="color: #757575;" action="#!">
             <div class="container md-1 mt-1">
                 <label class="col-md-3">User Name</label>
-                <input class="form-control col-md-9" formControlName="userName" [readonly]="data.type==='edit'">
+                <input class="form-control col-md-9" formControlName="userName" [readonly]="data.type==='edit'" placeholder="User name">
             </div>
           <div class="container md-1 mt-1">
             <label class="col-md-3">Password</label>
-            <input class="form-control col-md-9" formControlName="password">
+            <input type="password" class="form-control col-md-9" formControlName="password" placeholder="password">
           </div>
             <div class="container md-1 mt-1">
                 <label class="col-md-3">Role</label>
@@ -28,15 +28,15 @@
 
             <div class="container md-1 mt-1">
                 <label class="col-md-3">FullName</label>
-                <input class="form-control col-md-9" formControlName="fullName">
+                <input class="form-control col-md-9" formControlName="fullName" placeholder="Your name">
             </div>
             <div class="container md-1 mt-1">
                 <label class="col-md-3">Phone Number</label>
-                <input class="form-control col-md-9" formControlName="phoneNumber">
+                <input class="form-control col-md-9" formControlName="phoneNumber" placeholder="09xx xxx xxx">
             </div>
             <div class="container md-1 mt-1">
                 <label class="col-md-3">Email</label>
-                <input class="form-control col-md-9" formControlName="email">
+                <input class="form-control col-md-9" formControlName="email" placeholder="name@example.com">
             </div>
             <div class="container md-1 mt-1">
                 <label class="col-md-3">Avatar</label>

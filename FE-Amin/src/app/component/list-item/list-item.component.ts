@@ -78,7 +78,7 @@ export class ListItemComponent implements OnInit {
   }
 
   searcPost(search: string) {
-    this.endpointFactory.getEndPoint("posts/search?keySearch="+search).subscribe(data => {
+    this.endpointFactory.getEndPoint("purchases/search?keySearch="+search).subscribe(data => {
       if (data.status === "success") {
         const temp = [];
         data.data.forEach((element, index) => {

@@ -2,6 +2,7 @@ package com.tranquocdai.freshmarket.controller;
 
 import com.tranquocdai.freshmarket.config.Constants;
 import com.tranquocdai.freshmarket.dto.PostDTO;
+import com.tranquocdai.freshmarket.dto.PostInfoDTO;
 import com.tranquocdai.freshmarket.model.*;
 import com.tranquocdai.freshmarket.repository.*;
 import com.tranquocdai.freshmarket.response.ErrorResponse;
@@ -15,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -39,6 +41,9 @@ public class PostController {
     ImagePostRepository imagePostRepository;
 
     @Autowired
+    RatePostRepository ratePostRepository;
+
+    @Autowired
     BaseService baseService;
 
     @Autowired
@@ -47,8 +52,8 @@ public class PostController {
     @GetMapping("/posts")
     public ResponseEntity getAllPost() {
         try {
-            Collection<Post> postList = postRepository.findAll();
-            return new ResponseEntity(new SuccessfulResponse(PostDTO.convertListPost(postList)), HttpStatus.OK);
+            List<Post> postList = postRepository.findAll();
+            return new ResponseEntity(new SuccessfulResponse(convertListPost(postList)), HttpStatus.OK);
         } catch (Exception ex) {
             Map<String, String> errors = new HashMap<>();
             errors.put("message", "get data not successfully");
@@ -60,8 +65,8 @@ public class PostController {
     public ResponseEntity readAllPost(Authentication authentication) {
         try {
             User user = baseService.getUser(authentication).get();
-            Collection<Post> postList = postRepository.findByUser(user);
-            return new ResponseEntity(new SuccessfulResponse(PostDTO.convertListPost(postList)), HttpStatus.OK);
+            List<Post> postList = postRepository.findByUser(user);
+            return new ResponseEntity(new SuccessfulResponse(convertListPost(postList)), HttpStatus.OK);
         } catch (Exception ex) {
             Map<String, String> errors = new HashMap<>();
             errors.put("message", "get data not successfully");
@@ -73,8 +78,8 @@ public class PostController {
     public ResponseEntity readPost(Authentication authentication) {
         try {
             User user = baseService.getUser(authentication).get();
-            Collection<Post> posts = postRepository.findByUser(user);
-            return new ResponseEntity(new SuccessfulResponse(PostDTO.convertListPost(posts)), HttpStatus.OK);
+            List<Post> postList = postRepository.findByUser(user);
+            return new ResponseEntity(new SuccessfulResponse(convertListPost(postList)), HttpStatus.OK);
         } catch (Exception ex) {
             Map<String, String> errors = new HashMap<>();
             errors.put("message", "get data not successfully");
@@ -91,25 +96,27 @@ public class PostController {
                 return new ResponseEntity(new ErrorResponse(errors),
                         HttpStatus.NOT_FOUND);
             }
-            Optional<Post> optionalPost = postRepository.findById(id);
-            return new ResponseEntity(new SuccessfulResponse(PostDTO.converPost(optionalPost)), HttpStatus.OK);
+            Post post = postRepository.findById(id).get();
+            return new ResponseEntity(new SuccessfulResponse(converPost(post)), HttpStatus.OK);
         } catch (Exception ex) {
             Map<String, String> errors = new HashMap<>();
             errors.put("message", "get data not successfully");
             return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
         }
     }
+
     @GetMapping("/posts/search")
     public ResponseEntity getAllTourist(@RequestParam(value = "keySearch", defaultValue = "") String keyword) {
         try {
             List<Post> postList = postRepository.findByPostNameContains(keyword);
-            return new ResponseEntity(new SuccessfulResponse(PostDTO.convertListPost(postList)), HttpStatus.OK);
+            return new ResponseEntity(new SuccessfulResponse(convertListPost(postList)), HttpStatus.OK);
         } catch (Exception ex) {
             Map<String, String> errors = new HashMap<>();
             errors.put("message", "get data not successfully");
             return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
         }
     }
+
     @PostMapping("/posts/create")
     public ResponseEntity createPost(Authentication authentication, @Valid @RequestBody PostDTO postAddDTO) {
         try {
@@ -132,12 +139,12 @@ public class PostController {
             Category category = categoryRepository.findById(postAddDTO.getCategoryID()).get();
             post.setCategory(category);
             ImagePost imagePost = new ImagePost();
-            if (postAddDTO.getImageBase64()!=null) {
+            if (postAddDTO.getImageBase64() != null || !"".equals(postAddDTO.getImageBase64())) {
                 String newImageUrl = storageService.store(postAddDTO.getImageBase64());
                 imagePost.setUrl(newImageUrl);
                 imagePostRepository.save(imagePost);
-            }else {
-                imagePost=imagePostRepository.findById(Constants.ID_IMAGE_DEFAULT).get();
+            } else {
+                imagePost = imagePostRepository.findById(Constants.ID_IMAGE_DEFAULT).get();
             }
             post.setImagePost(imagePost);
             postRepository.save(post);
@@ -148,6 +155,7 @@ public class PostController {
             return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
         }
     }
+
     @PutMapping("/posts/update")
     public ResponseEntity updatePost(Authentication authentication, @Valid @RequestBody PostDTO postUpdateDTO) {
         try {
@@ -173,15 +181,15 @@ public class PostController {
             post.setCalculationUnit(calculationUnit);
             Category category = categoryRepository.findById(postUpdateDTO.getCategoryID()).get();
             post.setCategory(category);
-            if (postUpdateDTO.getImageBase64()!=null){
-                ImagePost imagePost =post.getImagePost();
-                if(Constants.URL_POST_DEFAULT.equals(imagePost.getUrl())){
-                    ImagePost imagePostSave=new ImagePost();
+            if (postUpdateDTO.getImageBase64() != null && !"".equals(postUpdateDTO.getImageBase64())) {
+                ImagePost imagePost = post.getImagePost();
+                if (Constants.URL_POST_DEFAULT.equals(imagePost.getUrl())) {
+                    ImagePost imagePostSave = new ImagePost();
                     String newImageUrl = storageService.store(postUpdateDTO.getImageBase64());
                     imagePostSave.setUrl(newImageUrl);
                     imagePostRepository.save(imagePostSave);
                     post.setImagePost(imagePostSave);
-                }else {
+                } else {
                     storageService.delete(imagePost.getUrl());
                     String newImageUrl = storageService.store(postUpdateDTO.getImageBase64());
                     imagePost.setUrl(newImageUrl);
@@ -197,8 +205,9 @@ public class PostController {
             return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
         }
     }
+
     @PutMapping("/posts/{postId}")
-    public ResponseEntity updatePostbyID(@Valid @RequestBody PostDTO postUpdateDTO,@PathVariable("postId") Long postId) {
+    public ResponseEntity updatePostbyID(@Valid @RequestBody PostDTO postUpdateDTO, @PathVariable("postId") Long postId) {
         try {
             if (!postRepository.findById(postId).isPresent()) {
                 Map<String, String> errors = new HashMap<>();
@@ -221,15 +230,15 @@ public class PostController {
             post.setCalculationUnit(calculationUnit);
             Category category = categoryRepository.findById(postUpdateDTO.getCategoryID()).get();
             post.setCategory(category);
-            if (postUpdateDTO.getImageBase64()!=null){
-                ImagePost imagePost =post.getImagePost();
-                if(Constants.URL_POST_DEFAULT.equals(imagePost.getUrl())){
-                    ImagePost imagePostSave=new ImagePost();
+            if (postUpdateDTO.getImageBase64() != null && !"".equals(postUpdateDTO.getImageBase64())) {
+                ImagePost imagePost = post.getImagePost();
+                if (Constants.URL_POST_DEFAULT.equals(imagePost.getUrl())) {
+                    ImagePost imagePostSave = new ImagePost();
                     String newImageUrl = storageService.store(postUpdateDTO.getImageBase64());
                     imagePostSave.setUrl(newImageUrl);
                     imagePostRepository.save(imagePostSave);
                     post.setImagePost(imagePostSave);
-                }else {
+                } else {
                     storageService.delete(imagePost.getUrl());
                     String newImageUrl = storageService.store(postUpdateDTO.getImageBase64());
                     imagePost.setUrl(newImageUrl);
@@ -261,5 +270,34 @@ public class PostController {
             errors.put("message", "get data not successfully");
             return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    public List<PostInfoDTO> convertListPost(List<Post> postList) {
+        List<PostInfoDTO> postInfoDTOList = new ArrayList<>();
+        for (Post post : postList) {
+            PostInfoDTO postInfoDTO = new PostInfoDTO();
+            post.getUser().setPassword("");
+            postInfoDTO.setAverageRate(averageRate(post));
+            postInfoDTO.setPost(post);
+            postInfoDTOList.add(postInfoDTO);
+        }
+        return postInfoDTOList;
+    }
+
+    public Post converPost(Post post) {
+        Post result = new Post();
+        result.getUser().setPassword("");
+        return result;
+    }
+
+    private float averageRate(Post post) {
+        List<RatePost> ratePostList = ratePostRepository.findByPost(post);
+        int sum = 0;
+        for (RatePost element : ratePostList) {
+            sum += element.getRateNumber().intValue();
+        }
+        DecimalFormat df = new DecimalFormat("0.00");
+        String averageRateStr = df.format((float) sum / ratePostList.size());
+        return Float.parseFloat(averageRateStr);
     }
 }
