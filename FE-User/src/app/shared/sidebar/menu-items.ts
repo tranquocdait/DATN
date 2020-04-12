@@ -12,7 +12,7 @@ export const ROUTES: RouteInfo[] = [
         submenu: []
     },
     {
-        path: '/component/list-post',
+        path: '/component/app-item-info',
         title: 'Rau,củ,quả',
         icon: '',
         class: '',

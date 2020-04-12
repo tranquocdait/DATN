@@ -20,9 +20,9 @@ export class ListPostComponent implements OnInit {
   // dataList: PostElement[] = null;
   // displayedColumns: string[] = ['imageURL','postId', 'postName', 'userName', 'description', 'unitPrice', 'address', 'dateOfPost', 'province', 'category',"calculationUnit", 'edit', 'delete'];
   // @ViewChild(MatSort, { static: true }) sort: MatSort;
-  constructor(private modalService: NgbModal, private changeDetectorRefs: ChangeDetectorRef, private endpointFactory: EndpointFactory,private localStoreManager:LocalStoreManager) {
+  constructor(private modalService: NgbModal, private changeDetectorRefs: ChangeDetectorRef, private endpointFactory: EndpointFactory, private localStoreManager: LocalStoreManager) {
   }
-  demo(){
+  demo() {
     this.localStoreManager.addNumberCart();
   }
   ngOnInit() {

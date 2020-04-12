@@ -33,7 +33,7 @@ export class LocalStoreManager {
         }
     }
     public deleteNumberCart(): void {
-        localStorage.removeItem(this.reservedKeys.token);
+        localStorage.removeItem(this.reservedKeys.numberCart);
     }
     public setToken(token: string): void {
         localStorage.setItem(this.reservedKeys.token, token);

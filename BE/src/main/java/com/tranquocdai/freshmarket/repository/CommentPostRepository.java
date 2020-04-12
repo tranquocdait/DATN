@@ -13,4 +13,5 @@ import java.util.Optional;
 public interface CommentPostRepository extends JpaRepository<CommentPost,Long> {
     Collection<CommentPost> findByPost(Post post);
     Optional<CommentPost> findByIdAndUser(Long id, User user);
+    Optional<CommentPost> findByPostAndUser(Post post, User user);
 }

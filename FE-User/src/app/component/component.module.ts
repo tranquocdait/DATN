@@ -15,6 +15,7 @@ import { EditPostComponent } from './list-post/edit-post/edit-post.component';
 import { DeletePostComponent } from './list-post/delete-post/delete-post.component';
 import { EditItemComponent } from './list-item/edit-item/edit-item.component';
 import { DeleteItemComponent } from './list-item/delete-item/delete-item.component';
+import { ItemInfoComponent } from './item-info/item-info.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -45,7 +46,8 @@ import { DeleteItemComponent } from './list-item/delete-item/delete-item.compone
     EditPostComponent,
     DeletePostComponent,
     EditItemComponent,
-    DeleteItemComponent
+    DeleteItemComponent,
+    ItemInfoComponent
   ]
 })
 export class ComponentsModule {}

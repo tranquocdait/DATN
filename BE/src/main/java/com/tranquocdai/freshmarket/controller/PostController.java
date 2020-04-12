@@ -3,6 +3,7 @@ package com.tranquocdai.freshmarket.controller;
 import com.tranquocdai.freshmarket.config.Constants;
 import com.tranquocdai.freshmarket.dto.PostDTO;
 import com.tranquocdai.freshmarket.dto.PostInfoDTO;
+import com.tranquocdai.freshmarket.dto.UserCommentDTO;
 import com.tranquocdai.freshmarket.model.*;
 import com.tranquocdai.freshmarket.repository.*;
 import com.tranquocdai.freshmarket.response.ErrorResponse;
@@ -33,6 +34,9 @@ public class PostController {
 
     @Autowired
     CategoryRepository categoryRepository;
+
+    @Autowired
+    CommentPostRepository commentPostRepository;
 
     @Autowired
     ProvinceRepository provinceRepository;
@@ -284,10 +288,25 @@ public class PostController {
         return postInfoDTOList;
     }
 
-    public Post converPost(Post post) {
-        Post result = new Post();
-        result.getUser().setPassword("");
-        return result;
+    public PostInfoDTO converPost(Post post) {
+        PostInfoDTO postInfoDTO = new PostInfoDTO();
+        post.getUser().setPassword("");
+        List<RatePost> ratePostList = ratePostRepository.findByPost(post);
+        List<UserCommentDTO> userCommentDTOList=new ArrayList<>();
+        for (RatePost element : ratePostList) {
+            UserCommentDTO userCommentDTO=new UserCommentDTO();
+            if(commentPostRepository.findByPostAndUser(post,element.getUser()).isPresent()) {
+                CommentPost commentPost = commentPostRepository.findByPostAndUser(post, element.getUser()).get();
+                userCommentDTO.setComment(commentPost.getContent());
+            }
+            userCommentDTO.setUser(element.getUser());
+            userCommentDTO.setRate(element.getRateNumber());
+            userCommentDTOList.add(userCommentDTO);
+        }
+        postInfoDTO.setUserCommentDTOList(userCommentDTOList);
+        postInfoDTO.setPost(post);
+        postInfoDTO.setAverageRate(averageRate(post));
+        return postInfoDTO;
     }
 
     private float averageRate(Post post) {

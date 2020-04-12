@@ -1,11 +1,24 @@
 package com.tranquocdai.freshmarket.dto;
 
+import com.tranquocdai.freshmarket.model.CommentPost;
 import com.tranquocdai.freshmarket.model.Post;
 
+import java.util.List;
+
 public class PostInfoDTO {
-    Post post;
+    private Post post;
+
+    private List<UserCommentDTO> userCommentDTOList;
 
     private float averageRate;
+
+    public List<UserCommentDTO> getUserCommentDTOList() {
+        return userCommentDTOList;
+    }
+
+    public void setUserCommentDTOList(List<UserCommentDTO> userCommentDTOList) {
+        this.userCommentDTOList = userCommentDTOList;
+    }
 
     public Post getPost() {
         return post;
