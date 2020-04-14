@@ -1,0 +1,36 @@
+<div class="card">
+    <h5 class="card-header info-color white-text text-center py-4">
+        <strong *ngIf="data.type === 'edit'">Thông tin đơn hàng</strong>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="clickClose()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </h5>
+    <div class="card-body col-12">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-6">
+                <div class="card">
+                    <img class="card-img-top img-responsive" src="assets/images/big/img1.jpg" alt="Card image cap">
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row ml-2 mb-2"><i class="mr-2">Tên khách hàng : </i><b>Trần Quốc Đại</b></div>
+                        <div class="row ml-2 mb-2"><i class="mr-2">Địa chỉ khách hàng: </i><b> Hồ Chí Minh</b></div>
+                        <div class="row ml-2 mb-2"><i class="mr-2">Số ĐT khách hàng: </i><b>0968227790</b></div>
+                        <div class="row ml-2 mb-2"><i class="mr-2">Post name : </i><b>Ngô trái</b></div>
+                        <div class="row ml-2 mb-2"><i class="mr-2">Đơn giá : </i><b>40000 VND/Kg</b></div>
+                        <div class="row ml-2 mb-2"><i class="mr-2">Sô Lượng : </i><b>100</b></div><br>
+                        <div class="row ml-2 mb-2" style="border-top:black outset ;"><i class="mr-2">Tổng tiền : </i><b>4000000</b></div>
+                        <div class="row mb-2">
+                            <div class="col">
+                                <a class="btn btn-info ml-2" (click)="purchaseItem()">Xác nhận đơn hàng</a>
+                                <a class="btn btn-danger ml-2" (click)="purchaseItem()">Cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -13,9 +13,10 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatInputModule} from '@angular/material/input';
 import { EditPostComponent } from './list-post/edit-post/edit-post.component';
 import { DeletePostComponent } from './list-post/delete-post/delete-post.component';
-import { EditItemComponent } from './list-item/edit-item/edit-item.component';
 import { DeleteItemComponent } from './list-item/delete-item/delete-item.component';
 import { ItemInfoComponent } from './item-info/item-info.component';
+import { PurchaseInfoComponent } from './list-item/purchase-info/purchase-info.component';
+import { ConfirmPurchaseComponent } from './confirm-purchase/confirm-purchase.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -29,13 +30,13 @@ import { ItemInfoComponent } from './item-info/item-info.component';
     MatSelectModule,
     MatInputModule
   ],exports: [
-     EditItemComponent,
+    PurchaseInfoComponent,
      EditPostComponent,
      DeleteItemComponent,
      DeletePostComponent,
    ],
   entryComponents: [
-    EditItemComponent,
+    PurchaseInfoComponent,
     EditPostComponent,
     DeleteItemComponent,
     DeletePostComponent,
@@ -45,9 +46,12 @@ import { ItemInfoComponent } from './item-info/item-info.component';
     ListPostComponent,
     EditPostComponent,
     DeletePostComponent,
-    EditItemComponent,
+    PurchaseInfoComponent,
     DeleteItemComponent,
-    ItemInfoComponent
+    ItemInfoComponent,
+    PurchaseInfoComponent,
+    PurchaseInfoComponent,
+    ConfirmPurchaseComponent
   ]
 })
 export class ComponentsModule {}

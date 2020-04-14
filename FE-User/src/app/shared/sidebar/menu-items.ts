@@ -3,7 +3,7 @@ import { RouteInfo } from './sidebar.metadata';
 export const ROUTES: RouteInfo[] = [
     {
         path: 'mdi mdi-home',
-        title: 'Fresher martket',
+        title: 'Danh mục',
         icon: '',
         class: 'nav-small-cap',
         label: '',
@@ -12,7 +12,7 @@ export const ROUTES: RouteInfo[] = [
         submenu: []
     },
     {
-        path: '/component/app-item-info',
+        path: '/component/item-info',
         title: 'Rau,củ,quả',
         icon: '',
         class: '',
@@ -22,7 +22,7 @@ export const ROUTES: RouteInfo[] = [
         submenu: []
     },
     {
-        path: '/component/list-post',
+        path: '/component/list-item',
         title: 'Thủy-Hải Sản',
         icon: '',
         class: '',
@@ -32,7 +32,7 @@ export const ROUTES: RouteInfo[] = [
         submenu: []
     },
     {
-        path: '/component/list-post',
+        path: '/component/confirm-purchase',
         title: 'Thịt các loại',
         icon: '',
         class: '',

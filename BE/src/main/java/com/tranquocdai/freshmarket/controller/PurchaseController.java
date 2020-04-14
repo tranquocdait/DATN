@@ -55,8 +55,13 @@ public class PurchaseController {
         }
     }
     @GetMapping("/purchases/{postId}")
-    public ResponseEntity readAllPurchase(@PathVariable("postId") Long id) {
+    public ResponseEntity readAllPurchase(Authentication authentication,@PathVariable("postId") Long id) {
         try {
+            if (!baseService.getUser(authentication).isPresent()) {
+                Map<String, String> errors = new HashMap<>();
+                errors.put("message", "username has not existed");
+                return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
+            }
             if (!postRepository.findById(id).isPresent()) {
                 Map<String, String> errors = new HashMap<>();
                 errors.put("message", "post id is not existed");
@@ -76,6 +81,11 @@ public class PurchaseController {
     @PostMapping("/purchases/create")
     public ResponseEntity createPurchase(Authentication authentication, @Valid @RequestBody PurchaseAddDTO purchaseAddDTO) {
         try {
+            if (!baseService.getUser(authentication).isPresent()) {
+                Map<String, String> errors = new HashMap<>();
+                errors.put("message", "username has not existed");
+                return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
+            }
             User user = baseService.getUser(authentication).get();
             Post post = postRepository.findById(purchaseAddDTO.getPostId()).get();
             StatusPurchase statusPurchase = statusPurchaseRepository.findById(purchaseAddDTO.getStatusPurchaseId()).get();
