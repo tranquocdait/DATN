@@ -17,6 +17,8 @@ import { DeleteItemComponent } from './list-item/delete-item/delete-item.compone
 import { ItemInfoComponent } from './item-info/item-info.component';
 import { PurchaseInfoComponent } from './list-item/purchase-info/purchase-info.component';
 import { ConfirmPurchaseComponent } from './confirm-purchase/confirm-purchase.component';
+import { UserInfoComponent } from './user-info/user-info.component';
+import { EditUserComponent } from './user-info/edit-user/edit-user.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -31,13 +33,15 @@ import { ConfirmPurchaseComponent } from './confirm-purchase/confirm-purchase.co
     MatInputModule
   ],exports: [
     PurchaseInfoComponent,
-     EditPostComponent,
-     DeleteItemComponent,
-     DeletePostComponent,
+    EditUserComponent,
+    EditPostComponent,
+    DeleteItemComponent,
+    DeletePostComponent,
    ],
   entryComponents: [
     PurchaseInfoComponent,
     EditPostComponent,
+    EditUserComponent,
     DeleteItemComponent,
     DeletePostComponent,
   ],
@@ -47,11 +51,12 @@ import { ConfirmPurchaseComponent } from './confirm-purchase/confirm-purchase.co
     EditPostComponent,
     DeletePostComponent,
     PurchaseInfoComponent,
+    EditUserComponent,
     DeleteItemComponent,
     ItemInfoComponent,
-    PurchaseInfoComponent,
-    PurchaseInfoComponent,
-    ConfirmPurchaseComponent
+    ConfirmPurchaseComponent,
+    UserInfoComponent,
+    EditUserComponent
   ]
 })
 export class ComponentsModule {}

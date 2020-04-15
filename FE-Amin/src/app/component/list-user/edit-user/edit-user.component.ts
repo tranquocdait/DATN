@@ -12,7 +12,8 @@ import {EndpointFactory} from '../../../services/endpoint-factory.service';
 export class EditUserComponent implements OnInit {
   roleList: any;
   imageBase64: string;
-
+  messageErrorArray = { corfirmPassword: "Nhập lại mật khẩu không đúng" };
+  messageError: any;
   constructor(public activeModal: NgbActiveModal, private formBuilder: FormBuilder, private endpointFactory: EndpointFactory) {
   }
 
@@ -112,5 +113,14 @@ export class EditUserComponent implements OnInit {
         }
       );
     }
+  }
+  checkForm(): boolean {
+    console.log(this.editForm.value['confirmPassword'].length);
+    if (this.editForm.value['confirmPassword'].length > 6)
+      if (this.editForm.value['password'] !== this.editForm.value['confirmPassword']){
+        this.messageError=this.messageErrorArray.corfirmPassword;
+        return false;
+      }
+    return true;
   }
 }
