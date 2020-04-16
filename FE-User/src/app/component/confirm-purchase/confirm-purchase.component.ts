@@ -9,7 +9,8 @@ export class ConfirmPurchaseComponent implements OnInit {
   name:string;
   address:string;
   phoneNumber:string;
-  constructor() { }
+  constructor() { 
+  }
 
   ngOnInit() {
   }

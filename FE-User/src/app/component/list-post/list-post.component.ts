@@ -8,6 +8,7 @@ import { PostElement } from '../model/post.model';
 import { DeletePostComponent } from './delete-post/delete-post.component';
 import { EditPostComponent } from './edit-post/edit-post.component';
 import { LocalStoreManager } from '../../services/local-store-manager.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-list-post',
@@ -20,10 +21,8 @@ export class ListPostComponent implements OnInit {
   // dataList: PostElement[] = null;
   // displayedColumns: string[] = ['imageURL','postId', 'postName', 'userName', 'description', 'unitPrice', 'address', 'dateOfPost', 'province', 'category',"calculationUnit", 'edit', 'delete'];
   // @ViewChild(MatSort, { static: true }) sort: MatSort;
-  constructor(private modalService: NgbModal, private changeDetectorRefs: ChangeDetectorRef, private endpointFactory: EndpointFactory, private localStoreManager: LocalStoreManager) {
-  }
-  demo() {
-    this.localStoreManager.addNumberCart();
+  constructor( private router: Router,private modalService: NgbModal, private changeDetectorRefs: ChangeDetectorRef,
+     private endpointFactory: EndpointFactory, private localStoreManager: LocalStoreManager) {
   }
   ngOnInit() {
     //this.setData();
@@ -113,4 +112,7 @@ export class ListPostComponent implements OnInit {
   //   }
   //   );
   // }
+  showInfo(){
+    this.router.navigateByUrl('/component/item-info');
+  }
 }

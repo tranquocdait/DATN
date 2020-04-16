@@ -51,6 +51,7 @@ export class EditUserComponent implements OnInit {
       role: ['', Validators.required],
       fullName: ['', Validators.required],
       password: ['', Validators.required],
+      confirmPassword: ['', Validators.required],
       phoneNumber: ['', Validators.required],
       email: ['', Validators.required],
       avatarURL: ['', Validators.required]
@@ -64,6 +65,7 @@ export class EditUserComponent implements OnInit {
       role: [this.data.data.role.roleID, Validators.required],
       fullName: [this.data.data.fullName, Validators.required],
       password: ['', Validators.required],
+      confirmPassword: ['', Validators.required],
       phoneNumber: [this.data.data.phoneNumber, Validators.required],
       email: [this.data.data.email, Validators.required],
       avatarURL: ['', Validators.required]

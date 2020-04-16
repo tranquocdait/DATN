@@ -30,7 +30,7 @@
                                 <input type="text" class="form-control col-1 pt-1 ml-1" value="{{numberItem}}">
                                 <button type="button" class="btn btn-info ml-1"
                                     style="width: 8px;padding-right: 16px;" (click)="changeNumber('add')">+</button>
-                                <a href="#" class="btn btn-danger ml-2" (click)="purchaseItem()">Chọn mua</a>
+                                <a class="btn btn-danger ml-2" (click)="purchaseItem()">Chọn mua</a>
                             </div>
                         </div>
                     </div>
@@ -42,7 +42,7 @@
         <h4>Nhận xét của khách hàng</h4>
         <div class="card mb-1">
             <div class="card-body">
-                <button type="button" class="btn btn-info">Viết nhận xét</button>
+                <button type="button" class="btn btn-info" (click)="createComment()">Viết nhận xét</button>
             </div>
         </div>
         <div class="card mb-1">

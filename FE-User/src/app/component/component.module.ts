@@ -19,6 +19,7 @@ import { PurchaseInfoComponent } from './list-item/purchase-info/purchase-info.c
 import { ConfirmPurchaseComponent } from './confirm-purchase/confirm-purchase.component';
 import { UserInfoComponent } from './user-info/user-info.component';
 import { EditUserComponent } from './user-info/edit-user/edit-user.component';
+import { CreateCommentComponent } from './item-info/create-comment/create-comment.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -36,6 +37,7 @@ import { EditUserComponent } from './user-info/edit-user/edit-user.component';
     EditUserComponent,
     EditPostComponent,
     DeleteItemComponent,
+    CreateCommentComponent,
     DeletePostComponent,
    ],
   entryComponents: [
@@ -43,6 +45,7 @@ import { EditUserComponent } from './user-info/edit-user/edit-user.component';
     EditPostComponent,
     EditUserComponent,
     DeleteItemComponent,
+    CreateCommentComponent,
     DeletePostComponent,
   ],
   declarations: [
@@ -55,8 +58,10 @@ import { EditUserComponent } from './user-info/edit-user/edit-user.component';
     DeleteItemComponent,
     ItemInfoComponent,
     ConfirmPurchaseComponent,
+    CreateCommentComponent,
     UserInfoComponent,
-    EditUserComponent
+    EditUserComponent,
+    CreateCommentComponent
   ]
 })
 export class ComponentsModule {}

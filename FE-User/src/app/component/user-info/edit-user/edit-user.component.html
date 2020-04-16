@@ -8,23 +8,25 @@
 
     <div class="card-body px-lg-5 pt-0">
         <div class="text-center" *ngIf="!checkForm()">
-            <small style="color: red;" >{{messageError}}</small>
+            <small style="color: red;">{{messageError}}</small>
         </div>
-        
+
         <form [formGroup]="editForm" (ngSubmit)="onSubmit()" class="text-center" style="color: #757575;" action="#!">
             <div class="container md-1 mt-1">
                 <label class="col-md-4 text-right">User Name</label>
-                <input class="form-control col-md-8" formControlName="userName" [readonly]="data.type==='edit'" placeholder="User name">
+                <input class="form-control col-md-8" formControlName="userName" [readonly]="data.type==='edit'"
+                    placeholder="User name">
             </div>
-          <div class="container md-1 mt-1">
-            <label class="col-md-4 text-right">Mật khẩu</label>
-            <input type="password" class="form-control col-md-8" formControlName="password" placeholder="Password">
-          </div>
-          
-          <div class="container md-1 mt-1">
-            <label class="col-md-4 text-right">Nhập lại mật khẩu</label>
-            <input type="password"  class="form-control col-md-8" formControlName="confirmPassword" placeholder="Confirm password">
-          </div>
+            <div class="container md-1 mt-1">
+                <label class="col-md-4 text-right">Mật khẩu</label>
+                <input type="password" class="form-control col-md-8" formControlName="password" placeholder="Password">
+            </div>
+
+            <div class="container md-1 mt-1">
+                <label class="col-md-4 text-right">Nhập lại mật khẩu</label>
+                <input type="password" class="form-control col-md-8" formControlName="confirmPassword"
+                    placeholder="Confirm password">
+            </div>
             <div class="container md-1 mt-1">
                 <label class="col-md-4 text-right">Role</label>
                 <select class="form-control col-md-8" formControlName="role">
@@ -47,12 +49,13 @@
             </div>
             <div class="container md-1 mt-1">
                 <label class="col-md-4">Avatar</label>
-                <input type="file" accept="image/*" class="form-control col-md-8" formControlName="avatarURL" (change)='changeToBase64($event)'>
+                <input type="file" accept="image/*" class="form-control col-md-8" formControlName="avatarURL"
+                    (change)='changeToBase64($event)'>
             </div>
             <div class="container">
                 <button class="btn btn-outline-info btn-rounded waves-effect
                     col-md-4" type="submit" id="btn_delete" *ngIf="data.type === 'edit'">Edit</button>
-                    <button class="btn btn-outline-info btn-rounded waves-effect
+                <button class="btn btn-outline-info btn-rounded waves-effect
                     col-md-4" type="submit" id="btn_delete" *ngIf="data.type !== 'edit'">Add New</button>
                 <button class="btn btn-outline-danger btn-rounded waves-effect
                     col-md-4" (click)="clickClose()">Cancel</button>
