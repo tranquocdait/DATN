@@ -1,8 +1,8 @@
 import { Component, AfterViewInit, OnInit } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ROUTES } from './menu-items';
 import { RouteInfo } from './sidebar.metadata';
 import { Router, ActivatedRoute } from '@angular/router';
+import { LocalStoreManager } from '../../services/local-store-manager.service';
 declare var $: any;
 @Component({
   selector: 'app-sidebar',
@@ -21,12 +21,13 @@ export class SidebarComponent implements OnInit {
       this.showMenu = element;
     }
   }
-  constructor(private modalService: NgbModal, private router: Router, private route: ActivatedRoute) { }
+  constructor(private localStoreManager: LocalStoreManager, private router: Router, private route: ActivatedRoute) { }
   // End open close
   ngOnInit() {
     this.sidebarnavItems = ROUTES.filter(sidebarnavItem => sidebarnavItem);
   }
   onUrl(sidebarnavItem: any): void {
+    this.localStoreManager.setPageProfile('');
     this.router.navigateByUrl(sidebarnavItem.path);
   }
 }

@@ -16,6 +16,7 @@ declare var $: any;
 })
 export class NavigationComponent implements AfterViewInit, AfterContentChecked {
   @Output() toggleSidebar = new EventEmitter<void>();
+  @Output('data') data = new EventEmitter();
   number: any;
   public config: PerfectScrollbarConfigInterface = {};
   constructor(private modalService: NgbModal, private router: Router, private localStoreManager: LocalStoreManager) {
@@ -29,13 +30,19 @@ export class NavigationComponent implements AfterViewInit, AfterContentChecked {
     this.localStoreManager.removeToken();
     this.localStoreManager.deleteNumberCart();
     //location.reload();
-    this.router.navigateByUrl('/login');
+  this.router.navigateByUrl('/login');
   }
 
   ngAfterViewInit() {
 
   }
+
   ngAfterContentChecked() {
     this.number = this.localStoreManager.getNumberCart();
+  }
+
+  onAction(url:string):void{
+    this.localStoreManager.setPageProfile('profile');
+    this.router.navigateByUrl(url);
   }
 }

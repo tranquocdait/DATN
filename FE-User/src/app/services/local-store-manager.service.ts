@@ -1,14 +1,21 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 @Injectable({
     providedIn: 'root'
 })
 
 export class LocalStoreManager {
+    private pageProfile = '';
     private reservedKeys: any =
         {
             token: 'token',
-            numberCart: 'numberCart',
+            numberCart: 'numberCart'
         };
+    public setPageProfile(pageProfile: string): void {
+        this.pageProfile = pageProfile;
+    }
+    public getPageProfile(): string {
+        return this.pageProfile;
+    }
     public setNumberCart(numberCart: string): void {
         localStorage.setItem(this.reservedKeys.numberCart, numberCart);
     }
