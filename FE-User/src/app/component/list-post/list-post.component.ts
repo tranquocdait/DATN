@@ -1,12 +1,8 @@
 
-import { Component, OnInit, ViewChild, ChangeDetectorRef, Input } from '@angular/core';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { EndpointFactory } from '../../services/endpoint-factory.service';
 import { PostElement } from '../model/post.model';
-import { DeletePostComponent } from './delete-post/delete-post.component';
-import { EditPostComponent } from './edit-post/edit-post.component';
 import { LocalStoreManager } from '../../services/local-store-manager.service';
 import { Router } from '@angular/router';
 
@@ -17,106 +13,92 @@ import { Router } from '@angular/router';
 })
 export class ListPostComponent implements OnInit {
     currentRate = 3.5;
-    // dataSource: MatTableDataSource<PostElement>;
-    // dataList: PostElement[] = null;
-    // displayedColumns: string[] = ['imageURL','postId', 'postName', 'userName', 'description', 'unitPrice', 'address', 'dateOfPost', 'province', 'category',"calculationUnit", 'edit', 'delete'];
-    // @ViewChild(MatSort, { static: true }) sort: MatSort;
+    isLoadData: false;
+    dataList: PostElement[] = null;
     constructor(private router: Router, private modalService: NgbModal, private changeDetectorRefs: ChangeDetectorRef,
         private endpointFactory: EndpointFactory, private localStoreManager: LocalStoreManager) {
+        this.loadData();
+        this.checkLoadData();
     }
     ngOnInit() {
-        //this.setData();
     }
-    // setData() {
-    //   this.loadData();
-    //   this.setDataSource();
-    // }
-    // loadData() {
-    //   this.endpointFactory.getEndPoint("posts").subscribe(data => {
-    //     if (data.status === "success") {
-    //       const temp = [];
-    //       data.data.forEach((element, index) => {
-    //         let post = new PostElement();
-    //         post.postId = element.id;
-    //         post.postName = element.postName;
-    //         post.userName = element.user.userName;
-    //         post.userElement = element.user;
-    //         post.unitPrice = element.unitPrice;
-    //         post.address=element.address;
-    //         post.dateOfPost=new Date(element.dateOfPost[0],element.dateOfPost[1],element.dateOfPost[2]);
-    //         post.province = element.province;
-    //         post.imageURL = element.imagePost.url;
-    //         post.imageURL = element.imagePost.url;
-    //         post.category = element.category;
-    //         post.description = element.description;
-    //         post.calculationUnit = element.calculationUnit;
-    //         temp.push(post);
 
-    //       });
-    //       this.dataList = temp;
-    //     };
-    //   }
-    //   );
-    // }
-    // setDataSource() {
-    //   setTimeout(() => {
-    //     this.dataSource = new MatTableDataSource(this.dataList);
-    //     this.dataSource.sort = this.sort;
-    //   }, 1000);
+    loadData() {
+        this.endpointFactory.getEndPoint('posts').subscribe(data => {
+            if (data.status === 'success') {
+                const temp = [];
+                data.data.forEach((elementInfo) => {
+                    const post = new PostElement();
+                    const element = elementInfo.post;
+                    post.postId = element.id;
+                    post.postName = element.postName;
+                    post.userName = element.user.userName;
+                    post.userElement = element.user;
+                    post.unitPrice = element.unitPrice;
+                    post.address = element.address;
+                    post.dateOfPost = new Date(element.dateOfPost[0], element.dateOfPost[1], element.dateOfPost[2]);
+                    post.province = element.province;
+                    post.imageURL = element.imagePost.url;
+                    post.category = element.category;
+                    if (element.description.length < 100) {
+                        post.description = element.description;
+                    } else {
+                        post.description = element.description.substr(0, 100) + '...';
+                    }
+                    post.calculationUnit = element.calculationUnit;
+                    post.averageRate = Number.parseFloat(elementInfo.averageRate);
+                    temp.push(post);
 
-    // }
-    // deletePost(element: any) {
-    //   const modalRef = this.modalService.open(DeletePostComponent, { size: 'lg', windowClass: 'delete-modal', centered: true });
-    //   modalRef.componentInstance.data = { data: element }
-    //   modalRef.componentInstance.output.subscribe((res) => {
-    //     if (res === "success") {
-    //       this.setData();
-    //     }
-    //   });
-    // }
+                });
+                this.dataList = temp;
+            }
+        });
+    }
 
-    // editPost(element: any) {
-    //   const modalRef = this.modalService.open(EditPostComponent, { size: 'lg', windowClass: 'edit-modal', centered: true });
-    //   modalRef.componentInstance.data = { data: element, type: 'edit' };
-    //   modalRef.componentInstance.output.subscribe((res) => {
-    //     if (res === "success") {
-    //       this.setData();
-    //     }
-    //   });
-    // }
+    checkLoadData(): boolean {
+        return false;
+    }
 
-    // searcPost(search: string) {
-    //   this.endpointFactory.getEndPoint("posts/search?keySearch="+search).subscribe(data => {
-    //     if (data.status === "success") {
-    //       const temp = [];
-    //       data.data.forEach((element, index) => {
-    //         let post = new PostElement();
-    //         post.postId = element.id;
-    //         post.postName = element.postName;
-    //         post.userName = element.user.userName;
-    //         post.userElement = element.user;
-    //         post.unitPrice = element.unitPrice;
-    //         post.address=element.address;
-    //         post.dateOfPost=new Date(element.dateOfPost[0],element.dateOfPost[1],element.dateOfPost[2]);
-    //         post.province = element.province;
-    //         post.imageURL = element.imagePost.url;
-    //         post.imageURL = element.imagePost.url;
-    //         post.category = element.category;
-    //         post.description = element.description;
-    //         post.calculationUnit = element.calculationUnit;
-    //         temp.push(post);
-    //       });
-    //       this.dataList = temp;
-    //       this.setDataSource();
-    //     };
-    //   }
-    //   );
-    // }
-    showInfo() {
+    searchPost(search: string) {
+        this.endpointFactory.getEndPoint('posts/search?keySearch=' + search).subscribe(data => {
+            if (data.status === 'success') {
+                const temp = [];
+                data.data.forEach((elementInfo) => {
+                    const post = new PostElement();
+                    const element = elementInfo.post;
+                    post.postId = element.id;
+                    post.postName = element.postName;
+                    post.userName = element.user.userName;
+                    post.userElement = element.user;
+                    post.unitPrice = element.unitPrice;
+                    post.address = element.address;
+                    post.dateOfPost = new Date(element.dateOfPost[0], element.dateOfPost[1], element.dateOfPost[2]);
+                    post.province = element.province;
+                    post.imageURL = element.imagePost.url;
+                    post.category = element.category;
+                    if (element.description.length < 100) {
+                        post.description = element.description;
+                    } else {
+                        post.description = element.description.substr(0, 100) + '...';
+                    }
+                    post.calculationUnit = element.calculationUnit;
+                    post.averageRate = Number.parseFloat(elementInfo.averageRate);
+                    temp.push(post);
+
+                });
+                this.dataList = temp;
+            }
+        });
+    }
+
+    showInfo(post: PostElement): void {
+        this.localStoreManager.setPostSelected(post.postId);
         if (this.localStoreManager.getPageProfile() === 'profile') {
             this.router.navigateByUrl('/component/list-item');
         } else {
             this.router.navigateByUrl('/component/item-info');
         }
     }
+
 }
+

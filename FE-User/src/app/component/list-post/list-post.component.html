@@ -1,18 +1,20 @@
-<div class="row">
-    <div class="col-12">
-        <h4 class="d-inline">Card with Image code icon</h4>
-        <div class="row">
-            <div class="col-lg-3 col-md-6">
-                <div class="card" style="cursor: pointer;" (click)="showInfo()">
-                    <img class="card-img-top img-responsive" src="assets/images/big/img1.jpg" alt="Card image cap">
+<div class="row" >
+    <div class="col-12" >
+        <div class="container">
+            <input #search class="form-control col-md-5" type="text" placeholder="Tìm kiếm sản phẩm mong muốn..." aria-label="Search" (keyup.enter)="searchPost(search.value)">
+            <button class="btn" (click)="searchPost(search.value)"><i class="fa fa-search fa-lg pb-2"></i></button>
+        </div>
+        <div class="row mt-2">
+            <div class="col-lg-3 col-md-6" *ngFor="let post of dataList">
+                <div class="card" style="cursor: pointer;" (click)="showInfo(post)">
+                    <img class="card-img-top img-responsive" src="{{post.imageURL}}" alt="Card image cap">
                     <div class="card-body">
-                        <h4 class="card-title">Card title</h4>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of
-                            the card's content.</p>
-                        <div class="row">
-                            <div class="col"><i>Hồ Chí Minh</i></div>
+                        <h4 class="card-title">{{post.postName}}</h4>
+                        <p class="card-text">{{post.description}}</p>
+                        <div class="row" >
+                            <div class="col"><i>{{post.province.nameProvince}}</i></div>
                             <div class="col">
-                                <ngb-rating [(rate)]="currentRate" max='5' [readonly]="true">
+                                <ngb-rating [(rate)]="post.averageRate" max='5' [readonly]="true">
                                     <ng-template let-fill="fill" let-index="index">
                                         <span class="star" [class.filled]="fill === 100"><span class="half"
                                                 [style.width.%]="fill">&#9733;</span>&#9733;</span>
@@ -21,103 +23,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col" style="margin-top: 8px;">400000/1 kg</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="card">
-                    <img class="card-img-top img-responsive" src="assets/images/big/img1.jpg" alt="Card image cap">
-                    <div class="card-body">
-                        <h4 class="card-title">Card title</h4>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of
-                            the card's content.</p>
-                        <div class="row">
-                            <div class="col"><i>Hồ Chí Minh</i></div>
-                            <div class="col">
-                                <ngb-rating [(rate)]="currentRate" max='5' [readonly]="true">
-                                    <ng-template let-fill="fill" let-index="index">
-                                        <span class="star" [class.filled]="fill === 100"><span class="half"
-                                                [style.width.%]="fill">&#9733;</span>&#9733;</span>
-                                    </ng-template>
-                                </ngb-rating>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col" style="margin-top: 8px;">400000/1 kg</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="card">
-                    <img class="card-img-top img-responsive" src="assets/images/big/img2.jpg" alt="Card image cap">
-                    <div class="card-body">
-                        <h4 class="card-title">Card title</h4>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of
-                            the card's content.</p>
-                        <div class="row">
-                            <div class="col"><i>Hồ Chí Minh</i></div>
-                            <div class="col">
-                                <ngb-rating [(rate)]="currentRate" max='5' [readonly]="true">
-                                    <ng-template let-fill="fill" let-index="index">
-                                        <span class="star" [class.filled]="fill === 100"><span class="half"
-                                                [style.width.%]="fill">&#9733;</span>&#9733;</span>
-                                    </ng-template>
-                                </ngb-rating>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col" style="margin-top: 8px;">400000/1 kg</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="card">
-                    <img class="card-img-top img-responsive" style="height:188px;" src="https://res.cloudinary.com/dnccnn3nx/image/upload/v1585411280/nmeuxcuzg1whpbdn8fz9.png" alt="Card image cap">
-                    <div class="card-body">
-                        <h4 class="card-title">Card title</h4>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of
-                            the card's content.</p>
-                        <div class="row">
-                            <div class="col"><i>Hồ Chí Minh</i></div>
-                            <div class="col">
-                                <ngb-rating [(rate)]="currentRate" max='5' [readonly]="true">
-                                    <ng-template let-fill="fill" let-index="index">
-                                        <span class="star" [class.filled]="fill === 100"><span class="half"
-                                                [style.width.%]="fill">&#9733;</span>&#9733;</span>
-                                    </ng-template>
-                                </ngb-rating>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col" style="margin-top: 8px;">400000/1 kg</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 img-responsive">
-                <div class="card">
-                    <img class="card-img-top img-responsive" src="https://res.cloudinary.com/dnccnn3nx/image/upload/v1581133132/sample.jpg" alt="Card image cap">
-                    <div class="card-body">
-                        <h4 class="card-title">Card title</h4>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of
-                            the card's content.</p>
-                        <div class="row">
-                            <div class="col"><i>Hồ Chí Minh</i></div>
-                            <div class="col">
-                                <ngb-rating [(rate)]="currentRate" max='5' [readonly]="true">
-                                    <ng-template let-fill="fill" let-index="index">
-                                        <span class="star" [class.filled]="fill === 100"><span class="half"
-                                                [style.width.%]="fill">&#9733;</span>&#9733;</span>
-                                    </ng-template>
-                                </ngb-rating>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col" style="margin-top: 8px;">400000/1 kg</div>
+                            <div class="col" style="margin-top: 8px;">{{post.unitPrice}}/1 {{post.calculationUnit.unitName}}</div>
                         </div>
                     </div>
                 </div>
