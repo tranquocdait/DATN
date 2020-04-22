@@ -66,19 +66,6 @@ public class PostController {
     }
 
     @GetMapping("/users/posts")
-    public ResponseEntity readAllPost(Authentication authentication) {
-        try {
-            User user = baseService.getUser(authentication).get();
-            List<Post> postList = postRepository.findByUser(user);
-            return new ResponseEntity(new SuccessfulResponse(convertListPost(postList)), HttpStatus.OK);
-        } catch (Exception ex) {
-            Map<String, String> errors = new HashMap<>();
-            errors.put("message", "get data not successfully");
-            return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @PostMapping("/posts")
     public ResponseEntity readPost(Authentication authentication) {
         try {
             User user = baseService.getUser(authentication).get();
@@ -312,11 +299,14 @@ public class PostController {
     private float averageRate(Post post) {
         List<RatePost> ratePostList = ratePostRepository.findByPost(post);
         int sum = 0;
-        for (RatePost element : ratePostList) {
-            sum += element.getRateNumber().intValue();
+        if(ratePostList.size()>0) {
+            for (RatePost element : ratePostList) {
+                sum += element.getRateNumber().intValue();
+            }
+            DecimalFormat df = new DecimalFormat("0.00");
+            String averageRateStr = df.format((float) sum / ratePostList.size());
+            return Float.parseFloat(averageRateStr);
         }
-        DecimalFormat df = new DecimalFormat("0.00");
-        String averageRateStr = df.format((float) sum / ratePostList.size());
-        return Float.parseFloat(averageRateStr);
+        return 0;
     }
 }

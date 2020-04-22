@@ -16,8 +16,8 @@ export class LoginComponent implements OnInit {
     loginStatus = false;
     @ViewChild('tt', { static: true }) ttUsername: NgbTooltip;
     constructor(private formBuilder: FormBuilder, private router: Router, private localStoreManager: LocalStoreManager,
-         private endpointFactory: EndpointFactory) {
-        // this.localStoreManager.removeToken();
+        private endpointFactory: EndpointFactory) {
+        this.localStoreManager.removeToken();
         this.createForm();
     }
 
@@ -52,6 +52,8 @@ export class LoginComponent implements OnInit {
                 }
                 );
             }
+        }, error => {
+            console.log('login false !');
         }
         );
         this.loginFailed();

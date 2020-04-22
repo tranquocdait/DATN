@@ -9,7 +9,8 @@ export class LocalStoreManager {
     private reservedKeys: any =
         {
             token: 'token',
-            numberCart: 'numberCart'
+            numberCart: 'numberCart',
+            postSelected: 'postSelected'
         };
     public setPageProfile(pageProfile: string): void {
         this.pageProfile = pageProfile;
@@ -20,11 +21,11 @@ export class LocalStoreManager {
     }
 
     public setPostSelected(postSelected: string): void {
-        this.postSelected = postSelected;
+        localStorage.setItem(this.reservedKeys.postSelected, postSelected);
     }
 
     public getPostSelected(): string {
-        return this.postSelected;
+        return localStorage.getItem(this.reservedKeys.postSelected);
     }
 
     public setNumberCart(numberCart: string): void {

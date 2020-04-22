@@ -2,6 +2,7 @@ package com.tranquocdai.freshmarket.controller;
 
 import com.tranquocdai.freshmarket.config.Constants;
 import com.tranquocdai.freshmarket.dto.UserDTO;
+import com.tranquocdai.freshmarket.dto.UserFirstInfo;
 import com.tranquocdai.freshmarket.dto.UserInfoDTO;
 import com.tranquocdai.freshmarket.model.Avatar;
 import com.tranquocdai.freshmarket.model.RoleUser;
@@ -73,6 +74,33 @@ public class UserController {
         } catch (Exception ex) {
             Map<String, String> errors = new HashMap<>();
             errors.put("message", "get data not successfully");
+            return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/users/fist")
+    public ResponseEntity createUserFistInfo(@Valid @RequestBody UserFirstInfo userAddDTO) {
+        try {
+            if (userRepository.findByUserName(userAddDTO.getUserName()).isPresent()) {
+                Map<String, String> errors = new HashMap<>();
+                errors.put("message", "username has existed");
+                return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
+            }
+            RoleUser roleUser = roleResponsitory.findByRoleID(Constants.ID_ROLE_DEFAULT).get();
+            User user = new User();
+            user.setUserName(userAddDTO.getUserName());
+            user.setPassword(passwordEncoder.encode(userAddDTO.getPassword()));
+            user.setRoleUser(roleUser);
+            Avatar avatar = new Avatar();
+            avatar = avatarRepository.findById(Constants.ID_IMAGE_DEFAULT).get();
+            user.setAvatar(avatar);
+            userRepository.save(user);
+            User result = userRepository.findByUserName(userAddDTO.getUserName()).get();
+            UserInfoDTO userDTO = UserInfoDTO.converUser(result);
+            return new ResponseEntity(new SuccessfulResponse(userDTO), HttpStatus.OK);
+        } catch (Exception ex) {
+            Map<String, String> errors = new HashMap<>();
+            errors.put("message", "create user not successfully");
             return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
         }
     }

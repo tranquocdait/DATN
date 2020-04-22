@@ -1,35 +1,35 @@
-<div class="row">
+<div class="row" *ngIf="checkLoadData">
     <div class="col-12">
         <div class="row justify-content-center">
             <div class="col-lg-5 col-md-6">
                 <div class="card">
-                    <img class="card-img-top img-responsive" src="assets/images/big/img1.jpg" alt="Card image cap">
+                    <img class="card-img-top img-responsive" src="{{dataContent.imageURL}}" alt="Card image cap" style="height: 338px;">
                 </div>
             </div>
             <div class="col-lg-5 col-md-6">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Card title</h4>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of
-                            the card's content.</p>
+                        <h4 class="card-title">{{dataContent.postName}}</h4>
+                        <p class="card-text">{{dataContent.description}}</p>
                         <div class="row ml-2 mb-2">
-                            <i  class="mr-2">Đánh giá : </i>
-                            <ngb-rating [(rate)]="currentRate" max='5' [readonly]="true">
+                            <i class="mr-2">Đánh giá : </i>
+                            <ngb-rating [(rate)]="dataContent.averageRate" max='5' [readonly]="true">
                                 <ng-template let-fill="fill" let-index="index">
                                     <span class="star" [class.filled]="fill === 100"><span class="half"
                                             [style.width.%]="fill">&#9733;</span>&#9733;</span>
                                 </ng-template>
                             </ngb-rating>
                         </div>
-                        <div class="row ml-2 mb-2"><i class="mr-2">Địa chỉ : </i> Hồ Chí Minh</div>
-                        <div class="row ml-2 mb-2"><i class="mr-2">Giá : </i>40000 VND/Kg</div>
+                        <div class="row ml-2 mb-2"><i class="mr-2">Địa chỉ : </i>{{dataContent.province.nameProvince}}</div>
+                        <div class="row ml-2 mb-2"><i class="mr-2">Giá : </i>{{dataContent.unitPrice}}/1
+                            {{dataContent.calculationUnit.unitName}}</div>
                         <div class="row mb-2">
                             <div class="col">
-                                <button type="button" class="btn btn-info"
-                                    style="width: 8px;padding-right: 16px;" (click)="changeNumber('sub')">-</button>
+                                <button type="button" class="btn btn-info" style="width: 8px;padding-right: 16px;"
+                                    (click)="changeNumber('sub')">-</button>
                                 <input type="text" class="form-control col-1 pt-1 ml-1" value="{{numberItem}}">
-                                <button type="button" class="btn btn-info ml-1"
-                                    style="width: 8px;padding-right: 16px;" (click)="changeNumber('add')">+</button>
+                                <button type="button" class="btn btn-info ml-1" style="width: 8px;padding-right: 16px;"
+                                    (click)="changeNumber('add')">+</button>
                                 <a class="btn btn-danger ml-2" (click)="purchaseItem()">Chọn mua</a>
                             </div>
                         </div>
@@ -45,12 +45,12 @@
                 <button type="button" class="btn btn-info" (click)="createComment()">Viết nhận xét</button>
             </div>
         </div>
-        <div class="card mb-1">
+        <div class="card mb-1" *ngFor="let item of dataComment">
             <div class="card-body">
                 <div class="row card-title">
-                    <div class="col col-2">Tran Quoc Dai</div>
+                    <div class="col col-2"><b>{{item.user.fullName}}</b></div>
                     <div class="col col-2">
-                        <ngb-rating [(rate)]="currentRate" max='5' [readonly]="true">
+                        <ngb-rating [(rate)]="item.rate" max='5' [readonly]="true">
                             <ng-template let-fill="fill" let-index="index">
                                 <span class="star" [class.filled]="fill === 100"><span class="half"
                                         [style.width.%]="fill">&#9733;</span>&#9733;</span>
@@ -59,27 +59,7 @@
                     </div>
                 </div>
                 <blockquote id="collapseExample" [ngbCollapse]="isCollapsed" class="m-0">
-                    You can collapse this card by clicking Toggle<br>
-                    You can collapse this card by clicking Toggle
-                </blockquote>
-            </div>
-        </div>
-        <div class="card mb-1">
-            <div class="card-body">
-                <div class="row card-title">
-                    <div class="col col-2">Tran Quoc Dai</div>
-                    <div class="col col-2">
-                        <ngb-rating [(rate)]="currentRate" max='5' [readonly]="true">
-                            <ng-template let-fill="fill" let-index="index">
-                                <span class="star" [class.filled]="fill === 100"><span class="half"
-                                        [style.width.%]="fill">&#9733;</span>&#9733;</span>
-                            </ng-template>
-                        </ngb-rating>
-                    </div>
-                </div>
-                <blockquote id="collapseExample" [ngbCollapse]="isCollapsed" class="m-0">
-                    You can collapse this card by clicking Toggle<br>
-                    You can collapse this card by clicking Toggle
+                    {{item.comment}}
                 </blockquote>
             </div>
         </div>

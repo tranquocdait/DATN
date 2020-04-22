@@ -1,4 +1,4 @@
-import { UserElement } from "./user.model";
+import { UserElement } from './user.model';
 
 export class PostElement {
     constructor() {
@@ -15,5 +15,5 @@ export class PostElement {
     imageURL: string;
     category: string;
     calculationUnit: string;
-    averageRate:number;
+    averageRate: number;
 }

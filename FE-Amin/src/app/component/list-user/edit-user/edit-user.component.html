@@ -9,6 +9,9 @@
 
     <div class="card-body px-lg-5 pt-0">
         <h2 class="text-center">Thông tin cá nhân</h2>
+        <div class="text-center" *ngIf="!checkForm()">
+            <small style="color: red;">{{messageError}}</small>
+        </div>
         <form [formGroup]="editForm" (ngSubmit)="onSubmit()" class="text-center" style="color: #757575;" action="#!">
             <div class="container md-1 mt-1">
                 <label class="col-md-3">User Name</label>
