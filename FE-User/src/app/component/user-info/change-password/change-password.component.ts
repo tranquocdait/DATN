@@ -38,10 +38,9 @@ export class ChangePasswordComponent implements OnInit {
     onSubmit() {
         if (this.checkForm()) {
             const params: any = {
-                password: this.editForm.value['password'],
-                phoneNumber: this.editForm.value['phoneNumber'],
+                password: this.editForm.value['password']
             };
-            this.endpointFactory.putEndPoint(params, 'users/' + this.data.data.userId).subscribe(data => {
+            this.endpointFactory.putByHeader(params, 'users/changePassword').subscribe(data => {
                 if (data.status === 'success') {
                     this.output.emit('success');
                     this.activeModal.close();
@@ -51,7 +50,7 @@ export class ChangePasswordComponent implements OnInit {
     }
 
     checkForm(): boolean {
-        if (this.editForm.value['confirmPassword'].length > 6) {
+        if (this.editForm.value['confirmPassword'].length >= 8) {
             if (this.editForm.value['password'] !== this.editForm.value['confirmPassword']) {
                 this.messageError = this.messageErrorArray.corfirmPassword;
                 return false;

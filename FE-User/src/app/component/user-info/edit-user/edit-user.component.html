@@ -6,7 +6,7 @@
         </button>
     </h5>
 
-    <div class="card-body px-lg-5 pt-1 mt-1">
+    <div class="card-body px-lg-5 pt-1 mt-1" *ngIf="isDataLoad">
         <div class="text-center" *ngIf="!checkForm()">
             <small style="color: red;">{{messageError}}</small>
         </div>

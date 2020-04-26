@@ -1,5 +1,5 @@
 export class PurchaseElement {
-    constructor () {
+    constructor() {
     }
     purchaseId: string;
     postId: string;
@@ -9,5 +9,6 @@ export class PurchaseElement {
     purchaseNumber: number;
     dateOfOrder: Date;
     statusPurchase: string;
-    imageURL:string;
+    imageURL: string;
+    statusPurchaseName: string;
 }

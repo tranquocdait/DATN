@@ -1,4 +1,3 @@
-
 import { Component, OnInit, ChangeDetectorRef, AfterContentChecked } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { EndpointFactory } from '../../services/endpoint-factory.service';
@@ -7,11 +6,11 @@ import { LocalStoreManager } from '../../services/local-store-manager.service';
 import { Router } from '@angular/router';
 
 @Component({
-    selector: 'app-list-post',
-    templateUrl: './list-post.component.html',
-    styleUrls: ['./list-post.component.scss']
+    selector: 'app-list-user-post',
+    templateUrl: './list-user-post.component.html',
+    styleUrls: ['./list-user-post.component.scss']
 })
-export class ListPostComponent implements OnInit, AfterContentChecked {
+export class ListUserPostComponent implements OnInit, AfterContentChecked {
     dataList: PostElement[] = null;
     getUrl = '';
     categoryId = 0;
@@ -28,7 +27,7 @@ export class ListPostComponent implements OnInit, AfterContentChecked {
         this.loadData();
     }
     loadData(): void {
-        this.endpointFactory.getEndPoint(this.getUrl).subscribe(data => {
+        this.endpointFactory.getEndPointByHeader(this.getUrl).subscribe(data => {
             if (data.status === 'success') {
                 const temp = [];
                 data.data.forEach((elementInfo) => {
@@ -60,12 +59,7 @@ export class ListPostComponent implements OnInit, AfterContentChecked {
     }
 
     setUrl(): void {
-        this.categoryId = this.localStoreManager.getCategoryId();
-        if (this.localStoreManager.getCategoryId() === 0) {
-            this.getUrl = 'posts';
-        } else {
-            this.getUrl = 'posts/' + this.localStoreManager.getCategoryId() + '/category';
-        }
+        this.getUrl = 'users/posts';
     }
 
     ngAfterContentChecked(): void {
@@ -75,13 +69,13 @@ export class ListPostComponent implements OnInit, AfterContentChecked {
     }
 
     searchPost(search: string): void {
-        this.getUrl = 'posts/search?keySearch=' + search;
-        this.loadData();
+        //this.getUrl = 'posts/search?keySearch=' + search;
+        //this.loadData();
     }
 
     showInfo(post: PostElement): void {
         this.localStoreManager.setPostSelected(post.postId);
-        this.router.navigateByUrl('/component/item-info');
+        this.router.navigateByUrl('/component/list-item');
     }
 
 }

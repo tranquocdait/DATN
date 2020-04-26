@@ -5,13 +5,68 @@ import { Injectable } from '@angular/core';
 
 export class LocalStoreManager {
     private pageProfile = '';
-    private postSelected = '';
+    private categoryId = 0;
     private reservedKeys: any =
         {
             token: 'token',
             numberCart: 'numberCart',
-            postSelected: 'postSelected'
+            postSelected: 'postSelected',
+            dataPurchase: 'dataPurchase',
+            urlAvatar: 'urlAvatar',
+            storageCart: 'storageCart'
         };
+
+    public setStorageCart(storageCart: string): void {
+        if (this.getStorageCart() === null) {
+            localStorage.setItem(this.reservedKeys.storageCart, '[' + storageCart + ']');
+            this.addNumberCart();
+        } else {
+            const cart = JSON.parse(storageCart);
+            const arr = JSON.parse(this.getStorageCart());
+            let check = false;
+            for (const element of arr) {
+                if (element.postId === cart.postId) {
+                    element.numberItem += cart.numberItem;
+                    check = true;
+                    break;
+                }
+            }
+            if (!check) {
+                arr.unshift(cart);
+                this.addNumberCart();
+            }
+            localStorage.setItem(this.reservedKeys.storageCart, JSON.stringify(arr));
+        }
+    }
+
+    public getStorageCart(): string {
+        return localStorage.getItem(this.reservedKeys.storageCart);
+    }
+    public clearAll(): void {
+        localStorage.clear();
+    }
+    public setUrlAvatar(urlAvatar: string): void {
+        localStorage.setItem(this.reservedKeys.urlAvatar, urlAvatar);
+    }
+
+    public getUrlAvatar(): string {
+        return localStorage.getItem(this.reservedKeys.urlAvatar);
+    }
+    public setDataPurchase(dataPurchase: string): void {
+        localStorage.setItem(this.reservedKeys.dataPurchase, dataPurchase);
+    }
+
+    public getDataPurchase(): string {
+        return localStorage.getItem(this.reservedKeys.dataPurchase);
+    }
+
+    public setCategoryId(categoryId: number): void {
+        this.categoryId = categoryId;
+    }
+
+    public getCategoryId(): number {
+        return this.categoryId;
+    }
     public setPageProfile(pageProfile: string): void {
         this.pageProfile = pageProfile;
     }

@@ -21,6 +21,9 @@ import java.util.*;
 @RestController
 public class PurchaseController {
     @Autowired
+    UserRepository userRepository;
+
+    @Autowired
     PurchaseRepository purchaseRepository;
 
     @Autowired
@@ -43,10 +46,28 @@ public class PurchaseController {
             return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
         }
     }
-    @GetMapping("/purchases/search")
-    public ResponseEntity getPurchaseBySearch(@RequestParam(value = "keySearch", defaultValue = "") Long keyword) {
+
+    @GetMapping("/purchases/user")
+    public ResponseEntity getPurchaseByUser(Authentication authentication) {
         try {
-            Optional<Purchase>  purchaseList= purchaseRepository.findById(keyword);
+            if (!baseService.getUser(authentication).isPresent()) {
+                Map<String, String> errors = new HashMap<>();
+                errors.put("message", "username has not existed");
+                return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
+            }
+            User user = baseService.getUser(authentication).get();
+            List<Post> postList = postRepository.findByUser(user);
+            List<Purchase> purchaseList = new ArrayList<>();
+            postList.forEach(post -> {
+                List<Purchase> purchaseListItem = purchaseRepository.findByPost(post);
+                purchaseList.addAll(purchaseListItem);
+            });
+            Collections.sort(purchaseList, new Comparator<Purchase>() {
+                @Override
+                public int compare(Purchase purchase1, Purchase purchase2) {
+                    return purchase1.getDateOfOrder().compareTo(purchase2.getDateOfOrder());
+                }
+            });
             return new ResponseEntity(new SuccessfulResponse(purchaseList), HttpStatus.OK);
         } catch (Exception ex) {
             Map<String, String> errors = new HashMap<>();
@@ -54,8 +75,21 @@ public class PurchaseController {
             return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("/purchases/search")
+    public ResponseEntity getPurchaseBySearch(@RequestParam(value = "keySearch", defaultValue = "") Long keyword) {
+        try {
+            Optional<Purchase> purchaseList = purchaseRepository.findById(keyword);
+            return new ResponseEntity(new SuccessfulResponse(purchaseList), HttpStatus.OK);
+        } catch (Exception ex) {
+            Map<String, String> errors = new HashMap<>();
+            errors.put("message", "get data not successfully");
+            return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @GetMapping("/purchases/{postId}")
-    public ResponseEntity readAllPurchase(Authentication authentication,@PathVariable("postId") Long id) {
+    public ResponseEntity readAllPurchase(Authentication authentication, @PathVariable("postId") Long id) {
         try {
             if (!baseService.getUser(authentication).isPresent()) {
                 Map<String, String> errors = new HashMap<>();
@@ -69,7 +103,7 @@ public class PurchaseController {
                         HttpStatus.NOT_FOUND);
             }
             Post post = postRepository.findById(id).get();
-            Collection<Purchase> purchaseList = purchaseRepository.findAllByPost(post);
+            List<Purchase> purchaseList = purchaseRepository.findByPost(post);
             return new ResponseEntity(new SuccessfulResponse(purchaseList), HttpStatus.OK);
         } catch (Exception ex) {
             Map<String, String> errors = new HashMap<>();
@@ -95,6 +129,9 @@ public class PurchaseController {
             purchase.setDateOfOrder(LocalDateTime.now());
             purchase.setPost(post);
             purchase.setPurchaseNumber(purchaseAddDTO.getPurchaseNumber());
+            purchase.setFullName(purchaseAddDTO.getFullName());
+            purchase.setPhoneNumber(purchaseAddDTO.getPhoneNumber());
+            purchase.setAddress(purchaseAddDTO.getAddress());
             purchaseRepository.save(purchase);
             return new ResponseEntity(new SuccessfulResponse(purchase), HttpStatus.OK);
         } catch (Exception ex) {
@@ -103,6 +140,7 @@ public class PurchaseController {
             return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
         }
     }
+
     @PutMapping("/purchases/update")
     public ResponseEntity updatePurchase(Authentication authentication, @Valid @RequestBody PurchaseUpdateDTO purchaseUpdateDTO) {
         try {
@@ -114,7 +152,7 @@ public class PurchaseController {
             Purchase purchase = purchaseRepository.findById(purchaseUpdateDTO.getPurchaseId()).get();
             if (purchaseUpdateDTO.getPurchaseNumber() != null)
                 purchase.setPurchaseNumber(purchaseUpdateDTO.getPurchaseNumber());
-            if(purchaseUpdateDTO.getStatusPurchaseId()!=null) {
+            if (purchaseUpdateDTO.getStatusPurchaseId() != null) {
                 StatusPurchase statusPurchase = statusPurchaseRepository.findById(purchaseUpdateDTO.getStatusPurchaseId()).get();
                 purchase.setStatusPurchase(statusPurchase);
             }
@@ -126,8 +164,9 @@ public class PurchaseController {
             return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
         }
     }
+
     @PutMapping("/purchases/{purchaseId}")
-    public ResponseEntity updatePurchase(@Valid @RequestBody PurchaseUpdateDTO purchaseUpdateDTO,@PathVariable("purchaseId") Long purchaseId) {
+    public ResponseEntity updatePurchase(@Valid @RequestBody PurchaseUpdateDTO purchaseUpdateDTO, @PathVariable("purchaseId") Long purchaseId) {
         try {
             if (!purchaseRepository.findById(purchaseId).isPresent()) {
                 Map<String, String> errors = new HashMap<>();
@@ -137,8 +176,8 @@ public class PurchaseController {
             Purchase purchase = purchaseRepository.findById(purchaseId).get();
             if (purchaseUpdateDTO.getPurchaseNumber() != null)
                 purchase.setPurchaseNumber(purchaseUpdateDTO.getPurchaseNumber());
-            if(purchaseUpdateDTO.getStatusPurchaseId()!=null) {
-                StatusPurchase statusPurchase=statusPurchaseRepository.findById(purchaseUpdateDTO.getStatusPurchaseId()).get();
+            if (purchaseUpdateDTO.getStatusPurchaseId() != null) {
+                StatusPurchase statusPurchase = statusPurchaseRepository.findById(purchaseUpdateDTO.getStatusPurchaseId()).get();
                 purchase.setStatusPurchase(statusPurchase);
             }
             purchaseRepository.save(purchase);
@@ -149,6 +188,7 @@ public class PurchaseController {
             return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
         }
     }
+
     @DeleteMapping("/purchases/{purchasesID}")
     public ResponseEntity deletePurchase(@PathVariable("purchasesID") Long purchasesID) {
         try {

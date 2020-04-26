@@ -1,6 +1,7 @@
 package com.tranquocdai.freshmarket.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Entity
@@ -15,6 +16,15 @@ public class Purchase {
     private LocalDateTime dateOfOrder;
 
     private Double purchaseNumber;
+
+    @Size(min = 2)
+    @Column(name = "full_name")
+    private String fullName;
+
+    @Size(min = 9)
+    private String phoneNumber;
+
+    private String address;
 
     @OneToOne(targetEntity = StatusPurchase.class)
     private StatusPurchase statusPurchase;
@@ -32,6 +42,31 @@ public class Purchase {
     public void setTransportationType(TransportationType transportationType) {
         this.transportationType = transportationType;
     }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public Long getId() {
         return id;
     }

@@ -25,12 +25,13 @@
                             {{dataContent.calculationUnit.unitName}}</div>
                         <div class="row mb-2">
                             <div class="col">
-                                <button type="button" class="btn btn-info" style="width: 8px;padding-right: 16px;"
-                                    (click)="changeNumber('sub')">-</button>
+                                <a class="btn btn-info" style="width: 8px;padding-right: 20px;"
+                                    (click)="changeNumber('sub')">-</a>
                                 <input type="text" class="form-control col-1 pt-1 ml-1" value="{{numberItem}}">
-                                <button type="button" class="btn btn-info ml-1" style="width: 8px;padding-right: 16px;"
-                                    (click)="changeNumber('add')">+</button>
-                                <a class="btn btn-danger ml-2" (click)="purchaseItem()">Chọn mua</a>
+                                <a class="btn btn-info ml-1" style="width: 8px;padding-right: 20px;"
+                                    (click)="changeNumber('add')"><b>+</b></a>
+                                <a class="btn btn-danger ml-2" (click)="purchaseItem()">Mua ngay</a>
+                                <a class="btn btn-success ml-2" (click)="addStorageCart()"><i class="ti-shopping-cart-full"></i>Thêm vào giỏ hàng</a>
                             </div>
                         </div>
                     </div>

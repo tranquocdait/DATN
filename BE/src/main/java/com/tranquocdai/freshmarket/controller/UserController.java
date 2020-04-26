@@ -1,6 +1,7 @@
 package com.tranquocdai.freshmarket.controller;
 
 import com.tranquocdai.freshmarket.config.Constants;
+import com.tranquocdai.freshmarket.dto.PassworDTO;
 import com.tranquocdai.freshmarket.dto.UserDTO;
 import com.tranquocdai.freshmarket.dto.UserFirstInfo;
 import com.tranquocdai.freshmarket.dto.UserInfoDTO;
@@ -158,7 +159,7 @@ public class UserController {
             user.setRoleUser(roleUser);
             if (updateUserDTO.getImageBase64() != null && !"".equals(updateUserDTO.getImageBase64())) {
                 Avatar avatar = user.getAvatar();
-                if (Constants.URL_POST_DEFAULT.equals(avatar.getUrl())) {
+                if (Constants.URL_AVATAR_DEFAULT.equals(avatar.getUrl())) {
                     Avatar avatarNew = new Avatar();
                     String newImageUrl = storageService.store(updateUserDTO.getImageBase64());
                     avatarNew.setUrl(newImageUrl);
@@ -198,9 +199,9 @@ public class UserController {
             user.setEmail(updateUserDTO.getEmail());
             user.setPhoneNumber(updateUserDTO.getPhoneNumber());
             user.setRoleUser(roleUser);
-            if (updateUserDTO.getImageBase64() != null && "".equals(updateUserDTO.getImageBase64())) {
+            if (updateUserDTO.getImageBase64() != null && !"".equals(updateUserDTO.getImageBase64())) {
                 Avatar avatar = user.getAvatar();
-                if (Constants.URL_POST_DEFAULT.equals(avatar.getUrl())) {
+                if (Constants.URL_AVATAR_DEFAULT.equals(avatar.getUrl())) {
                     Avatar avatarNew = new Avatar();
                     String newImageUrl = storageService.store(updateUserDTO.getImageBase64());
                     avatarNew.setUrl(newImageUrl);
@@ -214,6 +215,25 @@ public class UserController {
                     user.setAvatar(avatar);
                 }
             }
+            userRepository.save(user);
+            User result = baseService.getUser(authentication).get();
+            return new ResponseEntity(new SuccessfulResponse(UserInfoDTO.converUser(result)), HttpStatus.OK);
+        } catch (Exception ex) {
+            Map<String, String> errors = new HashMap<>();
+            errors.put("message", "update user not successfully");
+            return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
+        }
+    }
+    @PutMapping("/users/changePassword")
+    public ResponseEntity updatePassword(Authentication authentication, @Valid @RequestBody PassworDTO passworDTO) {
+        try {
+            if (authentication == null || "".equals(authentication)) {
+                Map<String, String> errors = new HashMap<>();
+                errors.put("message", "authorization has not been registered");
+                return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
+            }
+            User user = baseService.getUser(authentication).get();
+            user.setPassword(passworDTO.getPassword());
             userRepository.save(user);
             User result = baseService.getUser(authentication).get();
             return new ResponseEntity(new SuccessfulResponse(UserInfoDTO.converUser(result)), HttpStatus.OK);

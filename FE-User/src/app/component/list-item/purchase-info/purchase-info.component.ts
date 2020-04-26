@@ -5,58 +5,52 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EndpointFactory } from '../../../services/endpoint-factory.service';
 
 @Component({
-  selector: 'app-purchase-info',
-  templateUrl: './purchase-info.component.html',
-  styleUrls: ['./purchase-info.component.scss']
+    selector: 'app-purchase-info',
+    templateUrl: './purchase-info.component.html',
+    styleUrls: ['./purchase-info.component.scss']
 })
 export class PurchaseInfoComponent implements OnInit {
-  purchaseList: any;
+    purchaseList: any;
 
-  constructor(public activeModal: NgbActiveModal, private formBuilder: FormBuilder, private endpointFactory: EndpointFactory) {
-  }
-
-  @Input() data;
-  @Output() output = new EventEmitter();
-  editForm: FormGroup;
-
-  ngOnInit(): void {
-    this.getPurchase();
-    this.createForm();
-  }
-
-  getPurchase() {
-    this.endpointFactory.getEndPoint('statusPurchases').subscribe(data => {
-      if (data.status === 'success') {
-        this.purchaseList = data.data;
-      }
-      ;
+    constructor(public activeModal: NgbActiveModal, private formBuilder: FormBuilder, private endpointFactory: EndpointFactory) {
     }
-    );
-  }
 
-  createForm() {
-    if (this.data.type === 'edit') {
+    @Input() data;
+    @Output() output = new EventEmitter();
+
+    ngOnInit(): void {
+        this.getPurchase();
+        this.createForm();
     }
-  }
-  clickClose() {
-    this.activeModal.close();
-  }
 
-  onSubmit() {
-    let params: any = {
-      purchaseId: this.editForm.value['purchaseId'],
-      purchaseNumber:Number.parseInt(this.editForm.value['purchaseNumber']),
-      statusPurchaseId: Number.parseInt(this.editForm.value['statusPurchase'])
-    };
-    {
-      this.endpointFactory.putEndPoint(params, 'purchases/' + this.data.data.purchaseId).subscribe(data => {
-        if (data.status === 'success') {
-          this.output.emit('success');
-          this.activeModal.close();
+    getPurchase() {
+        this.endpointFactory.getEndPoint('statusPurchases').subscribe(data => {
+            if (data.status === 'success') {
+                this.purchaseList = data.data;
+            }
         }
-        ;
-      }
-      );
+        );
     }
-  }
+
+    createForm() {
+        if (this.data.type === 'edit') {
+        }
+    }
+    clickClose() {
+        this.activeModal.close();
+    }
+
+    onSubmit() {
+        const params: any = {
+            purchaseId: this.data.data.purchaseId,
+            statusPurchaseId: 2
+        };
+        this.endpointFactory.putByHeader(params, 'purchases/update').subscribe(data => {
+            if (data.status === 'success') {
+                this.output.emit('success');
+                this.activeModal.close();
+            }
+        }
+        );
+    }
 }

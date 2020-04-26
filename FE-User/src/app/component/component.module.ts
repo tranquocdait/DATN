@@ -13,7 +13,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { EditPostComponent } from './list-post/edit-post/edit-post.component';
 import { DeletePostComponent } from './list-post/delete-post/delete-post.component';
-import { DeleteItemComponent } from './list-item/delete-item/delete-item.component';
 import { ItemInfoComponent } from './item-info/item-info.component';
 import { PurchaseInfoComponent } from './list-item/purchase-info/purchase-info.component';
 import { ConfirmPurchaseComponent } from './confirm-purchase/confirm-purchase.component';
@@ -22,6 +21,7 @@ import { EditUserComponent } from './user-info/edit-user/edit-user.component';
 import { CreateCommentComponent } from './item-info/create-comment/create-comment.component';
 import { DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
 import { ChangePasswordComponent } from './user-info/change-password/change-password.component';
+import { ListUserPostComponent } from './list-user-post/list-user-post.component';
 @NgModule({
     imports: [
         CommonModule,
@@ -38,7 +38,6 @@ import { ChangePasswordComponent } from './user-info/change-password/change-pass
         PurchaseInfoComponent,
         EditUserComponent,
         EditPostComponent,
-        DeleteItemComponent,
         CreateCommentComponent,
         DeletePostComponent,
         DialogConfirmComponent,
@@ -48,7 +47,6 @@ import { ChangePasswordComponent } from './user-info/change-password/change-pass
         PurchaseInfoComponent,
         EditPostComponent,
         EditUserComponent,
-        DeleteItemComponent,
         CreateCommentComponent,
         DeletePostComponent,
         DialogConfirmComponent,
@@ -61,7 +59,6 @@ import { ChangePasswordComponent } from './user-info/change-password/change-pass
         DeletePostComponent,
         PurchaseInfoComponent,
         EditUserComponent,
-        DeleteItemComponent,
         ItemInfoComponent,
         ConfirmPurchaseComponent,
         CreateCommentComponent,
@@ -69,7 +66,8 @@ import { ChangePasswordComponent } from './user-info/change-password/change-pass
         EditUserComponent,
         CreateCommentComponent,
         DialogConfirmComponent,
-        ChangePasswordComponent
+        ChangePasswordComponent,
+        ListUserPostComponent
     ]
 })
 export class ComponentsModule { }

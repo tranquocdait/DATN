@@ -11,10 +11,6 @@ export const Approutes: Routes = [
         children: [
             { path: '', redirectTo: '/component/list-post', pathMatch: 'full' },
             {
-                path: 'home',
-                loadChildren: () => import('./home/home.module').then(m => m.HomeModule)
-            },
-            {
                 path: 'component',
                 loadChildren: () => import('./component/component.module').then(m => m.ComponentsModule)
             }

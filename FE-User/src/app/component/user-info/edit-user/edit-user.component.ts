@@ -20,7 +20,7 @@ export class EditUserComponent implements OnInit {
     @Input() data;
     @Output() output = new EventEmitter();
     editForm: FormGroup;
-
+    isDataLoad = false;
     ngOnInit(): void {
         this.getRole();
         this.createForm();
@@ -36,29 +36,19 @@ export class EditUserComponent implements OnInit {
     }
 
     createForm() {
-        {
-            // this.editForm = this.formBuilder.group({
-            //   userId: [this.data.data.userId, Validators.required],
-            //   userName: [this.data.data.userName, Validators.required],
-            //   role: [this.data.data.role.roleID, Validators.required],
-            //   fullName: [this.data.data.fullName, Validators.required],
-            //   password: ['', Validators.required],
-            //   phoneNumber: [this.data.data.phoneNumber, Validators.required],
-            //   email: [this.data.data.email, Validators.required],
-            //   avatarURL: ['', Validators.required]
-            // });
-            this.editForm = this.formBuilder.group({
-                userId: ['', Validators.required],
-                userName: [, Validators.required],
-                role: [2, Validators.required],
-                fullName: ['', Validators.required],
-                password: ['', Validators.required],
-                confirmPassword: ['', Validators.required],
-                phoneNumber: ['', Validators.required],
-                email: ['', Validators.required],
-                avatarURL: ['', Validators.required]
-            });
-        }
+        console.log(this.data);
+        this.editForm = this.formBuilder.group({
+            userId: [this.data.data.userId, Validators.required],
+            userName: [this.data.data.userName, Validators.required],
+            role: [this.data.data.role.roleID, Validators.required],
+            fullName: [this.data.data.fullName, Validators.required],
+            password: ['', Validators.required],
+            confirmPassword: ['', Validators.required],
+            phoneNumber: [this.data.data.phoneNumber, Validators.required],
+            email: [this.data.data.email, Validators.required],
+            avatarURL: ['', Validators.required]
+        });
+        this.isDataLoad = true;
     }
 
 
@@ -89,7 +79,7 @@ export class EditUserComponent implements OnInit {
                 email: this.editForm.value['email'],
             };
             if (this.data.type === 'edit') {
-                this.endpointFactory.putEndPoint(params, 'users/' + this.data.data.userId).subscribe(data => {
+                this.endpointFactory.putByHeader(params, 'users').subscribe(data => {
                     if (data.status === 'success') {
                         this.output.emit('success');
                         this.activeModal.close();
@@ -99,7 +89,7 @@ export class EditUserComponent implements OnInit {
         }
     }
     checkForm(): boolean {
-        if (this.editForm.value['confirmPassword'].length > 6) {
+        if (this.editForm.value['confirmPassword'].length >= 8) {
             if (this.editForm.value['password'] !== this.editForm.value['confirmPassword']) {
                 this.messageError = this.messageErrorArray.corfirmPassword;
                 return false;

@@ -1,48 +1,48 @@
-import { Component, AfterViewInit, EventEmitter, Output, AfterContentChecked } from '@angular/core';
+import { Component, AfterViewInit, EventEmitter, Output, AfterContentChecked, OnInit } from '@angular/core';
 import {
-  NgbModal,
-  ModalDismissReasons,
-  NgbPanelChangeEvent,
-  NgbCarouselConfig
+    NgbModal,
+    ModalDismissReasons,
+    NgbPanelChangeEvent,
+    NgbCarouselConfig
 } from '@ng-bootstrap/ng-bootstrap';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { LocalStoreManager } from '../../services/local-store-manager.service';
 import { Router } from '@angular/router';
 declare var $: any;
 @Component({
-  selector: 'app-navigation',
-  templateUrl: './navigation.component.html',
-  styleUrls: ['./navigation.component.scss']
+    selector: 'app-navigation',
+    templateUrl: './navigation.component.html',
+    styleUrls: ['./navigation.component.scss']
 })
-export class NavigationComponent implements AfterViewInit, AfterContentChecked {
-  @Output() toggleSidebar = new EventEmitter<void>();
-  @Output('data') data = new EventEmitter();
-  number: any;
-  public config: PerfectScrollbarConfigInterface = {};
-  constructor(private modalService: NgbModal, private router: Router, private localStoreManager: LocalStoreManager) {
-  }
+export class NavigationComponent implements OnInit, AfterViewInit, AfterContentChecked {
+    @Output() data = new EventEmitter();
+    number: any;
+    urlAvatar: string;
+    public config: PerfectScrollbarConfigInterface = {};
+    constructor(private modalService: NgbModal, private router: Router, private localStoreManager: LocalStoreManager) {
+    }
+    ngOnInit(): void {
+        this.number = this.localStoreManager.getNumberCart();
+        this.urlAvatar = this.localStoreManager.getUrlAvatar();
+    }
 
-  public showSearch = false;
+    logout() {
+        this.localStoreManager.removeToken();
+        this.localStoreManager.deleteNumberCart();
+        this.localStoreManager.clearAll();
+        this.router.navigateByUrl('/login');
+    }
 
-  // This is for Notifications
+    ngAfterViewInit() {
+    }
 
-  logout() {
-    this.localStoreManager.removeToken();
-    this.localStoreManager.deleteNumberCart();
-    //location.reload();
-  this.router.navigateByUrl('/login');
-  }
+    ngAfterContentChecked() {
+        this.number = this.localStoreManager.getNumberCart();
+        this.localStoreManager.getUrlAvatar();
+    }
 
-  ngAfterViewInit() {
-
-  }
-
-  ngAfterContentChecked() {
-    this.number = this.localStoreManager.getNumberCart();
-  }
-
-  onAction(url:string):void{
-    this.localStoreManager.setPageProfile('profile');
-    this.router.navigateByUrl(url);
-  }
+    onAction(url: string): void {
+        this.localStoreManager.setPageProfile('profile');
+        this.router.navigateByUrl(url);
+    }
 }

@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit {
 
     }
 
-    createForm() {
+    createForm(): void {
         this.loginForm = this.formBuilder.group({
             userName: ['', Validators.required],
             password: ['', Validators.required],
@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
         });
     }
 
-    onSubmit() {
+    onSubmit(): void {
         const params: any = {
             userName: this.loginForm.value['userName'],
             password: this.loginForm.value['password']
@@ -46,6 +46,7 @@ export class LoginComponent implements OnInit {
                 this.endpointFactory.postByHeader(null, 'users/information').subscribe(dataInfor => {
                     if (dataInfor.status === 'success') {
                         if (dataInfor.data.roleUser.roleName !== this.roleAdmin) {
+                            this.localStoreManager.setUrlAvatar(dataInfor.data.avatar.url);
                             this.router.navigateByUrl('');
                         }
                     }
@@ -58,8 +59,11 @@ export class LoginComponent implements OnInit {
         );
         this.loginFailed();
     }
-    loginFailed() {
+
+    loginFailed(): void {
         this.localStoreManager.removeToken();
         this.loginStatus = true;
     }
+
 }
+

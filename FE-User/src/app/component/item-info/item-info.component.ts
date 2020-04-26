@@ -64,6 +64,14 @@ export class ItemInfoComponent implements OnInit {
     }
 
     purchaseItem(): void {
+        const dataPurchase = [
+            this.dataContent.postId,
+            this.dataContent.unitPrice,
+            this.numberItem,
+            this.dataContent.imageURL,
+            this.dataContent.calculationUnit.unitName,
+        ];
+        this.localStoreManager.setDataPurchase(dataPurchase.toString());
         this.router.navigateByUrl('/component/confirm-purchase');
     }
     createComment(): void {
@@ -74,5 +82,16 @@ export class ItemInfoComponent implements OnInit {
             if (res === 'success') {
             }
         });
+    }
+
+    addStorageCart(): void {
+        const dataPurchase = {
+            postId: this.dataContent.postId,
+            unitPrice: this.dataContent.unitPrice,
+            numberItem: this.numberItem,
+            imageURL: this.dataContent.imageURL,
+            unitName: this.dataContent.calculationUnit.unitName,
+        };
+        this.localStoreManager.setStorageCart(JSON.stringify(dataPurchase));
     }
 }

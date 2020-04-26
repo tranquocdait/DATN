@@ -65,6 +65,19 @@ public class PostController {
         }
     }
 
+    @GetMapping("/posts/{id}/category")
+    public ResponseEntity getAllPostByCategory(@PathVariable("id") Long id) {
+        try {
+            Category category = categoryRepository.findById(id).get();
+            List<Post> postList = postRepository.findByCategory(category);
+            return new ResponseEntity(new SuccessfulResponse(convertListPost(postList)), HttpStatus.OK);
+        } catch (Exception ex) {
+            Map<String, String> errors = new HashMap<>();
+            errors.put("message", "get data not successfully");
+            return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @GetMapping("/users/posts")
     public ResponseEntity readPost(Authentication authentication) {
         try {
@@ -279,10 +292,10 @@ public class PostController {
         PostInfoDTO postInfoDTO = new PostInfoDTO();
         post.getUser().setPassword("");
         List<RatePost> ratePostList = ratePostRepository.findByPost(post);
-        List<UserCommentDTO> userCommentDTOList=new ArrayList<>();
+        List<UserCommentDTO> userCommentDTOList = new ArrayList<>();
         for (RatePost element : ratePostList) {
-            UserCommentDTO userCommentDTO=new UserCommentDTO();
-            if(commentPostRepository.findByPostAndUser(post,element.getUser()).isPresent()) {
+            UserCommentDTO userCommentDTO = new UserCommentDTO();
+            if (commentPostRepository.findByPostAndUser(post, element.getUser()).isPresent()) {
                 CommentPost commentPost = commentPostRepository.findByPostAndUser(post, element.getUser()).get();
                 userCommentDTO.setComment(commentPost.getContent());
             }
@@ -299,7 +312,7 @@ public class PostController {
     private float averageRate(Post post) {
         List<RatePost> ratePostList = ratePostRepository.findByPost(post);
         int sum = 0;
-        if(ratePostList.size()>0) {
+        if (ratePostList.size() > 0) {
             for (RatePost element : ratePostList) {
                 sum += element.getRateNumber().intValue();
             }
