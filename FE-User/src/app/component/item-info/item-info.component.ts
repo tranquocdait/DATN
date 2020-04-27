@@ -53,6 +53,7 @@ export class ItemInfoComponent implements OnInit {
             }
         });
     }
+
     changeNumber(change: String): void {
         if (change === 'add') {
             this.numberItem += 1;
@@ -66,6 +67,7 @@ export class ItemInfoComponent implements OnInit {
     purchaseItem(): void {
         const dataPurchase = [
             this.dataContent.postId,
+            this.dataContent.postName,
             this.dataContent.unitPrice,
             this.numberItem,
             this.dataContent.imageURL,
@@ -87,9 +89,13 @@ export class ItemInfoComponent implements OnInit {
     addStorageCart(): void {
         const dataPurchase = {
             postId: this.dataContent.postId,
+            postName: this.dataContent.postName,
             unitPrice: this.dataContent.unitPrice,
             numberItem: this.numberItem,
+            userName: this.dataContent.userName,
+            province: this.dataContent.province.nameProvince,
             imageURL: this.dataContent.imageURL,
+            address: this.dataContent.address,
             unitName: this.dataContent.calculationUnit.unitName,
         };
         this.localStoreManager.setStorageCart(JSON.stringify(dataPurchase));

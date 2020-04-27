@@ -5,6 +5,7 @@ import { ItemInfoComponent } from './item-info/item-info.component';
 import { ConfirmPurchaseComponent } from './confirm-purchase/confirm-purchase.component';
 import { UserInfoComponent } from './user-info/user-info.component';
 import { ListUserPostComponent } from './list-user-post/list-user-post.component';
+import { StorageCartComponent } from './storage-cart/storage-cart.component';
 
 export const ComponentsRoutes: Routes = [{
     path: '',
@@ -36,6 +37,11 @@ export const ComponentsRoutes: Routes = [{
         {
             path: 'list-user-post',
             component: ListUserPostComponent,
+            pathMatch: 'full'
+        },
+        {
+            path: 'storage-cart',
+            component: StorageCartComponent,
             pathMatch: 'full'
         }
     ]

@@ -31,11 +31,11 @@ export class ConfirmPurchaseComponent implements OnInit {
     loadData(): void {
         const data = this.localStoreManager.getDataPurchase().split(',');
         this.postId = Number.parseInt(data[0]);
-        this.unitPrice = Number.parseFloat(data[1]);
-        this.numberItem = Number.parseInt(data[2]);
+        this.unitPrice = Number.parseFloat(data[2]);
+        this.numberItem = Number.parseInt(data[3]);
         this.totalPrice = this.unitPrice * this.numberItem;
-        this.imageURL = data[3];
-        this.unitName = data[4];
+        this.imageURL = data[4];
+        this.unitName = data[5];
     }
 
     confirmPurchase(): void {

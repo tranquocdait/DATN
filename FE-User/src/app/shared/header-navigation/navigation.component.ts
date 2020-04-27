@@ -45,4 +45,7 @@ export class NavigationComponent implements OnInit, AfterViewInit, AfterContentC
         this.localStoreManager.setPageProfile('profile');
         this.router.navigateByUrl(url);
     }
+    toStorageCart(): void {
+        this.router.navigateByUrl('/component/storage-cart');
+    }
 }

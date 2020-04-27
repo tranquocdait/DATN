@@ -39,6 +39,17 @@ export class LocalStoreManager {
         }
     }
 
+    public removeStorageCart(storage: any): string {
+        if (localStorage.getItem(this.reservedKeys.storageCart) === null) {
+            return;
+        } else {
+            const arrBefore = JSON.parse(this.getStorageCart());
+            const arrAfter = arrBefore.filter(element => element.postId !== storage.postId);
+            localStorage.setItem(this.reservedKeys.storageCart, JSON.stringify(arrAfter));
+            this.subNumberCart();
+        }
+    }
+
     public getStorageCart(): string {
         return localStorage.getItem(this.reservedKeys.storageCart);
     }
@@ -106,7 +117,7 @@ export class LocalStoreManager {
 
     public subNumberCart(): void {
         if (this.getNumberCart() > 0) {
-            localStorage.setItem(this.reservedKeys.numberCart, (this.getNumberCart() + 1).toString());
+            localStorage.setItem(this.reservedKeys.numberCart, (this.getNumberCart() - 1).toString());
         }
     }
 

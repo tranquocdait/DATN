@@ -48,16 +48,19 @@ export class LoginComponent implements OnInit {
                         if (dataInfor.data.roleUser.roleName !== this.roleAdmin) {
                             this.localStoreManager.setUrlAvatar(dataInfor.data.avatar.url);
                             this.router.navigateByUrl('');
+                        } else {
+                            this.loginFailed();
                         }
                     }
+                }, error => {
+                    this.loginFailed();
                 }
                 );
             }
         }, error => {
-            console.log('login false !');
+            this.loginFailed();
         }
         );
-        this.loginFailed();
     }
 
     loginFailed(): void {

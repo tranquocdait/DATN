@@ -22,6 +22,7 @@ import { CreateCommentComponent } from './item-info/create-comment/create-commen
 import { DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
 import { ChangePasswordComponent } from './user-info/change-password/change-password.component';
 import { ListUserPostComponent } from './list-user-post/list-user-post.component';
+import { StorageCartComponent } from './storage-cart/storage-cart.component';
 @NgModule({
     imports: [
         CommonModule,
@@ -67,7 +68,8 @@ import { ListUserPostComponent } from './list-user-post/list-user-post.component
         CreateCommentComponent,
         DialogConfirmComponent,
         ChangePasswordComponent,
-        ListUserPostComponent
+        ListUserPostComponent,
+        StorageCartComponent
     ]
 })
 export class ComponentsModule { }
