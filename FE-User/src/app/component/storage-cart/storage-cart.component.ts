@@ -41,7 +41,7 @@ export class StorageCartComponent implements OnInit {
     }
 
     removeStorageCart(storage: any): void {
-        this.localStoreManager.removeStorageCart(storage);
+        this.localStoreManager.removeItemOnCart(storage);
         this.loadData();
         this.setTotalAmount();
     }
@@ -58,4 +58,11 @@ export class StorageCartComponent implements OnInit {
         this.localStoreManager.setDataPurchase(dataPurchase.toString());
         this.router.navigateByUrl('/component/confirm-purchase');
     }
+
+    paymentCart(): void {
+        if (this.localStoreManager.getNumberCart() > 0) {
+            this.router.navigateByUrl('/component/payment-cart');
+        }
+    }
+
 }

@@ -9,15 +9,18 @@
         <div class="col col-12">
             <div class="container md-1 mt-1">
                <label class="col-md-2 text-left">Đánh giá :</label>
-                <ngb-rating class="col-md-10 text-left" [(rate)]="currentRate" max='5'>
+                <ngb-rating class="col-md-3 text-left" [(rate)]="currentRate" max='5'>
                     <ng-template let-fill="fill" let-index="index">
                         <span class="star" [class.filled]="fill === 100"><span class="half"
                                 [style.width.%]="fill">&#9733;</span>&#9733;</span>
                     </ng-template>
                 </ngb-rating>
+                <label class="col-md-7 text-left" *ngIf="checkRate()">
+                    <small style="color: red;">Bạn hãy đánh giá!</small>
+                </label>
             </div>
             <div class="container md-1 mt-1">
-                <textarea class="form-control col-md-12" rows="3" placeholder="Viết đánh giá ......"></textarea>
+                <textarea class="form-control col-md-12" rows="3" placeholder="Viết đánh giá ......" [(ngModel)]="commentContent"></textarea>
             </div>
             <div class="container text-center" style="display: block;">
                 <button class="btn btn-outline-info btn-rounded waves-effect

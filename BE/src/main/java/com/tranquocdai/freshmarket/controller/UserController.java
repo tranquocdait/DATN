@@ -48,7 +48,7 @@ public class UserController {
     @GetMapping("/users")
     public ResponseEntity getAllUser() {
         try {
-            List<User> userList = userRepository.findAll();
+            List<User> userList = userRepository.findUsers();
             List<User> userListPipe = new ArrayList<>();
             userList.forEach((element) -> {
                 if (element.getRoleUser().getRoleID() != Constants.ID_ROLE_ADMIN)
@@ -65,13 +65,8 @@ public class UserController {
     @GetMapping("/users/search")
     public ResponseEntity getAllUserBySearch(@RequestParam(value = "keySearch", defaultValue = "") String keyword) {
         try {
-            List<User> userList = userRepository.findByFullNameContains(keyword);
-            List<User> userListPipe = new ArrayList<>();
-            userList.forEach((element) -> {
-                if (element.getRoleUser().getRoleID() != Constants.ID_ROLE_ADMIN)
-                    userListPipe.add(element);
-            });
-            return new ResponseEntity(new SuccessfulResponse(userListPipe), HttpStatus.OK);
+            List<User> userList = userRepository.findSearchUsers('%'+keyword+'%');
+            return new ResponseEntity(new SuccessfulResponse(userList), HttpStatus.OK);
         } catch (Exception ex) {
             Map<String, String> errors = new HashMap<>();
             errors.put("message", "get data not successfully");
@@ -80,25 +75,24 @@ public class UserController {
     }
 
     @PostMapping("/users/fist")
-    public ResponseEntity createUserFistInfo(@Valid @RequestBody UserFirstInfo userAddDTO) {
+    public ResponseEntity createUserFistInfo(@Valid @RequestBody UserFirstInfo userDTO) {
         try {
-            if (userRepository.findByUserName(userAddDTO.getUserName()).isPresent()) {
+            if (userRepository.findByUserName(userDTO.getUserName()).isPresent()) {
                 Map<String, String> errors = new HashMap<>();
                 errors.put("message", "username has existed");
                 return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
             }
             RoleUser roleUser = roleResponsitory.findByRoleID(Constants.ID_ROLE_DEFAULT).get();
             User user = new User();
-            user.setUserName(userAddDTO.getUserName());
-            user.setPassword(passwordEncoder.encode(userAddDTO.getPassword()));
+            user.setUserName(userDTO.getUserName());
+            user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
             user.setRoleUser(roleUser);
-            Avatar avatar = new Avatar();
-            avatar = avatarRepository.findById(Constants.ID_IMAGE_DEFAULT).get();
+            Avatar avatar = avatarRepository.findById(Constants.ID_IMAGE_DEFAULT).get();
             user.setAvatar(avatar);
             userRepository.save(user);
-            User result = userRepository.findByUserName(userAddDTO.getUserName()).get();
-            UserInfoDTO userDTO = UserInfoDTO.converUser(result);
-            return new ResponseEntity(new SuccessfulResponse(userDTO), HttpStatus.OK);
+            User result = userRepository.findByUserName(userDTO.getUserName()).get();
+            UserInfoDTO userInfoDTO = UserInfoDTO.converUser(result);
+            return new ResponseEntity(new SuccessfulResponse(userInfoDTO), HttpStatus.OK);
         } catch (Exception ex) {
             Map<String, String> errors = new HashMap<>();
             errors.put("message", "create user not successfully");
@@ -224,6 +218,7 @@ public class UserController {
             return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
         }
     }
+
     @PutMapping("/users/changePassword")
     public ResponseEntity updatePassword(Authentication authentication, @Valid @RequestBody PassworDTO passworDTO) {
         try {
@@ -245,7 +240,7 @@ public class UserController {
     }
 
     @PostMapping("/users/information")
-    public ResponseEntity readUser(Authentication authentication) {
+    public ResponseEntity getInfoUser(Authentication authentication) {
         try {
             Optional<User> user = baseService.getUser(authentication);
             return new ResponseEntity(new SuccessfulResponse(user), HttpStatus.OK);

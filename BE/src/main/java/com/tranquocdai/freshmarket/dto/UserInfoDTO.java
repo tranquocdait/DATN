@@ -2,8 +2,6 @@ package com.tranquocdai.freshmarket.dto;
 
 import com.tranquocdai.freshmarket.model.*;
 
-import javax.validation.constraints.Size;
-
 public class UserInfoDTO {
     private Long userID;
 
@@ -75,15 +73,15 @@ public class UserInfoDTO {
         this.email = email;
     }
 
-    public static UserInfoDTO converUser(User user){
-        UserInfoDTO userInfoDTO=new UserInfoDTO();
-        userInfoDTO.userID=user.getUserID();
-        userInfoDTO.userName=user.getUserName();
-        userInfoDTO.fullName=user.getFullName();
-        userInfoDTO.roleUser=user.getRoleUser();
-        userInfoDTO.avatar=user.getAvatar();
-        userInfoDTO.phoneNumber=user.getPhoneNumber();
-        userInfoDTO.email=user.getEmail();
+    public static UserInfoDTO converUser(User user) {
+        UserInfoDTO userInfoDTO = new UserInfoDTO();
+        userInfoDTO.userID = user.getUserID();
+        userInfoDTO.userName = user.getUserName();
+        userInfoDTO.fullName = user.getFullName();
+        userInfoDTO.roleUser = user.getRoleUser();
+        userInfoDTO.avatar = user.getAvatar();
+        userInfoDTO.phoneNumber = user.getPhoneNumber();
+        userInfoDTO.email = user.getEmail();
         return userInfoDTO;
     }
 }

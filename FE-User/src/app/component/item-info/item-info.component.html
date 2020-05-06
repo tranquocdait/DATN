@@ -21,7 +21,7 @@
                             </ngb-rating>
                         </div>
                         <div class="row ml-2 mb-2"><i class="mr-2">Địa chỉ : </i>{{dataContent.province.nameProvince}}</div>
-                        <div class="row ml-2 mb-2"><i class="mr-2">Giá : </i>{{dataContent.unitPrice}}/1
+                        <div class="row ml-2 mb-2"><i class="mr-2">Giá : </i>{{dataContent.unitPrice|convertAmount}}/1
                             {{dataContent.calculationUnit.unitName}}</div>
                         <div class="row mb-2">
                             <div class="col">

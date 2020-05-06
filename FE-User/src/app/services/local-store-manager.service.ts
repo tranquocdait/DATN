@@ -39,7 +39,7 @@ export class LocalStoreManager {
         }
     }
 
-    public removeStorageCart(storage: any): string {
+    public removeItemOnCart(storage: any): string {
         if (localStorage.getItem(this.reservedKeys.storageCart) === null) {
             return;
         } else {
@@ -50,12 +50,19 @@ export class LocalStoreManager {
         }
     }
 
+    public removeStorageCart() {
+        localStorage.removeItem(this.reservedKeys.storageCart);
+        this.deleteNumberCart();
+    }
+
     public getStorageCart(): string {
         return localStorage.getItem(this.reservedKeys.storageCart);
     }
+
     public clearAll(): void {
         localStorage.clear();
     }
+
     public setUrlAvatar(urlAvatar: string): void {
         localStorage.setItem(this.reservedKeys.urlAvatar, urlAvatar);
     }

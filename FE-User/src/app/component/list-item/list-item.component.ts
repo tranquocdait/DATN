@@ -42,7 +42,7 @@ export class ListItemComponent implements OnInit {
                     post.purchaseNumber = element.purchaseNumber;
                     post.statusPurchaseName = element.statusPurchase.status;
                     post.statusPurchase = element.statusPurchase;
-                    post.dateOfOrder = new Date(element.dateOfOrder[0], element.dateOfOrder[1], element.dateOfOrder[2]);
+                    post.dateOfOrder = new Date(element.dateOfOrder[0], element.dateOfOrder[1] - 1, element.dateOfOrder[2]);
                     post.imageURL = element.post.imagePost.url;
                     temp.unshift(post);
                 });

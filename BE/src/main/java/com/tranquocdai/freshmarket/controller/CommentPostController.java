@@ -83,10 +83,15 @@ public class CommentPostController {
     public ResponseEntity createComment(Authentication authentication, @Valid @RequestBody CommentPostDTO commentPostDTO) {
         try {
             User user=baseService.getUser(authentication).get();
-            CommentPost commentPost =new CommentPost();
-            commentPost.setUser(user);
             Post post = postRepository.findById(commentPostDTO.getPostID()).get();
-            commentPost.setPost(post);
+            CommentPost commentPost =new CommentPost();
+            if(commentPostRepository.findByPostAndUser(post, user).isPresent()){
+                commentPost = commentPostRepository.findByPostAndUser(post, user).get();
+                commentPost.setContent(commentPostDTO.getContent());
+            }else {
+                commentPost.setUser(user);
+                commentPost.setPost(post);
+            }
             commentPost.setContent(commentPostDTO.getContent());
             commentPost.setDateOfComment(LocalDateTime.now());
             commentPostRepository.save(commentPost);

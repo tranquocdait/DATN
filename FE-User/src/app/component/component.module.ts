@@ -23,6 +23,8 @@ import { DialogConfirmComponent } from './dialog-confirm/dialog-confirm.componen
 import { ChangePasswordComponent } from './user-info/change-password/change-password.component';
 import { ListUserPostComponent } from './list-user-post/list-user-post.component';
 import { StorageCartComponent } from './storage-cart/storage-cart.component';
+import { PipeModule } from '../pipe/pipe.module';
+import { PaymentCartComponent } from './storage-cart/payment-cart/payment-cart.component';
 @NgModule({
     imports: [
         CommonModule,
@@ -34,7 +36,8 @@ import { StorageCartComponent } from './storage-cart/storage-cart.component';
         MatSortModule,
         MatFormFieldModule,
         MatSelectModule,
-        MatInputModule
+        MatInputModule,
+        PipeModule
     ], exports: [
         PurchaseInfoComponent,
         EditUserComponent,
@@ -69,7 +72,8 @@ import { StorageCartComponent } from './storage-cart/storage-cart.component';
         DialogConfirmComponent,
         ChangePasswordComponent,
         ListUserPostComponent,
-        StorageCartComponent
+        StorageCartComponent,
+        PaymentCartComponent
     ]
 })
 export class ComponentsModule { }

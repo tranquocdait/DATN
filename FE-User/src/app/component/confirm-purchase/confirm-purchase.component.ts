@@ -4,6 +4,7 @@ import { DialogConfirmComponent } from '../dialog-confirm/dialog-confirm.compone
 import { LocalStoreManager } from '../../services/local-store-manager.service';
 import { EndpointFactory } from '../../services/endpoint-factory.service';
 import { Router } from '@angular/router';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 
 @Component({
     selector: 'app-confirm-purchase',
@@ -20,8 +21,9 @@ export class ConfirmPurchaseComponent implements OnInit {
     address: string;
     phoneNumber: string;
     totalPrice: number;
-    constructor(private modalService: NgbModal,private router: Router, private localStoreManager: LocalStoreManager,
-         private endpointFactory: EndpointFactory) {
+    @BlockUI() blockUI: NgBlockUI;
+    constructor(private modalService: NgbModal, private router: Router, private localStoreManager: LocalStoreManager,
+        private endpointFactory: EndpointFactory) {
     }
 
     ngOnInit() {
@@ -52,10 +54,13 @@ export class ConfirmPurchaseComponent implements OnInit {
                     statusPurchaseId: 1
                 };
                 this.endpointFactory.postByHeader(params, 'purchases/create').subscribe(data => {
+                    this.blockUI.start();
                     if (data.status === 'success') {
                         this.router.navigateByUrl('component/list-post');
+                        this.blockUI.stop();
                     }
                 }, error => {
+                    this.blockUI.stop();
                 });
             }
         });

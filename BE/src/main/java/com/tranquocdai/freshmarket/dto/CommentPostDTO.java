@@ -18,7 +18,6 @@ public class CommentPostDTO {
 
     private Long postID;
 
-    @NotEmpty
     private String content;
 
     public Long getId() {

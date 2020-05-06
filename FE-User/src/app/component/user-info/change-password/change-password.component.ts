@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { EndpointFactory } from '../../../services/endpoint-factory.service';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 
 @Component({
     selector: 'app-change-password',
@@ -11,6 +12,7 @@ import { EndpointFactory } from '../../../services/endpoint-factory.service';
 export class ChangePasswordComponent implements OnInit {
     roleList: any;
     imageBase64: string;
+    @BlockUI() blockUI: NgBlockUI;
     messageErrorArray = { corfirmPassword: 'Nhập lại mật khẩu không đúng' };
     messageError: any;
     constructor(public activeModal: NgbActiveModal, private formBuilder: FormBuilder, private endpointFactory: EndpointFactory) {
@@ -41,10 +43,14 @@ export class ChangePasswordComponent implements OnInit {
                 password: this.editForm.value['password']
             };
             this.endpointFactory.putByHeader(params, 'users/changePassword').subscribe(data => {
+                this.blockUI.start();
                 if (data.status === 'success') {
                     this.output.emit('success');
                     this.activeModal.close();
+                    this.blockUI.stop();
                 }
+            }, error => {
+                this.blockUI.stop();
             });
         }
     }

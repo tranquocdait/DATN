@@ -90,15 +90,13 @@ public class RatePostController {
         try {
             User user = baseService.getUser(authentication).get();
             Post post = postRepository.findById(ratePostDTO.getPostId()).get();
-            if(ratePostRepository.findByPostAndUser(post,user).isPresent()){
-                Map<String, String> errors = new HashMap<>();
-                errors.put("message", "post have done evaluated");
-                return new ResponseEntity(new ErrorResponse(errors),
-                        HttpStatus.NOT_FOUND);
-            }
             RatePost ratePost = new RatePost();
-            ratePost.setUser(user);
-            ratePost.setPost(post);
+            if(ratePostRepository.findByPostAndUser(post,user).isPresent()){
+                ratePost = ratePostRepository.findByPostAndUser(post, user).get();
+            }else {
+                ratePost.setUser(user);
+                ratePost.setPost(post);
+            }
             ratePost.setRateNumber(ratePostDTO.getRateNumber());
             ratePostRepository.save(ratePost);
             return new ResponseEntity(new SuccessfulResponse(ratePost), HttpStatus.OK);

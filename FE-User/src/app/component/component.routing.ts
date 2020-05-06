@@ -6,6 +6,7 @@ import { ConfirmPurchaseComponent } from './confirm-purchase/confirm-purchase.co
 import { UserInfoComponent } from './user-info/user-info.component';
 import { ListUserPostComponent } from './list-user-post/list-user-post.component';
 import { StorageCartComponent } from './storage-cart/storage-cart.component';
+import { PaymentCartComponent } from './storage-cart/payment-cart/payment-cart.component';
 
 export const ComponentsRoutes: Routes = [{
     path: '',
@@ -42,6 +43,11 @@ export const ComponentsRoutes: Routes = [{
         {
             path: 'storage-cart',
             component: StorageCartComponent,
+            pathMatch: 'full'
+        },
+        {
+            path: 'payment-cart',
+            component: PaymentCartComponent,
             pathMatch: 'full'
         }
     ]

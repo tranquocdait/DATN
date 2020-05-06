@@ -27,8 +27,6 @@ export class NavigationComponent implements OnInit, AfterViewInit, AfterContentC
     }
 
     logout() {
-        this.localStoreManager.removeToken();
-        this.localStoreManager.deleteNumberCart();
         this.localStoreManager.clearAll();
         this.router.navigateByUrl('/login');
     }
@@ -46,6 +44,8 @@ export class NavigationComponent implements OnInit, AfterViewInit, AfterContentC
         this.router.navigateByUrl(url);
     }
     toStorageCart(): void {
-        this.router.navigateByUrl('/component/storage-cart');
+        if (this.localStoreManager.getNumberCart() > 0) {
+            this.router.navigateByUrl('/component/storage-cart');
+        }
     }
 }

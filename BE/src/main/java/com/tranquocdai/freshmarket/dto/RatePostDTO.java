@@ -1,8 +1,5 @@
 package com.tranquocdai.freshmarket.dto;
 
-
-import javax.validation.constraints.NotEmpty;
-
 public class RatePostDTO {
     private Long id;
 
@@ -10,7 +7,6 @@ public class RatePostDTO {
 
     private Long postId;
 
-    @NotEmpty
     private Integer rateNumber;
 
     public Long getId() {

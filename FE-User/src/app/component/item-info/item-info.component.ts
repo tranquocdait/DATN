@@ -22,6 +22,8 @@ export class ItemInfoComponent implements OnInit {
     dataContent: any;
     dataComment: any[];
     checkLoadData = false;
+    checkUserRate: false;
+    checkUserComment: false;
     ngOnInit() {
     }
 
@@ -82,6 +84,7 @@ export class ItemInfoComponent implements OnInit {
         modalRef.componentInstance.data = { data: this.dataContent };
         modalRef.componentInstance.output.subscribe((res) => {
             if (res === 'success') {
+                this.loadData();
             }
         });
     }

@@ -3,6 +3,7 @@ import { Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EndpointFactory } from '../../../services/endpoint-factory.service';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 
 @Component({
     selector: 'app-edit-user',
@@ -16,7 +17,7 @@ export class EditUserComponent implements OnInit {
     messageError: any;
     constructor(public activeModal: NgbActiveModal, private formBuilder: FormBuilder, private endpointFactory: EndpointFactory) {
     }
-
+    @BlockUI() blockUI: NgBlockUI;
     @Input() data;
     @Output() output = new EventEmitter();
     editForm: FormGroup;
@@ -80,10 +81,14 @@ export class EditUserComponent implements OnInit {
             };
             if (this.data.type === 'edit') {
                 this.endpointFactory.putByHeader(params, 'users').subscribe(data => {
+                    this.blockUI.start();
                     if (data.status === 'success') {
                         this.output.emit('success');
                         this.activeModal.close();
+                        this.blockUI.stop();
                     }
+                }, error => {
+                    this.blockUI.stop();
                 });
             }
         }

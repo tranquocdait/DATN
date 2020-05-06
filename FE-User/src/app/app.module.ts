@@ -20,6 +20,9 @@ import { Approutes } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EndpointFactory } from './services/endpoint-factory.service';
 import { LocalStoreManager } from './services/local-store-manager.service';
+import { ConvertAmountPipe } from './pipe/convert-amount.pipe';
+import { BlockUIModule } from 'ng-block-ui';
+
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true,
     wheelSpeed: 2,
@@ -42,6 +45,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         HttpClientModule,
         NgbModule,
         RouterModule.forRoot(Approutes),
+        BlockUIModule.forRoot(),
         PerfectScrollbarModule,
         ChartsModule,
         ReactiveFormsModule

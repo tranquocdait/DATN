@@ -23,7 +23,7 @@
                     </div>
                     <div class="container md-1 mt-1">
                         <label class="col-md-3 md-1 mt-1">Đơn giá : </label>
-                        <label class="col-md-9 md-1 mt-1"><b>{{unitPrice}} VND/{{unitName}}</b></label>
+                        <label class="col-md-9 md-1 mt-1"><b>{{unitPrice|convertAmount}}/{{unitName}}</b></label>
                     </div>
                     <div class="container md-1 mt-1">
                         <label class="col-md-3">Số lượng : </label>
@@ -31,7 +31,7 @@
                     </div>
                     <div class="container md-1 mt-1">
                         <label class="col-md-3">Tổng tiền : </label>
-                        <label class="col-md-9" style="border-top:black outset ;"><b>{{totalPrice}}</b></label>
+                        <label class="col-md-9" style="border-top:black outset ;"><b>{{totalPrice|convertAmount}}</b></label>
                     </div>
                     <div class="row mb-2">
                         <div class="col text-center">

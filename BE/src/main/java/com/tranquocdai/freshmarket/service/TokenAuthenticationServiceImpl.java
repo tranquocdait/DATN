@@ -23,12 +23,13 @@ import java.util.List;
 
 @Service
 public class TokenAuthenticationServiceImpl implements TokenAuthenticationService {
-    private static final long EXPIRATION_TIME = 1000 * 3600 * 24 ; // 1 days
+    private static final long EXPIRATION_TIME = 1000 * 3600 * 24; // 1 days
     private static final String HEADER_STRING = "Authorization";
     private static final String SECRET_KEY = "secret";
 
     @Autowired
     private UserRepository userRepository;
+
     public void addAuthentication(HttpServletResponse response, String username) {
         String Jwt = Jwts.builder()
                 .setSubject(username)
@@ -41,7 +42,7 @@ public class TokenAuthenticationServiceImpl implements TokenAuthenticationServic
             PrintWriter writer = response.getWriter();
             response.addHeader(HEADER_STRING, Jwt);
             ObjectMapper mapper = new ObjectMapper();
-            String json=mapper.writeValueAsString(new SuccessfulResponse(Jwt));
+            String json = mapper.writeValueAsString(new SuccessfulResponse(Jwt));
             writer.print(json);
 
             writer.flush();
@@ -52,20 +53,24 @@ public class TokenAuthenticationServiceImpl implements TokenAuthenticationServic
 
     public Authentication getAuthentication(HttpServletRequest request) {
         String token = request.getHeader(HEADER_STRING);
-        if (token != null) {
-            String username = Jwts.parser()
-                    .setSigningKey(SECRET_KEY)
-                    .parseClaimsJws(token)
-                    .getBody()
-                    .getSubject();
-            if (username != null) {
-                List<GrantedAuthority> role = new ArrayList<>();
-                role.add(new SimpleGrantedAuthority(
-                        userRepository.findByUserName(username).get().getRoleUser().getRoleName()
-                ));
-                return new UsernamePasswordAuthenticationToken(username, null, role);
+        try {
+            if (token != null) {
+                String username = Jwts.parser()
+                        .setSigningKey(SECRET_KEY)
+                        .parseClaimsJws(token)
+                        .getBody()
+                        .getSubject();
+                if (username != null) {
+                    List<GrantedAuthority> role = new ArrayList<>();
+                    role.add(new SimpleGrantedAuthority(
+                            userRepository.findByUserName(username).get().getRoleUser().getRoleName()
+                    ));
+                    return new UsernamePasswordAuthenticationToken(username, null, role);
+                }
             }
+            return null;
+        } catch (Exception ex) {
+            return null;
         }
-        return null;
     }
 }
