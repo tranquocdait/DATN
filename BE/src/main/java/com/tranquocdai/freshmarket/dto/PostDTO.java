@@ -1,18 +1,9 @@
 package com.tranquocdai.freshmarket.dto;
 
-import com.tranquocdai.freshmarket.model.*;
-
-import javax.validation.constraints.NotEmpty;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Optional;
-
-
 public class PostDTO {
 
     private Long id;
 
-    @NotEmpty
     private String postName;
 
     private String description;

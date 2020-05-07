@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { LocalStoreManager } from '../../services/local-store-manager.service';
 import { EndpointFactory } from '../../services/endpoint-factory.service';
 import { PostElement } from '../model/post.model';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 
 @Component({
     selector: 'app-item-info',
@@ -12,7 +13,7 @@ import { PostElement } from '../model/post.model';
     styleUrls: ['./item-info.component.scss']
 })
 export class ItemInfoComponent implements OnInit {
-
+    @BlockUI() blockUI: NgBlockUI;
     constructor(private router: Router, private modalService: NgbModal, private localStoreManager: LocalStoreManager,
         private endpointFactory: EndpointFactory) {
         this.loadData();
@@ -28,6 +29,7 @@ export class ItemInfoComponent implements OnInit {
     }
 
     loadData() {
+        this.blockUI.start();
         this.endpointFactory.getEndPoint('posts/' + this.localStoreManager.getPostSelected()).subscribe(data => {
             if (data.status === 'success') {
                 const post = new PostElement();
@@ -52,6 +54,7 @@ export class ItemInfoComponent implements OnInit {
                 this.dataComment = data.data.userCommentDTOList;
                 this.dataContent = post;
                 this.checkLoadData = true;
+                this.blockUI.stop();
             }
         });
     }

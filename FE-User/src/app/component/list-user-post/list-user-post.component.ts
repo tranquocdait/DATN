@@ -4,6 +4,7 @@ import { EndpointFactory } from '../../services/endpoint-factory.service';
 import { PostElement } from '../model/post.model';
 import { LocalStoreManager } from '../../services/local-store-manager.service';
 import { Router } from '@angular/router';
+import { EditPostComponent } from './edit-post/edit-post.component';
 
 @Component({
     selector: 'app-list-user-post',
@@ -26,6 +27,7 @@ export class ListUserPostComponent implements OnInit, AfterContentChecked {
         this.setUrl();
         this.loadData();
     }
+
     loadData(): void {
         this.endpointFactory.getEndPointByHeader(this.getUrl).subscribe(data => {
             if (data.status === 'success') {
@@ -43,10 +45,14 @@ export class ListUserPostComponent implements OnInit, AfterContentChecked {
                     post.province = element.province;
                     post.imageURL = element.imagePost.url;
                     post.category = element.category;
-                    if (element.description.length < 100) {
-                        post.description = element.description;
+                    if (element.description !== null) {
+                        if (element.description.length < 100) {
+                            post.description = element.description;
+                        } else {
+                            post.description = element.description.substr(0, 100) + '...';
+                        }
                     } else {
-                        post.description = element.description.substr(0, 100) + '...';
+                        post.description = '';
                     }
                     post.calculationUnit = element.calculationUnit;
                     post.averageRate = Number.parseFloat(elementInfo.averageRate);
@@ -78,5 +84,14 @@ export class ListUserPostComponent implements OnInit, AfterContentChecked {
         this.router.navigateByUrl('/component/list-item');
     }
 
+    addNewPost(): void {
+        const modalRef = this.modalService.open(EditPostComponent, { size: 'lg', windowClass: 'edit-modal', centered: true });
+        modalRef.componentInstance.data = {type: 'addNew' };
+        modalRef.componentInstance.output.subscribe((res) => {
+            if (res === 'success') {
+                this.loadData();
+            }
+        });
+    }
 }
 

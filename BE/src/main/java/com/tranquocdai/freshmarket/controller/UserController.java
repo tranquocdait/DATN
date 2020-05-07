@@ -117,7 +117,7 @@ public class UserController {
             user.setPhoneNumber(userAddDTO.getPhoneNumber());
             user.setRoleUser(roleUser);
             Avatar avatar = new Avatar();
-            if (userAddDTO.getImageBase64() != null || "".equals(userAddDTO.getImageBase64())) {
+            if (userAddDTO.getImageBase64() != null && "".equals(userAddDTO.getImageBase64())) {
                 String newImageUrl = storageService.store(userAddDTO.getImageBase64());
                 avatar.setUrl(newImageUrl);
                 avatarRepository.save(avatar);
@@ -228,7 +228,7 @@ public class UserController {
                 return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
             }
             User user = baseService.getUser(authentication).get();
-            user.setPassword(passworDTO.getPassword());
+            user.setPassword(passwordEncoder.encode(passworDTO.getPassword()));
             userRepository.save(user);
             User result = baseService.getUser(authentication).get();
             return new ResponseEntity(new SuccessfulResponse(UserInfoDTO.converUser(result)), HttpStatus.OK);

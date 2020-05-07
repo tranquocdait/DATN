@@ -124,6 +124,11 @@ public class PostController {
     @PostMapping("/posts/create")
     public ResponseEntity createPost(Authentication authentication, @Valid @RequestBody PostDTO postAddDTO) {
         try {
+            if (!baseService.getUser(authentication).isPresent()) {
+                Map<String, String> errors = new HashMap<>();
+                errors.put("message", "username has not existed");
+                return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
+            }
             User user = baseService.getUser(authentication).get();
             Post post = new Post();
             post.setUser(user);
@@ -134,6 +139,7 @@ public class PostController {
             post.setDistrictId(postAddDTO.getDistrictId());
             post.setDateOfPost(LocalDateTime.now());
             post.setWeightOfItem(postAddDTO.getWeightOfItem());
+            post.setDescription(postAddDTO.getDescription());
             //TypePost typePost = typePostRepository.findById(addPostDTO.getTypePostID()).get();
             // post.setTypePost(typePost);
             Province province = provinceRepository.findById(postAddDTO.getProvinceID()).get();
@@ -143,7 +149,7 @@ public class PostController {
             Category category = categoryRepository.findById(postAddDTO.getCategoryID()).get();
             post.setCategory(category);
             ImagePost imagePost = new ImagePost();
-            if (postAddDTO.getImageBase64() != null || !"".equals(postAddDTO.getImageBase64())) {
+            if (postAddDTO.getImageBase64() != null && !"".equals(postAddDTO.getImageBase64())) {
                 String newImageUrl = storageService.store(postAddDTO.getImageBase64());
                 imagePost.setUrl(newImageUrl);
                 imagePostRepository.save(imagePost);
@@ -163,6 +169,11 @@ public class PostController {
     @PutMapping("/posts/update")
     public ResponseEntity updatePost(Authentication authentication, @Valid @RequestBody PostDTO postUpdateDTO) {
         try {
+            if (!baseService.getUser(authentication).isPresent()) {
+                Map<String, String> errors = new HashMap<>();
+                errors.put("message", "username has not existed");
+                return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
+            }
             User user = baseService.getUser(authentication).get();
             if (!postRepository.findByUserAndId(user, postUpdateDTO.getId()).isPresent()) {
                 Map<String, String> errors = new HashMap<>();
