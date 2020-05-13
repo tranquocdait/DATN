@@ -22,6 +22,8 @@ import { EndpointFactory } from './services/endpoint-factory.service';
 import { LocalStoreManager } from './services/local-store-manager.service';
 import { ConvertAmountPipe } from './pipe/convert-amount.pipe';
 import { BlockUIModule } from 'ng-block-ui';
+import { SignupComponent } from './login/signup/signup.component';
+import { LoginComponent } from './login/login.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true,
@@ -35,7 +37,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         FullComponent,
         NavigationComponent,
         BreadcrumbComponent,
-        SidebarComponent
+        SidebarComponent,
+        SignupComponent,
+        LoginComponent
     ],
     imports: [
         CommonModule,
@@ -48,7 +52,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         BlockUIModule.forRoot(),
         PerfectScrollbarModule,
         ChartsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
     ],
     providers: [
         {
@@ -58,6 +62,14 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         EndpointFactory,
         LocalStoreManager
     ],
-    bootstrap: [AppComponent]
+    bootstrap: [AppComponent],
+    exports: [
+        SignupComponent,
+        LoginComponent
+    ],
+    entryComponents: [
+        SignupComponent,
+        LoginComponent
+    ]
 })
 export class AppModule { }

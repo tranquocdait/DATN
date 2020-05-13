@@ -1,10 +1,13 @@
-import { Component, OnInit, ChangeDetectorRef, AfterContentChecked } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, AfterContentChecked, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { EndpointFactory } from '../../services/endpoint-factory.service';
 import { PostElement } from '../model/post.model';
 import { LocalStoreManager } from '../../services/local-store-manager.service';
 import { Router } from '@angular/router';
 import { EditPostComponent } from './edit-post/edit-post.component';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { DialogConfirmComponent } from '../dialog-confirm/dialog-confirm.component';
 
 @Component({
     selector: 'app-list-user-post',
@@ -16,9 +19,14 @@ export class ListUserPostComponent implements OnInit, AfterContentChecked {
     getUrl = '';
     categoryId = 0;
     change = false;
+    dataSource: MatTableDataSource<PostElement>;
+    @ViewChild(MatSort, { static: true }) sort: MatSort;
+    displayedColumns: string[] = ['imageURL', 'postId', 'postName', 'description', 'unitPrice',
+        'dateOfPost', 'province', 'category', 'calculationUnit', 'viewPurchase', 'edit', 'delete'];
     constructor(private router: Router, private modalService: NgbModal, private changeDetectorRefs: ChangeDetectorRef,
         private endpointFactory: EndpointFactory, private localStoreManager: LocalStoreManager) {
         this.loadFisrtData();
+        this.setDataSource();
     }
     ngOnInit() {
     }
@@ -64,6 +72,14 @@ export class ListUserPostComponent implements OnInit, AfterContentChecked {
         });
     }
 
+    setDataSource() {
+        setTimeout(() => {
+            this.dataSource = new MatTableDataSource(this.dataList);
+            this.dataSource.sort = this.sort;
+        }, 1000);
+
+    }
+
     setUrl(): void {
         this.getUrl = 'users/posts';
     }
@@ -79,19 +95,48 @@ export class ListUserPostComponent implements OnInit, AfterContentChecked {
         //this.loadData();
     }
 
-    showInfo(post: PostElement): void {
-        this.localStoreManager.setPostSelected(post.postId);
+    showInfo(postId: string): void {
+        this.localStoreManager.setPostSelected(postId);
         this.router.navigateByUrl('/component/list-item');
     }
 
     addNewPost(): void {
         const modalRef = this.modalService.open(EditPostComponent, { size: 'lg', windowClass: 'edit-modal', centered: true });
-        modalRef.componentInstance.data = {type: 'addNew' };
+        modalRef.componentInstance.data = { type: 'addNew' };
         modalRef.componentInstance.output.subscribe((res) => {
             if (res === 'success') {
                 this.loadData();
+                this.setDataSource();
             }
         });
     }
+
+    editPost(element: any): void {
+        const modalRef = this.modalService.open(EditPostComponent, { size: 'lg', windowClass: 'edit-modal', centered: true });
+        modalRef.componentInstance.data = { data: element, type: 'edit' };
+        modalRef.componentInstance.output.subscribe((res) => {
+            if (res === 'success') {
+                this.loadData();
+                this.setDataSource();
+            }
+        });
+    }
+
+    deletePost(element: any): void {
+        const modalRef = this.modalService.open(DialogConfirmComponent, { size: 'lg', windowClass: 'delete-modal', centered: true });
+        modalRef.componentInstance.data = { title: 'Xóa bài đăng', content: 'Bạn muốn xóa bài đăng?' };
+        modalRef.componentInstance.output.subscribe((res) => {
+            if (res === 'success') {
+                this.endpointFactory.deleteEndPoint(element.postId, 'posts/' + element.postId).subscribe(data => {
+                    if (data.status === 'success') {
+                        this.loadData();
+                        this.setDataSource();
+                    }
+                }
+                );
+            }
+        });
+    }
+
 }
 

@@ -7,15 +7,16 @@
             <i class="ti-menu"></i></a> </li>
 </ul>
 <ul class="navbar-nav my-lg-0 float-right">
-    <li class="nav-item" id="cart"><span class="mdi mdi-cart mdi-24px" (click)="toStorageCart()"></span>{{number}} đơn hàng</li>
-    <li class="nav-item dropdown" ngbDropdown placement="bottom-right">
+    <li class="nav-item" id="cart"><span class="mdi mdi-cart mdi-24px" (click)="toStorageCart()" >
+    </span>{{number}} đơn hàng</li>
+    <li class="nav-item dropdown" ngbDropdown placement="bottom-right" *ngIf="checkLogin">
         <a ngbDropdownToggle class="nav-link dropdown-toggle text-muted waves-effect waves-dark"
             href="javascript:void(0)" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img
                 src="{{urlAvatar}}" alt="user"
                 class="profile-pic"></a>
         <div class="dropdown-menu" ngbDropdownMenu>
             <ul class="dropdown-user">
-                <li><a href="./component/user-info" style="cursor: pointer;"><i class="ti-user"></i> My Profile</a></li>
+                <li><a (click)="onMyProfile()" style="cursor: pointer;"><i class="ti-user"></i> My Profile</a></li>
                 <li><a (click)="onAction('/component/list-user-post')" style="cursor: pointer;"><i class="ti-shopping-cart"></i>
                         Bài đăng</a></li>
                 <li><a (click)="onAction('/component/list-item')" style="cursor: pointer;"><i class="ti-wallet"></i> Các
@@ -24,6 +25,18 @@
                 <li><a href="#"><i class="ti-settings"></i> Account Setting</a></li>
                 <li role="separator" class="divider"></li>
                 <li><a (click)="logout()" style="cursor: pointer;"><i class="fa fa-power-off"></i> Logout</a></li>
+            </ul>
+        </div>
+    </li>
+    <li class="nav-item dropdown" ngbDropdown placement="bottom-right" *ngIf="!checkLogin">
+        <a ngbDropdownToggle class="nav-link dropdown-toggle text-muted waves-effect waves-dark"
+            href="javascript:void(0)" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img
+                src="../assets/images/Default.png" alt="user"
+                class="profile-pic"></a>
+        <div class="dropdown-menu" ngbDropdownMenu>
+            <ul class="dropdown-user">
+                <li><a (click)="onLogin()" style="cursor: pointer;"><i class="ti-user"></i> Đăng nhập</a></li>
+                <li><a (click)="onSignUp()" style="cursor: pointer;"><i class="fa fa-user-plus"></i> Tạo tài khoản</a></li>
             </ul>
         </div>
     </li>

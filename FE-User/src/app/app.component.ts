@@ -12,16 +12,16 @@ export class AppComponent {
     constructor(private router: Router, private localStoreManager: LocalStoreManager, private endpointFactory: EndpointFactory) {
         this.getCheckLogin();
     }
-    getCheckLogin() {
+    getCheckLogin(): void {
         if (this.localStoreManager.getToken() === null) {
-            this.router.navigateByUrl('/login');
+            this.router.navigateByUrl('/component/list-post');
         } else {
             this.endpointFactory.postByHeader(null, 'users/information').subscribe(dataInfor => {
                 if (dataInfor.status !== 'success') {
-                    this.router.navigateByUrl('/login');
+                    this.localStoreManager.clearAll();
                 }
             }, error => {
-                this.router.navigateByUrl('/login');
+                this.localStoreManager.clearAll();
             }
             );
         }

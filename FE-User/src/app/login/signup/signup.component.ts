@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
+import { NgbTooltip, NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { LocalStoreManager } from '../../services/local-store-manager.service';
 import { EndpointFactory } from '../../services/endpoint-factory.service';
+import { LoginComponent } from '../login.component';
 
 @Component({
     selector: 'app-signup',
@@ -21,8 +22,8 @@ export class SignupComponent implements OnInit {
     };
     isSuccess = false;
     messageError: any;
-    constructor(private formBuilder: FormBuilder, private router: Router, private localStoreManager: LocalStoreManager,
-        private endpointFactory: EndpointFactory) {
+    constructor(public activeModal: NgbActiveModal, private formBuilder: FormBuilder, private router: Router,
+        private localStoreManager: LocalStoreManager, private endpointFactory: EndpointFactory, private modalService: NgbModal) {
         this.createForm();
     }
 
@@ -49,6 +50,7 @@ export class SignupComponent implements OnInit {
             if (data.status === 'success') {
                 this.isSuccess = true;
                 this.messageError = this.messageErrorArray.success;
+                this.activeModal.close();
             }
         }, error => {
         });
@@ -69,7 +71,12 @@ export class SignupComponent implements OnInit {
         return true;
     }
 
-    resetMessage(){
+    onLogin(): void {
+        this.activeModal.close();
+        this.modalService.open(LoginComponent, { size: 'lg', windowClass: 'login-modal', centered: true });
+    }
+
+    resetMessage() {
         this.isSuccess = false;
     }
 }

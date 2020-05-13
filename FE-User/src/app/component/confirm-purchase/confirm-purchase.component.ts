@@ -5,6 +5,7 @@ import { LocalStoreManager } from '../../services/local-store-manager.service';
 import { EndpointFactory } from '../../services/endpoint-factory.service';
 import { Router } from '@angular/router';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { LoginComponent } from '../../login/login.component';
 
 @Component({
     selector: 'app-confirm-purchase',
@@ -41,29 +42,39 @@ export class ConfirmPurchaseComponent implements OnInit {
     }
 
     confirmPurchase(): void {
-        const modalRef = this.modalService.open(DialogConfirmComponent, { size: 'lg', windowClass: 'delete-modal', centered: true });
-        modalRef.componentInstance.data = { title: 'Xác nhận đơn hàng', content: 'Bạn muốn xác nhận đơn hàng?' };
-        modalRef.componentInstance.output.subscribe((res) => {
-            if (res === 'success') {
-                const params: any = {
-                    address: this.address,
-                    fullName: this.name,
-                    phoneNumber: this.phoneNumber,
-                    postId: this.postId,
-                    purchaseNumber: this.numberItem,
-                    statusPurchaseId: 1
-                };
-                this.endpointFactory.postByHeader(params, 'purchases/create').subscribe(data => {
-                    this.blockUI.start();
-                    if (data.status === 'success') {
-                        this.router.navigateByUrl('component/list-post');
+        if (this.localStoreManager.getCheckLogin()) {
+            const modalRef = this.modalService.open(DialogConfirmComponent, { size: 'lg', windowClass: 'delete-modal', centered: true });
+            modalRef.componentInstance.data = { title: 'Xác nhận đơn hàng', content: 'Bạn muốn xác nhận đơn hàng?' };
+            modalRef.componentInstance.output.subscribe((res) => {
+                if (res === 'success') {
+                    const params: any = {
+                        address: this.address,
+                        fullName: this.name,
+                        phoneNumber: this.phoneNumber,
+                        postId: this.postId,
+                        purchaseNumber: this.numberItem,
+                        statusPurchaseId: 1
+                    };
+                    this.endpointFactory.postByHeader(params, 'purchases/create').subscribe(data => {
+                        this.blockUI.start();
+                        if (data.status === 'success') {
+                            this.router.navigateByUrl('component/list-post');
+                            this.blockUI.stop();
+                        }
+                    }, error => {
                         this.blockUI.stop();
-                    }
-                }, error => {
-                    this.blockUI.stop();
-                });
-            }
-        });
+                    });
+                }
+            });
+        } else {
+            this.onLogin();
+        }
+    }
+    goBackInfoItem(): void {
+        this.router.navigateByUrl('component/item-info');
+    }
+    onLogin(): void {
+        this.modalService.open(LoginComponent, { size: 'lg', windowClass: 'login-modal', centered: true });
     }
 
 }

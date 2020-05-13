@@ -2,13 +2,17 @@ package com.tranquocdai.freshmarket.controller;
 
 import com.tranquocdai.freshmarket.config.Constants;
 import com.tranquocdai.freshmarket.model.Avatar;
+import com.tranquocdai.freshmarket.model.Post;
 import com.tranquocdai.freshmarket.model.RoleUser;
 import com.tranquocdai.freshmarket.model.User;
 import com.tranquocdai.freshmarket.repository.AvatarRepository;
+import com.tranquocdai.freshmarket.repository.PostRepository;
 import com.tranquocdai.freshmarket.repository.RoleResponsitory;
 import com.tranquocdai.freshmarket.repository.UserRepository;
 import com.tranquocdai.freshmarket.service.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +23,9 @@ import java.util.List;
 public class HelloController {
     @Autowired
     RoleResponsitory roleResponsitory;
+
+    @Autowired
+    PostRepository postRepository;
 
     @Autowired
     StorageService storageService;
@@ -38,6 +45,12 @@ public class HelloController {
     public ResponseEntity readAdmin() {
         List<RoleUser> userList = roleResponsitory.findAll();
         return ResponseEntity.ok(userList);
+    }
+
+    @GetMapping("/pagedingPost")
+    public ResponseEntity pagedingPost() {
+        Page<Post> postList = postRepository.findAll(PageRequest.of(1, 5));
+        return ResponseEntity.ok(postList);
     }
 
     @GetMapping("/demoUser/{search}")

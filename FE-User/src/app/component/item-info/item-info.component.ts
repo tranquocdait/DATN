@@ -6,6 +6,7 @@ import { LocalStoreManager } from '../../services/local-store-manager.service';
 import { EndpointFactory } from '../../services/endpoint-factory.service';
 import { PostElement } from '../model/post.model';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { LoginComponent } from '../../login/login.component';
 
 @Component({
     selector: 'app-item-info',
@@ -80,16 +81,22 @@ export class ItemInfoComponent implements OnInit {
         ];
         this.localStoreManager.setDataPurchase(dataPurchase.toString());
         this.router.navigateByUrl('/component/confirm-purchase');
+
     }
+
     createComment(): void {
-        const modalRef =
-            this.modalService.open(CreateCommentComponent, { size: 'lg', windowClass: 'create-comment-dialog', centered: true });
-        modalRef.componentInstance.data = { data: this.dataContent };
-        modalRef.componentInstance.output.subscribe((res) => {
-            if (res === 'success') {
-                this.loadData();
-            }
-        });
+        if (this.localStoreManager.getCheckLogin()) {
+            const modalRef =
+                this.modalService.open(CreateCommentComponent, { size: 'lg', windowClass: 'create-comment-dialog', centered: true });
+            modalRef.componentInstance.data = { data: this.dataContent };
+            modalRef.componentInstance.output.subscribe((res) => {
+                if (res === 'success') {
+                    this.loadData();
+                }
+            });
+        } else {
+            this.onLogin();
+        }
     }
 
     addStorageCart(): void {
@@ -105,5 +112,9 @@ export class ItemInfoComponent implements OnInit {
             unitName: this.dataContent.calculationUnit.unitName,
         };
         this.localStoreManager.setStorageCart(JSON.stringify(dataPurchase));
+    }
+
+    onLogin(): void {
+        this.modalService.open(LoginComponent, { size: 'lg', windowClass: 'login-modal', centered: true });
     }
 }

@@ -24,7 +24,7 @@ export class DeletePostComponent implements OnInit {
       if (data.status === "success") {
         this.output.emit("success");
         this.activeModal.close();
-      };
+      }
     }
     );
   }

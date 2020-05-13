@@ -88,7 +88,7 @@ public class PurchaseController {
         }
     }
 
-    @GetMapping("/purchases/{postId}")
+    @GetMapping("/purchases/user/{postId}")
     public ResponseEntity readAllPurchase(Authentication authentication, @PathVariable("postId") Long id) {
         try {
             if (!baseService.getUser(authentication).isPresent()) {

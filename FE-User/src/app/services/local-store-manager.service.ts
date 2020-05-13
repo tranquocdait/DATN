@@ -13,9 +13,16 @@ export class LocalStoreManager {
             postSelected: 'postSelected',
             dataPurchase: 'dataPurchase',
             urlAvatar: 'urlAvatar',
-            storageCart: 'storageCart'
+            storageCart: 'storageCart',
+            checkLogin: 'checkLogin',
         };
-
+    public getCheckLogin(): boolean {
+        return localStorage.getItem(this.reservedKeys.checkLogin) === 'true';
+    }
+    public setCheckLogin(checkLogin: boolean): void {
+        const aaa = checkLogin.toString();
+        localStorage.setItem(this.reservedKeys.checkLogin, checkLogin.toString());
+    }
     public setStorageCart(storageCart: string): void {
         if (this.getStorageCart() === null) {
             localStorage.setItem(this.reservedKeys.storageCart, '[' + storageCart + ']');

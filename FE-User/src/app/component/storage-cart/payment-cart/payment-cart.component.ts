@@ -4,6 +4,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
 import { LocalStoreManager } from '../../../services/local-store-manager.service';
 import { EndpointFactory } from '../../../services/endpoint-factory.service';
+import { LoginComponent } from '../../../login/login.component';
 
 @Component({
     selector: 'app-payment-cart',
@@ -38,31 +39,42 @@ export class PaymentCartComponent implements OnInit {
         });
     }
     confirmPurchase(): void {
-        const modalRef = this.modalService.open(DialogConfirmComponent, { size: 'lg', windowClass: 'delete-modal', centered: true });
-        modalRef.componentInstance.data = { title: 'Xác nhận đơn hàng', content: 'Bạn muốn xác nhận đơn hàng?' };
-        modalRef.componentInstance.output.subscribe((res) => {
-            if (res === 'success') {
-                this.storageArr.forEach((element, index) => {
-                    {
-                        const params: any = {
-                            address: this.address,
-                            fullName: this.name,
-                            phoneNumber: this.phoneNumber,
-                            postId: element.postId,
-                            purchaseNumber: element.numberItem,
-                            statusPurchaseId: 1
-                        };
-                        this.endpointFactory.postByHeader(params, 'purchases/create').subscribe(data => {
-                            if (data.status === 'success') {
-                                this.router.navigateByUrl('component/list-post');
-                            }
-                        }, error => {
-                        });
-                    }
-                });
-                this.localStoreManager.removeStorageCart();
-            }
-        });
+        if (this.localStoreManager.getCheckLogin()) {
+            const modalRef = this.modalService.open(DialogConfirmComponent, { size: 'lg', windowClass: 'delete-modal', centered: true });
+            modalRef.componentInstance.data = { title: 'Xác nhận đơn hàng', content: 'Bạn muốn xác nhận đơn hàng?' };
+            modalRef.componentInstance.output.subscribe((res) => {
+                if (res === 'success') {
+                    this.storageArr.forEach((element, index) => {
+                        {
+                            const params: any = {
+                                address: this.address,
+                                fullName: this.name,
+                                phoneNumber: this.phoneNumber,
+                                postId: element.postId,
+                                purchaseNumber: element.numberItem,
+                                statusPurchaseId: 1
+                            };
+                            this.endpointFactory.postByHeader(params, 'purchases/create').subscribe(data => {
+                                if (data.status === 'success') {
+                                    this.router.navigateByUrl('component/list-post');
+                                }
+                            }, error => {
+                            });
+                        }
+                    });
+                    this.localStoreManager.removeStorageCart();
+                }
+            });
+        } else {
+            this.onLogin();
+        }
     }
 
+    goBackStorage(): void {
+        this.router.navigateByUrl('component/storage-cart');
+    }
+
+    onLogin(): void {
+        this.modalService.open(LoginComponent, { size: 'lg', windowClass: 'login-modal', centered: true });
+    }
 }

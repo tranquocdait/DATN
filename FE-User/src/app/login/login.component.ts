@@ -2,8 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LocalStoreManager } from '../services/local-store-manager.service';
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
+import { NgbTooltip, NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { EndpointFactory } from '../services/endpoint-factory.service';
+import { SignupComponent } from './signup/signup.component';
 
 @Component({
     selector: 'app-login',
@@ -15,8 +16,8 @@ export class LoginComponent implements OnInit {
     roleAdmin = 'admin';
     loginStatus = false;
     @ViewChild('tt', { static: true }) ttUsername: NgbTooltip;
-    constructor(private formBuilder: FormBuilder, private router: Router, private localStoreManager: LocalStoreManager,
-        private endpointFactory: EndpointFactory) {
+    constructor(public activeModal: NgbActiveModal, private formBuilder: FormBuilder, private router: Router,
+        private localStoreManager: LocalStoreManager, private endpointFactory: EndpointFactory, private modalService: NgbModal) {
         this.localStoreManager.removeToken();
         this.createForm();
     }
@@ -47,7 +48,9 @@ export class LoginComponent implements OnInit {
                     if (dataInfor.status === 'success') {
                         if (dataInfor.data.roleUser.roleName !== this.roleAdmin) {
                             this.localStoreManager.setUrlAvatar(dataInfor.data.avatar.url);
-                            this.router.navigateByUrl('');
+                            this.activeModal.close();
+                            //location.reload();
+                            this.localStoreManager.setCheckLogin(true);
                         } else {
                             this.loginFailed();
                         }
@@ -66,6 +69,11 @@ export class LoginComponent implements OnInit {
     loginFailed(): void {
         this.localStoreManager.removeToken();
         this.loginStatus = true;
+    }
+
+    onSignUp(): void {
+        this.activeModal.close();
+        this.modalService.open(SignupComponent, { size: 'lg', windowClass: 'login-modal', centered: true });
     }
 
 }

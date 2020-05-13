@@ -112,6 +112,14 @@ export class EditPostComponent implements OnInit {
     }
 
     onSubmit(): void {
+        if (this.data.type === 'edit') {
+            this.editPost();
+        } else {
+            this.createPost();
+        }
+    }
+
+    createPost(): void {
         this.blockUI.start();
         const params: any = {
             //postId: this.editForm.value['postId'],
@@ -135,6 +143,34 @@ export class EditPostComponent implements OnInit {
             }
         }
         );
+    }
+
+    editPost(): void {
+        this.blockUI.start();
+        const params: any = {
+            postId: this.editForm.value['postId'],
+            postName: this.editForm.value['postName'],
+            userName: this.editForm.value['userName'],
+            unitPrice: Number.parseFloat(this.editForm.value['unitPrice']),
+            address: this.editForm.value['address'],
+            description: this.editForm.value['description'],
+            provinceID: Number.parseInt(this.editForm.value['province']),
+            calculationUnitID: Number.parseInt(this.editForm.value['calculationUnit']),
+            categoryID: Number.parseInt(this.editForm.value['category']),
+            imageBase64: this.imageBase64,
+        };
+        {
+            this.endpointFactory.putEndPoint(params, 'posts/' + this.data.data.postId).subscribe(data => {
+                if (data.status === 'success') {
+                    this.output.emit('success');
+                    this.activeModal.close();
+                    setTimeout(() => {
+                        this.blockUI.stop();
+                    }, 500);
+                }
+            }
+            );
+        }
     }
 
     checkAmount(): boolean {

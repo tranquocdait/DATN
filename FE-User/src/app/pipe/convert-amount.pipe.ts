@@ -6,7 +6,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class ConvertAmountPipe implements PipeTransform {
 
   transform(value: any, ...args: any[]): any {
-    return Number.parseFloat(value).toLocaleString('it-IT', {style : 'currency', currency : 'VND'});
+    if (value === null) {
+      return '';
+    }
+    return Number.parseFloat(value).toLocaleString('it-IT', { style: 'currency', currency: 'VND' });
   }
 
 }

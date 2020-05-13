@@ -7,6 +7,7 @@ import { PostElement } from '../model/post.model';
 import { PurchaseElement } from '../model/PurchaseElement.model';
 import { PurchaseInfoComponent } from './purchase-info/purchase-info.component';
 import { DialogConfirmComponent } from '../dialog-confirm/dialog-confirm.component';
+import { LocalStoreManager } from '../../services/local-store-manager.service';
 
 @Component({
     selector: 'app-list-item',
@@ -16,10 +17,13 @@ import { DialogConfirmComponent } from '../dialog-confirm/dialog-confirm.compone
 export class ListItemComponent implements OnInit {
     dataSource: MatTableDataSource<PostElement>;
     dataList: PostElement[] = null;
+    getUrl = 'purchases/user';
     displayedColumns: string[] = ['imageURL', 'purchaseId', 'postId', 'buyerName', 'unitPrice', 'purchaseNumber', 'dateOfOrder',
         'statusPurchaseName', 'view', 'delete'];
     @ViewChild(MatSort, { static: true }) sort: MatSort;
-    constructor(private modalService: NgbModal, private changeDetectorRefs: ChangeDetectorRef, private endpointFactory: EndpointFactory) {
+    constructor(private modalService: NgbModal, private changeDetectorRefs: ChangeDetectorRef, private endpointFactory: EndpointFactory,
+        private localStoreManager: LocalStoreManager) {
+        this.setUrl();
 
     }
     ngOnInit() {
@@ -29,8 +33,16 @@ export class ListItemComponent implements OnInit {
         this.loadData();
         this.setDataSource();
     }
+    setUrl(): void {
+        if (this.localStoreManager.getPostSelected() !== null && this.localStoreManager.getPostSelected() !== '0') {
+            this.getUrl = 'purchases/user/' + this.localStoreManager.getPostSelected();
+        } else {
+            this.getUrl = 'purchases/user';
+        }
+    }
     loadData() {
-        this.endpointFactory.getEndPointByHeader('purchases/user').subscribe(data => {
+
+        this.endpointFactory.getEndPointByHeader(this.getUrl).subscribe(data => {
             if (data.status === 'success') {
                 const temp = [];
                 data.data.forEach((element, index) => {
@@ -47,7 +59,6 @@ export class ListItemComponent implements OnInit {
                     temp.unshift(post);
                 });
                 this.dataList = temp;
-                data = [{ id: 1, name: 'name1' }, { id: 2, name: 'name2' }];
             }
         }
         );
