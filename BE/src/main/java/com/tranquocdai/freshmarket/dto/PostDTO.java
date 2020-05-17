@@ -1,5 +1,7 @@
 package com.tranquocdai.freshmarket.dto;
 
+import java.util.List;
+
 public class PostDTO {
 
     private Long id;
@@ -16,15 +18,13 @@ public class PostDTO {
 
     private Long calculationUnitID;
 
-    //private Long typePostID;
-
     private Long categoryID;
 
     private Long provinceID;
 
     private Double weightOfItem;
 
-    private String imageBase64;
+    private List<String> imageBase64s;
 
     public Long getId() {
         return id;
@@ -58,14 +58,6 @@ public class PostDTO {
         this.calculationUnitID = calculationUnitID;
     }
 
-   /* public Long getTypePostID() {
-        return typePostID;
-    }
-
-    public void setTypePostID(Long typePostID) {
-        this.typePostID = typePostID;
-    }*/
-
     public Long getCategoryID() {
         return categoryID;
     }
@@ -74,12 +66,12 @@ public class PostDTO {
         this.categoryID = categoryID;
     }
 
-    public String getImageBase64() {
-        return imageBase64;
+    public List<String> getImageBase64s() {
+        return imageBase64s;
     }
 
-    public void setImageBase64(String imageBase64) {
-        this.imageBase64 = imageBase64;
+    public void setImageBase64s(List<String> imageBase64s) {
+        this.imageBase64s = imageBase64s;
     }
 
     public String getPostName() {

@@ -36,6 +36,9 @@ public class DataLoader implements CommandLineRunner {
     @Autowired
     ImagePostRepository imagePostRepository;
 
+    @Autowired
+    StatusPurchaseRepository statusPurchaseRepository;
+
 
     @Override
     public void run(String... args) throws Exception {
@@ -82,6 +85,23 @@ public class DataLoader implements CommandLineRunner {
         RoleUser diff=new RoleUser();
         diff.setRoleName("khác");
         roleResponsitory.save(diff);
+
+        //add status purchase
+        StatusPurchase pending= new StatusPurchase();
+        pending.setStatus("Pending");
+        statusPurchaseRepository.save(pending);
+
+        StatusPurchase waiting= new StatusPurchase();
+        waiting.setStatus("Waiting");
+        statusPurchaseRepository.save(waiting);
+
+        StatusPurchase done= new StatusPurchase();
+        done.setStatus("Done");
+        statusPurchaseRepository.save(done);
+
+        StatusPurchase cancel= new StatusPurchase();
+        cancel.setStatus("Cancel");
+        statusPurchaseRepository.save(cancel);
 
         //add type post
         TypePost sell= new TypePost();

@@ -41,7 +41,6 @@ export class ListItemComponent implements OnInit {
         }
     }
     loadData() {
-
         this.endpointFactory.getEndPointByHeader(this.getUrl).subscribe(data => {
             if (data.status === 'success') {
                 const temp = [];
@@ -63,18 +62,26 @@ export class ListItemComponent implements OnInit {
         }
         );
     }
-    setDataSource() {
+
+    setDataSource(): void {
         setTimeout(() => {
             this.dataSource = new MatTableDataSource(this.dataList);
             this.dataSource.sort = this.sort;
         }, 1000);
     }
-    deleteItem(element: any) {
+
+    deleteItem(element: any): void {
         const modalRef = this.modalService.open(DialogConfirmComponent, { size: 'lg', windowClass: 'delete-modal', centered: true });
         modalRef.componentInstance.data = { title: 'Xác nhận xóa đơn hàng', content: 'Bạn muốn xóa đơn hàng đơn hàng?' };
         modalRef.componentInstance.output.subscribe((res) => {
             if (res === 'success') {
-                alert('ok');
+                const params = element.purchaseId;
+                this.endpointFactory.deleteEndPoint(params, 'purchases/' + params).subscribe(data => {
+                    if (data.status === 'success') {
+                        this.setData();
+                    }
+                }, error => {
+                });
             }
         });
     }
@@ -86,6 +93,7 @@ export class ListItemComponent implements OnInit {
             if (res === 'success') {
                 this.setData();
             }
+        }, error => {
         });
     }
 }

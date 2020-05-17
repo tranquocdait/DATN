@@ -7,12 +7,12 @@
     </h5>
     <div class="card-body col-12">
         <div class="row justify-content-center">
-            <div class="col-lg-6 col-md-6">
+            <div class="col-lg-4 col-md-6">
                 <div class="card">
                     <img class="card-img-top img-responsive" src="assets/images/big/img1.jpg" alt="Card image cap">
                 </div>
             </div>
-            <div class="col-lg-6 col-md-6">
+            <div class="col-lg-8 col-md-6">
                 <div class="card">
                     <div class="card-body">
                         <div class="row ml-2 mb-2"><i class="mr-2">Tên khách hàng : </i><b>Trần Quốc Đại</b></div>
@@ -22,9 +22,11 @@
                         <div class="row ml-2 mb-2"><i class="mr-2">Đơn giá : </i><b>40000 VND/Kg</b></div>
                         <div class="row ml-2 mb-2"><i class="mr-2">Sô Lượng : </i><b>100</b></div><br>
                         <div class="row ml-2 mb-2" style="border-top:black outset ;"><i class="mr-2">Tổng tiền : </i><b>4000000</b></div>
-                        <div class="row mb-2">
+                        <div class="row mb-2 text-center">
                             <div class="col">
-                                <a class="btn btn-info ml-2" (click)="onSubmit()">Xác nhận đơn hàng</a>
+                                <a class="btn btn-success ml-2" (click)="onSubmit(1)" *ngIf="data.data.statusPurchase.id===1">Xác nhận đơn hàng</a>
+                                <a class="btn btn-success ml-2" (click)="onSubmit(2)" *ngIf="data.data.statusPurchase.id===2">Đã giao hàng</a>
+                                <a class="btn btn-info ml-2" (click)="onSubmit(3)" >Hủy đơn hàng</a>
                                 <a class="btn btn-danger ml-2" (click)="clickClose()">Cancel</a>
                             </div>
                         </div>

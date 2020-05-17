@@ -17,6 +17,7 @@ export class EditPostComponent implements OnInit {
     provinceList: any;
     categoryList: any;
     imageBase64: string;
+    urls = [];
 
     constructor(public activeModal: NgbActiveModal, private formBuilder: FormBuilder, private endpointFactory: EndpointFactory,
         public checkValidatorService: CheckValidatorService) {
@@ -131,7 +132,7 @@ export class EditPostComponent implements OnInit {
             provinceID: Number.parseInt(this.editForm.value['province']),
             calculationUnitID: Number.parseInt(this.editForm.value['calculationUnit']),
             categoryID: Number.parseInt(this.editForm.value['category']),
-            imageBase64: this.imageBase64,
+            imageBase64s: this.urls,
         };
         this.endpointFactory.postByHeader(params, 'posts/create').subscribe(data => {
             if (data.status === 'success') {
@@ -141,6 +142,10 @@ export class EditPostComponent implements OnInit {
                     this.blockUI.stop();
                 }, 500);
             }
+        }, error => {
+            setTimeout(() => {
+                this.blockUI.stop();
+            }, 500);
         }
         );
     }
@@ -157,7 +162,7 @@ export class EditPostComponent implements OnInit {
             provinceID: Number.parseInt(this.editForm.value['province']),
             calculationUnitID: Number.parseInt(this.editForm.value['calculationUnit']),
             categoryID: Number.parseInt(this.editForm.value['category']),
-            imageBase64: this.imageBase64,
+            imageBase64s: this.urls,
         };
         {
             this.endpointFactory.putEndPoint(params, 'posts/' + this.data.data.postId).subscribe(data => {
@@ -177,4 +182,17 @@ export class EditPostComponent implements OnInit {
         return this.checkValidatorService.isNumber(this.editForm.value['unitPrice']);
     }
 
+    onSelectFile(event) {
+        if (event.target.files && event.target.files[0]) {
+            const filesAmount = event.target.files.length;
+            for (let i = 0; i < filesAmount; i++) {
+                const reader = new FileReader();
+                reader.onload = (event: any) => {
+                    this.urls.push(event.target.result);
+                };
+                reader.readAsDataURL(event.target.files[i]);
+            }
+            console.log(this.urls);
+        }
+    }
 }

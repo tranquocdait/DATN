@@ -28,7 +28,8 @@ export class ListPostComponent implements OnInit, AfterContentChecked {
         this.loadData();
     }
     loadData(): void {
-        this.endpointFactory.getEndPoint(this.getUrl).subscribe(data => {
+        this.endpointFactory.getEndPointWithResponeHeader(this.getUrl).subscribe(data => {
+            console.log(data.headers.get("total"));
             if (data.status === 'success') {
                 const temp = [];
                 data.data.forEach((elementInfo) => {
@@ -64,12 +65,13 @@ export class ListPostComponent implements OnInit, AfterContentChecked {
     }
 
     setUrl(): void {
-        this.categoryId = this.localStoreManager.getCategoryId();
-        if (this.localStoreManager.getCategoryId() === 0) {
-            this.getUrl = 'posts';
-        } else {
-            this.getUrl = 'posts/' + this.localStoreManager.getCategoryId() + '/category';
-        }
+        this.getUrl = 'pagedingPost';
+        // this.categoryId = this.localStoreManager.getCategoryId();
+        // if (this.localStoreManager.getCategoryId() === 0) {
+        //     this.getUrl = 'posts';
+        // } else {
+        //     this.getUrl = 'posts/' + this.localStoreManager.getCategoryId() + '/category';
+        // }
     }
 
     ngAfterContentChecked(): void {

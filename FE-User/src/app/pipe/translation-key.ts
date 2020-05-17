@@ -8,5 +8,8 @@ export const TranslationKey = [
     }, {
         key: 'Done',
         value: 'Đã giao hàng'
+    }, {
+        key: 'Cancel',
+        value: 'Đã hủy'
     }
 ];

@@ -9,6 +9,7 @@ import com.tranquocdai.freshmarket.repository.AvatarRepository;
 import com.tranquocdai.freshmarket.repository.PostRepository;
 import com.tranquocdai.freshmarket.repository.RoleResponsitory;
 import com.tranquocdai.freshmarket.repository.UserRepository;
+import com.tranquocdai.freshmarket.response.SuccessfulResponse;
 import com.tranquocdai.freshmarket.service.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -49,8 +50,10 @@ public class HelloController {
 
     @GetMapping("/pagedingPost")
     public ResponseEntity pagedingPost() {
-        Page<Post> postList = postRepository.findAll(PageRequest.of(1, 5));
-        return ResponseEntity.ok(postList);
+        Page<Post> postList = postRepository.findAll(PageRequest.of(0, 5));
+        return ResponseEntity.ok().header("total", postList.getTotalPages()+"")
+                .header("pageCurrent",postList.getNumber()+"")
+                .body(new SuccessfulResponse(postList.getContent()));
     }
 
     @GetMapping("/demoUser/{search}")

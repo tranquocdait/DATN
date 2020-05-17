@@ -1,8 +1,11 @@
 package com.tranquocdai.freshmarket.model;
 
+import org.hibernate.annotations.Fetch;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "Post")
@@ -31,17 +34,24 @@ public class Post {
     @OneToOne(targetEntity = CalculationUnit.class)
     private CalculationUnit calculationUnit;
 
+    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER,cascade = CascadeType.ALL,targetEntity = ImagePost.class)
+    private List<ImagePost> imagePosts;
     /*@OneToOne(targetEntity = TypePost.class)
     private TypePost typePost;*/
 
     @OneToOne(targetEntity = Category.class)
     private Category category;
 
-    @OneToOne(targetEntity = ImagePost.class)
-    private ImagePost imagePost;
-
     @OneToOne(targetEntity = Province.class)
     private Province province;
+
+    public List<ImagePost> getImagePosts() {
+        return imagePosts;
+    }
+
+    public void setImagePosts(List<ImagePost> imagePosts) {
+        this.imagePosts = imagePosts;
+    }
 
     public Double getWeightOfItem() {
         return weightOfItem;
@@ -59,13 +69,13 @@ public class Post {
         this.province = province;
     }
 
-    public ImagePost getImagePost() {
-        return imagePost;
-    }
-
-    public void setImagePost(ImagePost imagePost) {
-        this.imagePost = imagePost;
-    }
+//    public ImagePost getImagePost() {
+//        return imagePost;
+//    }
+//
+//    public void setImagePost(ImagePost imagePost) {
+//        this.imagePost = imagePost;
+//    }
 
     public Long getId() {
         return id;

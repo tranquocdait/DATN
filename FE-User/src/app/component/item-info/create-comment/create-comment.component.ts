@@ -33,11 +33,11 @@ export class CreateCommentComponent implements OnInit {
             if (this.commentContent !== null && this.commentContent !== '') {
                 this.createComment();
             }
-            this.output.emit('success');
-            this.activeModal.close();
             setTimeout(() => {
                 this.blockUI.stop();
-            }, 500);
+            }, 1000);
+            this.output.emit('success');
+            this.activeModal.close();
         }
         this.checkClick = true;
     }

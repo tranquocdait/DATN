@@ -22,8 +22,7 @@ export class AppComponent {
                 }
             }, error => {
                 this.localStoreManager.clearAll();
-            }
-            );
+            });
         }
     }
 }

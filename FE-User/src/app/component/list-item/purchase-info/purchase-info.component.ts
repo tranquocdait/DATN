@@ -40,10 +40,10 @@ export class PurchaseInfoComponent implements OnInit {
         this.activeModal.close();
     }
 
-    onSubmit() {
+    onSubmit(statusPurchaseId: number): void {
         const params: any = {
             purchaseId: this.data.data.purchaseId,
-            statusPurchaseId: 2
+            statusPurchaseId: statusPurchaseId + 1
         };
         this.endpointFactory.putByHeader(params, 'purchases/update').subscribe(data => {
             if (data.status === 'success') {

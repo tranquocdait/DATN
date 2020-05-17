@@ -62,7 +62,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 config.setAllowedHeaders(Collections.singletonList("*"));
                 config.setAllowedMethods(Collections.singletonList("*"));
                 config.addAllowedOrigin("*");
-                config.setExposedHeaders(Arrays.asList("Authorization"));
+                config.setExposedHeaders(Arrays.asList("Authorization", "total","pageCurrent"));
                 config.setAllowCredentials(true);
                 return config;
             }

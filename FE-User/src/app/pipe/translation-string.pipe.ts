@@ -2,17 +2,17 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { TranslationKey } from './translation-key';
 
 @Pipe({
-  name: 'translationString'
+    name: 'translationString'
 })
 export class TranslationStringPipe implements PipeTransform {
-
-  transform(value: any, ...args: any[]): any {
-    TranslationKey.forEach(element => {
-      if (element.key === value) {
-        return element.value;
-      }
-    });
-    return '';
-  }
+    translationKey = TranslationKey;
+    transform(value: string, ...args: any[]): any {
+        for (const ele of this.translationKey) {
+            if (ele.key === value.trim()) {
+                return ele.value;
+                break;
+            }
+        }
+    }
 
 }

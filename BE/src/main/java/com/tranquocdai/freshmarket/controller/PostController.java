@@ -140,24 +140,28 @@ public class PostController {
             post.setDateOfPost(LocalDateTime.now());
             post.setWeightOfItem(postAddDTO.getWeightOfItem());
             post.setDescription(postAddDTO.getDescription());
-            //TypePost typePost = typePostRepository.findById(addPostDTO.getTypePostID()).get();
-            // post.setTypePost(typePost);
             Province province = provinceRepository.findById(postAddDTO.getProvinceID()).get();
             post.setProvince(province);
             CalculationUnit calculationUnit = calculationUnitRepository.findById(postAddDTO.getCalculationUnitID()).get();
             post.setCalculationUnit(calculationUnit);
             Category category = categoryRepository.findById(postAddDTO.getCategoryID()).get();
             post.setCategory(category);
-            ImagePost imagePost = new ImagePost();
-            if (postAddDTO.getImageBase64() != null && !"".equals(postAddDTO.getImageBase64())) {
-                String newImageUrl = storageService.store(postAddDTO.getImageBase64());
-                imagePost.setUrl(newImageUrl);
-                imagePostRepository.save(imagePost);
+            if (postAddDTO.getImageBase64s() != null && postAddDTO.getImageBase64s().size() > 0) {
+                List<ImagePost> imagePosts=new ArrayList<>();
+                postAddDTO.getImageBase64s().forEach(element -> {
+                    ImagePost imagePost = new ImagePost();
+                    String newImageUrl = storageService.store(element);
+                    imagePost.setUrl(newImageUrl);
+                    imagePost.setPost(post);
+                    imagePosts.add(imagePost);
+                });
+                imagePostRepository.saveAll(imagePosts);
             } else {
-                imagePost = imagePostRepository.findById(Constants.ID_IMAGE_DEFAULT).get();
+                ImagePost imagePost = new ImagePost();
+                imagePost.setUrl(Constants.URL_POST_DEFAULT);
+                imagePost.setPost(post);
+                imagePostRepository.save(imagePost);
             }
-            post.setImagePost(imagePost);
-            postRepository.save(post);
             return new ResponseEntity(new SuccessfulResponse(post), HttpStatus.OK);
         } catch (Exception ex) {
             Map<String, String> errors = new HashMap<>();
@@ -196,23 +200,21 @@ public class PostController {
             post.setCalculationUnit(calculationUnit);
             Category category = categoryRepository.findById(postUpdateDTO.getCategoryID()).get();
             post.setCategory(category);
-            if (postUpdateDTO.getImageBase64() != null && !"".equals(postUpdateDTO.getImageBase64())) {
-                ImagePost imagePost = post.getImagePost();
-                if (Constants.URL_POST_DEFAULT.equals(imagePost.getUrl())) {
-                    ImagePost imagePostSave = new ImagePost();
-                    String newImageUrl = storageService.store(postUpdateDTO.getImageBase64());
-                    imagePostSave.setUrl(newImageUrl);
-                    imagePostRepository.save(imagePostSave);
-                    post.setImagePost(imagePostSave);
-                } else {
-                    storageService.delete(imagePost.getUrl());
-                    String newImageUrl = storageService.store(postUpdateDTO.getImageBase64());
-                    imagePost.setUrl(newImageUrl);
-                    imagePostRepository.save(imagePost);
-                    post.setImagePost(imagePost);
-                }
-            }
             postRepository.save(post);
+            if (postUpdateDTO.getImageBase64s() != null && postUpdateDTO.getImageBase64s().size() > 0) {
+                postUpdateDTO.getImageBase64s().forEach(element -> {
+                    ImagePost imagePost = new ImagePost();
+                    String newImageUrl = storageService.store(element);
+                    imagePost.setUrl(newImageUrl);
+                    imagePost.setPost(post);
+                    imagePostRepository.save(imagePost);
+                });
+            } else {
+                ImagePost imagePost = new ImagePost();
+                imagePost.setUrl(Constants.URL_POST_DEFAULT);
+                imagePost.setPost(post);
+                imagePostRepository.save(imagePost);
+            }
             return new ResponseEntity(new SuccessfulResponse(post), HttpStatus.OK);
         } catch (Exception ex) {
             Map<String, String> errors = new HashMap<>();
@@ -245,23 +247,21 @@ public class PostController {
             post.setCalculationUnit(calculationUnit);
             Category category = categoryRepository.findById(postUpdateDTO.getCategoryID()).get();
             post.setCategory(category);
-            if (postUpdateDTO.getImageBase64() != null && !"".equals(postUpdateDTO.getImageBase64())) {
-                ImagePost imagePost = post.getImagePost();
-                if (Constants.URL_POST_DEFAULT.equals(imagePost.getUrl())) {
-                    ImagePost imagePostSave = new ImagePost();
-                    String newImageUrl = storageService.store(postUpdateDTO.getImageBase64());
-                    imagePostSave.setUrl(newImageUrl);
-                    imagePostRepository.save(imagePostSave);
-                    post.setImagePost(imagePostSave);
-                } else {
-                    storageService.delete(imagePost.getUrl());
-                    String newImageUrl = storageService.store(postUpdateDTO.getImageBase64());
-                    imagePost.setUrl(newImageUrl);
-                    imagePostRepository.save(imagePost);
-                    post.setImagePost(imagePost);
-                }
-            }
             postRepository.save(post);
+            if (postUpdateDTO.getImageBase64s() != null && postUpdateDTO.getImageBase64s().size() > 0) {
+                postUpdateDTO.getImageBase64s().forEach(element -> {
+                    ImagePost imagePost = new ImagePost();
+                    String newImageUrl = storageService.store(element);
+                    imagePost.setUrl(newImageUrl);
+                    imagePost.setPost(post);
+                    imagePostRepository.save(imagePost);
+                });
+            } else {
+                ImagePost imagePost = new ImagePost();
+                imagePost.setUrl(Constants.URL_POST_DEFAULT);
+                imagePost.setPost(post);
+                imagePostRepository.save(imagePost);
+            }
             return new ResponseEntity(new SuccessfulResponse(post), HttpStatus.OK);
         } catch (Exception ex) {
             Map<String, String> errors = new HashMap<>();
