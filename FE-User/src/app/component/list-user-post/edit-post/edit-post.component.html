@@ -56,15 +56,15 @@
             <div class="container md-1 mt-1">
                 <label class="col-md-3 text-right">Hình ảnh</label>
                 <input type="file" accept="image/*" class="form-control col-md-9" formControlName="imageURL"
-                (change)="onSelectFile($event)" multiple>
+                    (change)="onSelectFile($event)" multiple>
             </div>
             <div class=" mb-1 mt-1">
-                <img *ngFor='let url of urls'  [src]="url" width="50">
+                <img *ngFor='let url of urls' [src]="url" width="50">
             </div>
             <div class="container">
                 <button class="btn btn-outline-info btn-rounded waves-effect
                     col-md-4" type="submit" id="btn_delete" *ngIf="data.type === 'edit'">Edit</button>
-                    <button class="btn btn-outline-info btn-rounded waves-effect
+                <button class="btn btn-outline-info btn-rounded waves-effect
                     col-md-4" type="submit" id="btn_delete" *ngIf="data.type !== 'edit'">Đăng bài</button>
                 <button class="btn btn-outline-danger btn-rounded waves-effect
                     col-md-4" (click)="clickClose()">Hủy</button>

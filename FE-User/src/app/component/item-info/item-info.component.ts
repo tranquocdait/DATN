@@ -43,7 +43,7 @@ export class ItemInfoComponent implements OnInit {
                 post.address = element.address;
                 post.dateOfPost = new Date(element.dateOfPost[0], element.dateOfPost[1], element.dateOfPost[2]);
                 post.province = element.province;
-                post.imageURL = element.imagePost.url;
+                post.imageURLs = element.imagePosts;
                 post.category = element.category;
                 if (element.description.length < 300) {
                     post.description = element.description;
@@ -76,7 +76,7 @@ export class ItemInfoComponent implements OnInit {
             this.dataContent.postName,
             this.dataContent.unitPrice,
             this.numberItem,
-            this.dataContent.imageURL,
+            this.dataContent.imageURLs[0].url,
             this.dataContent.calculationUnit.unitName,
         ];
         this.localStoreManager.setDataPurchase(dataPurchase.toString());
@@ -107,7 +107,7 @@ export class ItemInfoComponent implements OnInit {
             numberItem: this.numberItem,
             userName: this.dataContent.userName,
             province: this.dataContent.province.nameProvince,
-            imageURL: this.dataContent.imageURL,
+            imageURL: this.dataContent.imageURLs[0].url,
             address: this.dataContent.address,
             unitName: this.dataContent.calculationUnit.unitName,
         };

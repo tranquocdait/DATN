@@ -29,10 +29,9 @@ export class ListPostComponent implements OnInit, AfterContentChecked {
     }
     loadData(): void {
         this.endpointFactory.getEndPointWithResponeHeader(this.getUrl).subscribe(data => {
-            console.log(data.headers.get("total"));
-            if (data.status === 'success') {
+            if (data.body.status === 'success') {
                 const temp = [];
-                data.data.forEach((elementInfo) => {
+                data.body.data.forEach((elementInfo) => {
                     const post = new PostElement();
                     const element = elementInfo.post;
                     post.postId = element.id;
@@ -43,7 +42,7 @@ export class ListPostComponent implements OnInit, AfterContentChecked {
                     post.address = element.address;
                     post.dateOfPost = new Date(element.dateOfPost[0], element.dateOfPost[1], element.dateOfPost[2]);
                     post.province = element.province;
-                    post.imageURL = element.imagePost.url;
+                    post.imageURLs = element.imagePosts;
                     post.category = element.category;
                     if (element.description !== null) {
                         if (element.description.length < 100) {
@@ -65,13 +64,12 @@ export class ListPostComponent implements OnInit, AfterContentChecked {
     }
 
     setUrl(): void {
-        this.getUrl = 'pagedingPost';
-        // this.categoryId = this.localStoreManager.getCategoryId();
-        // if (this.localStoreManager.getCategoryId() === 0) {
-        //     this.getUrl = 'posts';
-        // } else {
-        //     this.getUrl = 'posts/' + this.localStoreManager.getCategoryId() + '/category';
-        // }
+        this.categoryId = this.localStoreManager.getCategoryId();
+        if (this.localStoreManager.getCategoryId() === 0) {
+            this.getUrl = 'posts/0/getAll';
+        } else {
+            this.getUrl = 'posts/' + this.localStoreManager.getCategoryId() + '/category';
+        }
     }
 
     ngAfterContentChecked(): void {

@@ -25,6 +25,9 @@ import { ListUserPostComponent } from './list-user-post/list-user-post.component
 import { StorageCartComponent } from './storage-cart/storage-cart.component';
 import { PipeModule } from '../pipe/pipe.module';
 import { PaymentCartComponent } from './storage-cart/payment-cart/payment-cart.component';
+import { ListBuyItemComponent } from './list-buy-item/list-buy-item.component';
+import { PurchaseBuyInfoComponent } from './list-buy-item/purchase-buy-info/purchase-buy-info.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
 @NgModule({
     imports: [
         CommonModule,
@@ -35,6 +38,7 @@ import { PaymentCartComponent } from './storage-cart/payment-cart/payment-cart.c
         MatTableModule,
         MatSortModule,
         MatFormFieldModule,
+        MatPaginatorModule,
         MatSelectModule,
         MatInputModule,
         PipeModule
@@ -45,7 +49,8 @@ import { PaymentCartComponent } from './storage-cart/payment-cart/payment-cart.c
         CreateCommentComponent,
         DeletePostComponent,
         DialogConfirmComponent,
-        ChangePasswordComponent
+        ChangePasswordComponent,
+        PurchaseBuyInfoComponent
     ],
     entryComponents: [
         PurchaseInfoComponent,
@@ -54,7 +59,8 @@ import { PaymentCartComponent } from './storage-cart/payment-cart/payment-cart.c
         CreateCommentComponent,
         DeletePostComponent,
         DialogConfirmComponent,
-        ChangePasswordComponent
+        ChangePasswordComponent,
+        PurchaseBuyInfoComponent
     ],
     declarations: [
         ListItemComponent,
@@ -73,7 +79,9 @@ import { PaymentCartComponent } from './storage-cart/payment-cart/payment-cart.c
         ChangePasswordComponent,
         ListUserPostComponent,
         StorageCartComponent,
-        PaymentCartComponent
+        PaymentCartComponent,
+        ListBuyItemComponent,
+        PurchaseBuyInfoComponent
     ]
 })
 export class ComponentsModule { }

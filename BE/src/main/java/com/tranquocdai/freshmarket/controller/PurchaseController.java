@@ -76,6 +76,30 @@ public class PurchaseController {
         }
     }
 
+    @GetMapping("/purchases/buyer")
+    public ResponseEntity getPurchaseByBuyer(Authentication authentication) {
+        try {
+            if (!baseService.getUser(authentication).isPresent()) {
+                Map<String, String> errors = new HashMap<>();
+                errors.put("message", "username has not existed");
+                return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
+            }
+            User user = baseService.getUser(authentication).get();
+            List<Purchase> purchaseList = purchaseRepository.findByBuyer(user);
+            Collections.sort(purchaseList, new Comparator<Purchase>() {
+                @Override
+                public int compare(Purchase purchase1, Purchase purchase2) {
+                    return purchase1.getDateOfOrder().compareTo(purchase2.getDateOfOrder());
+                }
+            });
+            return new ResponseEntity(new SuccessfulResponse(purchaseList), HttpStatus.OK);
+        } catch (Exception ex) {
+            Map<String, String> errors = new HashMap<>();
+            errors.put("message", "get data not successfully");
+            return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @GetMapping("/purchases/search")
     public ResponseEntity getPurchaseBySearch(@RequestParam(value = "keySearch", defaultValue = "") Long keyword) {
         try {

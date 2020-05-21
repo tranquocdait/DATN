@@ -12,7 +12,7 @@ export class PostElement {
     address: string;
     dateOfPost: Date;
     province: string;
-    imageURL: string;
+    imageURLs: string;
     category: string;
     calculationUnit: string;
     averageRate: number;

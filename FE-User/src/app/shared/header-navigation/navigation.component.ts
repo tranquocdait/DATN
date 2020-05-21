@@ -22,6 +22,7 @@ export class NavigationComponent implements OnInit, AfterViewInit, AfterContentC
     number: any;
     urlAvatar: string;
     checkLogin = true;
+    checkDown = true;
     public config: PerfectScrollbarConfigInterface = {};
     constructor(private modalService: NgbModal, private router: Router, private localStoreManager: LocalStoreManager,
         private endpointFactory: EndpointFactory) {
@@ -68,6 +69,10 @@ export class NavigationComponent implements OnInit, AfterViewInit, AfterContentC
     logout(): void {
         this.localStoreManager.clearAll();
         location.reload();
+    }
+
+    changeDown(check: any): void {
+        this.checkDown = check;
     }
 
 }

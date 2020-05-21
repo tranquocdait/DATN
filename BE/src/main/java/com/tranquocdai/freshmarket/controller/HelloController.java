@@ -14,6 +14,7 @@ import com.tranquocdai.freshmarket.service.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,7 +51,7 @@ public class HelloController {
 
     @GetMapping("/pagedingPost")
     public ResponseEntity pagedingPost() {
-        Page<Post> postList = postRepository.findAll(PageRequest.of(0, 5));
+        Page<Post> postList = postRepository.findAll(PageRequest.of(0, 5, Sort.by("dateOfPost")));
         return ResponseEntity.ok().header("total", postList.getTotalPages()+"")
                 .header("pageCurrent",postList.getNumber()+"")
                 .body(new SuccessfulResponse(postList.getContent()));

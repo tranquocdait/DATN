@@ -5,28 +5,27 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { EndpointFactory } from '../../services/endpoint-factory.service';
 import { PostElement } from '../model/post.model';
 import { PurchaseElement } from '../model/PurchaseElement.model';
-import { PurchaseInfoComponent } from './purchase-info/purchase-info.component';
 import { DialogConfirmComponent } from '../dialog-confirm/dialog-confirm.component';
 import { LocalStoreManager } from '../../services/local-store-manager.service';
+import { PurchaseBuyInfoComponent } from './purchase-buy-info/purchase-buy-info.component';
 import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
-    selector: 'app-list-item',
-    templateUrl: './list-item.component.html',
-    styleUrls: ['./list-item.component.scss']
+    selector: 'app-list-buy-item',
+    templateUrl: './list-buy-item.component.html',
+    styleUrls: ['./list-buy-item.component.css']
 })
-export class ListItemComponent implements OnInit {
+export class ListBuyItemComponent implements OnInit {
     dataSource: MatTableDataSource<PostElement>;
     dataList: PostElement[] = null;
-    getUrl = 'purchases/user';
+    getUrl = 'purchases/buyer';
     displayedColumns: string[] = ['imageURL', 'purchaseId', 'postId', 'buyerName', 'unitPrice', 'purchaseNumber', 'dateOfOrder',
         'statusPurchaseName', 'view', 'delete'];
     @ViewChild(MatSort, { static: true }) sort: MatSort;
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     constructor(private modalService: NgbModal, private changeDetectorRefs: ChangeDetectorRef, private endpointFactory: EndpointFactory,
         private localStoreManager: LocalStoreManager) {
-        this.setUrl();
-
+        //this.setUrl();
     }
     ngOnInit() {
         this.setData();
@@ -35,13 +34,15 @@ export class ListItemComponent implements OnInit {
         this.loadData();
         this.setDataSource();
     }
-    setUrl(): void {
-        if (this.localStoreManager.getPostSelected() !== null && this.localStoreManager.getPostSelected() !== '0') {
-            this.getUrl = 'purchases/user/' + this.localStoreManager.getPostSelected();
-        } else {
-            this.getUrl = 'purchases/user';
-        }
-    }
+
+    // setUrl(): void {
+    //     if (this.localStoreManager.getPostSelected() !== null && this.localStoreManager.getPostSelected() !== '0') {
+    //         this.getUrl = 'purchases/user/' + this.localStoreManager.getPostSelected();
+    //     } else {
+    //         this.getUrl = 'purchases/user';
+    //     }
+    // }
+
     loadData() {
         this.endpointFactory.getEndPointByHeader(this.getUrl).subscribe(data => {
             if (data.status === 'success') {
@@ -90,13 +91,13 @@ export class ListItemComponent implements OnInit {
     }
 
     viewItem(element: any) {
-        const modalRef = this.modalService.open(PurchaseInfoComponent, { size: 'lg', windowClass: 'edit-modal', centered: true });
-        modalRef.componentInstance.data = { data: element, type: 'edit' };
-        modalRef.componentInstance.output.subscribe((res) => {
-            if (res === 'success') {
-                this.setData();
-            }
-        }, error => {
-        });
+        const modalRef = this.modalService.open(PurchaseBuyInfoComponent, { size: 'lg', windowClass: 'edit-modal', centered: true });
+        // modalRef.componentInstance.data = { data: element, type: 'edit' };
+        // modalRef.componentInstance.output.subscribe((res) => {
+        //     if (res === 'success') {
+        //         this.setData();
+        //     }
+        // }, error => {
+        // });
     }
 }

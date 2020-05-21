@@ -8,6 +8,7 @@ import { EditPostComponent } from './edit-post/edit-post.component';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { DialogConfirmComponent } from '../dialog-confirm/dialog-confirm.component';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
     selector: 'app-list-user-post',
@@ -21,6 +22,7 @@ export class ListUserPostComponent implements OnInit, AfterContentChecked {
     change = false;
     dataSource: MatTableDataSource<PostElement>;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
+    @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     displayedColumns: string[] = ['imageURL', 'postId', 'postName', 'description', 'unitPrice',
         'dateOfPost', 'province', 'category', 'calculationUnit', 'viewPurchase', 'edit', 'delete'];
     constructor(private router: Router, private modalService: NgbModal, private changeDetectorRefs: ChangeDetectorRef,
@@ -51,7 +53,7 @@ export class ListUserPostComponent implements OnInit, AfterContentChecked {
                     post.address = element.address;
                     post.dateOfPost = new Date(element.dateOfPost[0], element.dateOfPost[1], element.dateOfPost[2]);
                     post.province = element.province;
-                    post.imageURL = element.imagePost.url;
+                    post.imageURLs = element.imagePosts;
                     post.category = element.category;
                     if (element.description !== null) {
                         if (element.description.length < 100) {
@@ -76,6 +78,7 @@ export class ListUserPostComponent implements OnInit, AfterContentChecked {
         setTimeout(() => {
             this.dataSource = new MatTableDataSource(this.dataList);
             this.dataSource.sort = this.sort;
+            this.dataSource.paginator = this.paginator;
         }, 1000);
 
     }

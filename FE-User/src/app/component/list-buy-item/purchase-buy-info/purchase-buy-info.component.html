@@ -1,6 +1,6 @@
 <div class="card">
     <h5 class="card-header info-color white-text text-center py-4">
-        <strong *ngIf="data.type === 'edit'">Thông tin đơn hàng</strong>
+        <strong>Thông tin đơn hàng</strong>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="clickClose()">
             <span aria-hidden="true">&times;</span>
         </button>
@@ -23,17 +23,8 @@
                         <div class="row ml-2 mb-2"><i class="mr-2">Sô Lượng : </i><b>100</b></div><br>
                         <div class="row ml-2 mb-2" style="border-top:black outset ;"><i class="mr-2">Tổng tiền :
                             </i><b>4000000</b></div>
-                        <div class="row mb-2 text-center">
-                            <div class="col">
-                                <a class="btn btn-success ml-2" (click)="onSubmit(1)"
-                                    *ngIf="data.data.statusPurchase.id===1">Xác nhận đơn hàng</a>
-                                <a class="btn btn-success ml-2" (click)="onSubmit(2)"
-                                    *ngIf="data.data.statusPurchase.id===2">Đã giao hàng</a>
-                                <a class="btn btn-info ml-2" (click)="onSubmit(3)"
-                                    *ngIf="data.data.statusPurchase.id!==3&&data.data.statusPurchase.id!==4">Hủy đơn
-                                    hàng</a>
-                                <a class="btn btn-danger ml-2" (click)="clickClose()">Cancel</a>
-                            </div>
+                        <div class="row mb-2 justify-content-center">
+                            <a class="btn btn-danger ml-2" (click)="clickClose()">Cancel</a>
                         </div>
                     </div>
                 </div>

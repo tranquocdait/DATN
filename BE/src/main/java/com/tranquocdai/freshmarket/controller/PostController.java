@@ -11,6 +11,9 @@ import com.tranquocdai.freshmarket.response.SuccessfulResponse;
 import com.tranquocdai.freshmarket.service.BaseService;
 import com.tranquocdai.freshmarket.service.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -53,11 +56,13 @@ public class PostController {
     @Autowired
     StorageService storageService;
 
-    @GetMapping("/posts")
-    public ResponseEntity getAllPost() {
+    @GetMapping("/posts/{page}/getAll")
+    public ResponseEntity getAllPost(@PathVariable("page") int page) {
         try {
-            List<Post> postList = postRepository.findAll();
-            return new ResponseEntity(new SuccessfulResponse(convertListPost(postList)), HttpStatus.OK);
+            Page<Post> postPage = postRepository.findAll(PageRequest.of(page, 40, Sort.by("dateOfPost").descending()));
+            return ResponseEntity.ok().header("total", postPage.getTotalPages()+"")
+                    .header("pageCurrent",postPage.getNumber()+"")
+                    .body(new SuccessfulResponse(convertListPost(postPage.getContent())));
         } catch (Exception ex) {
             Map<String, String> errors = new HashMap<>();
             errors.put("message", "get data not successfully");
@@ -112,7 +117,7 @@ public class PostController {
     @GetMapping("/posts/search")
     public ResponseEntity getAllTourist(@RequestParam(value = "keySearch", defaultValue = "") String keyword) {
         try {
-            List<Post> postList = postRepository.findByPostNameContains(keyword);
+            List<Post> postList = postRepository.findByPostNameContains(keyword,PageRequest.of(0, 40, Sort.by("dateOfPost").descending()));
             return new ResponseEntity(new SuccessfulResponse(convertListPost(postList)), HttpStatus.OK);
         } catch (Exception ex) {
             Map<String, String> errors = new HashMap<>();
