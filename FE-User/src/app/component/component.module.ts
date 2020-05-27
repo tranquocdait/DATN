@@ -28,6 +28,7 @@ import { PaymentCartComponent } from './storage-cart/payment-cart/payment-cart.c
 import { ListBuyItemComponent } from './list-buy-item/list-buy-item.component';
 import { PurchaseBuyInfoComponent } from './list-buy-item/purchase-buy-info/purchase-buy-info.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { EditPurchaseComponent } from './list-buy-item/edit-purchase/edit-purchase.component';
 @NgModule({
     imports: [
         CommonModule,
@@ -50,7 +51,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
         DeletePostComponent,
         DialogConfirmComponent,
         ChangePasswordComponent,
-        PurchaseBuyInfoComponent
+        PurchaseBuyInfoComponent,
+        EditPurchaseComponent
     ],
     entryComponents: [
         PurchaseInfoComponent,
@@ -60,7 +62,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
         DeletePostComponent,
         DialogConfirmComponent,
         ChangePasswordComponent,
-        PurchaseBuyInfoComponent
+        PurchaseBuyInfoComponent,
+        EditPurchaseComponent
     ],
     declarations: [
         ListItemComponent,
@@ -81,7 +84,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
         StorageCartComponent,
         PaymentCartComponent,
         ListBuyItemComponent,
-        PurchaseBuyInfoComponent
+        PurchaseBuyInfoComponent,
+        EditPurchaseComponent,
+        EditPurchaseComponent
     ]
 })
 export class ComponentsModule { }

@@ -9,6 +9,7 @@ import { DialogConfirmComponent } from '../dialog-confirm/dialog-confirm.compone
 import { LocalStoreManager } from '../../services/local-store-manager.service';
 import { PurchaseBuyInfoComponent } from './purchase-buy-info/purchase-buy-info.component';
 import { MatPaginator } from '@angular/material/paginator';
+import { EditPurchaseComponent } from './edit-purchase/edit-purchase.component';
 
 @Component({
     selector: 'app-list-buy-item',
@@ -19,8 +20,8 @@ export class ListBuyItemComponent implements OnInit {
     dataSource: MatTableDataSource<PostElement>;
     dataList: PostElement[] = null;
     getUrl = 'purchases/buyer';
-    displayedColumns: string[] = ['imageURL', 'purchaseId', 'postId', 'buyerName', 'unitPrice', 'purchaseNumber', 'dateOfOrder',
-        'statusPurchaseName', 'view', 'delete'];
+    displayedColumns: string[] = ['imageURL', 'purchaseId', 'postId', 'unitPrice', 'purchaseNumber', 'dateOfOrder',
+        'statusPurchaseName', 'edit', 'view', 'delete'];
     @ViewChild(MatSort, { static: true }) sort: MatSort;
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     constructor(private modalService: NgbModal, private changeDetectorRefs: ChangeDetectorRef, private endpointFactory: EndpointFactory,
@@ -48,17 +49,20 @@ export class ListBuyItemComponent implements OnInit {
             if (data.status === 'success') {
                 const temp = [];
                 data.data.forEach((element, index) => {
-                    const post = new PurchaseElement();
-                    post.purchaseId = element.id;
-                    post.postId = element.post.id;
-                    post.buyerName = element.fullName;
-                    post.unitPrice = element.post.unitPrice;
-                    post.purchaseNumber = element.purchaseNumber;
-                    post.statusPurchaseName = element.statusPurchase.status;
-                    post.statusPurchase = element.statusPurchase;
-                    post.dateOfOrder = new Date(element.dateOfOrder[0], element.dateOfOrder[1] - 1, element.dateOfOrder[2]);
-                    post.imageURL = element.post.imagePosts[0].url;
-                    temp.unshift(post);
+                    const purchase = new PurchaseElement();
+                    purchase.purchaseId = element.id;
+                    purchase.postId = element.post.id;
+                    purchase.post = element.post;
+                    purchase.buyerName = element.fullName;
+                    purchase.phoneNumber = element.phoneNumber;
+                    purchase.address = element.address;
+                    purchase.unitPrice = element.post.unitPrice;
+                    purchase.purchaseNumber = element.purchaseNumber;
+                    purchase.statusPurchaseName = element.statusPurchase.status;
+                    purchase.statusPurchase = element.statusPurchase;
+                    purchase.dateOfOrder = new Date(element.dateOfOrder[0], element.dateOfOrder[1] - 1, element.dateOfOrder[2]);
+                    purchase.imageURL = element.post.imagePosts[0].url;
+                    temp.unshift(purchase);
                 });
                 this.dataList = temp;
             }
@@ -92,12 +96,15 @@ export class ListBuyItemComponent implements OnInit {
 
     viewItem(element: any) {
         const modalRef = this.modalService.open(PurchaseBuyInfoComponent, { size: 'lg', windowClass: 'edit-modal', centered: true });
-        // modalRef.componentInstance.data = { data: element, type: 'edit' };
-        // modalRef.componentInstance.output.subscribe((res) => {
-        //     if (res === 'success') {
-        //         this.setData();
-        //     }
-        // }, error => {
-        // });
+        modalRef.componentInstance.data = { data: element, type: 'edit' };
+    }
+    eidtPurchase(element: any): void {
+        const modalRef = this.modalService.open(EditPurchaseComponent, { size: 'lg', windowClass: 'edit-modal', centered: true });
+        modalRef.componentInstance.data = { data: element, type: 'edit' };
+        modalRef.componentInstance.output.subscribe((res) => {
+            if (res === 'success') {
+                this.setData();
+            }
+        });
     }
 }

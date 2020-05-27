@@ -47,17 +47,20 @@ export class ListItemComponent implements OnInit {
             if (data.status === 'success') {
                 const temp = [];
                 data.data.forEach((element, index) => {
-                    const post = new PurchaseElement();
-                    post.purchaseId = element.id;
-                    post.postId = element.post.id;
-                    post.buyerName = element.fullName;
-                    post.unitPrice = element.post.unitPrice;
-                    post.purchaseNumber = element.purchaseNumber;
-                    post.statusPurchaseName = element.statusPurchase.status;
-                    post.statusPurchase = element.statusPurchase;
-                    post.dateOfOrder = new Date(element.dateOfOrder[0], element.dateOfOrder[1] - 1, element.dateOfOrder[2]);
-                    post.imageURL = element.post.imagePosts[0].url;
-                    temp.unshift(post);
+                    const purchase = new PurchaseElement();
+                    purchase.purchaseId = element.id;
+                    purchase.postId = element.post.id;
+                    purchase.post = element.post;
+                    purchase.buyerName = element.fullName;
+                    purchase.phoneNumber = element.phoneNumber;
+                    purchase.address = element.address;
+                    purchase.unitPrice = element.post.unitPrice;
+                    purchase.purchaseNumber = element.purchaseNumber;
+                    purchase.statusPurchaseName = element.statusPurchase.status;
+                    purchase.statusPurchase = element.statusPurchase;
+                    purchase.dateOfOrder = new Date(element.dateOfOrder[0], element.dateOfOrder[1] - 1, element.dateOfOrder[2]);
+                    purchase.imageURL = element.post.imagePosts[0].url;
+                    temp.unshift(purchase);
                 });
                 this.dataList = temp;
             }

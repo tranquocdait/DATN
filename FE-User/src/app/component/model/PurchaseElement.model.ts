@@ -3,6 +3,9 @@ export class PurchaseElement {
     }
     purchaseId: string;
     postId: string;
+    post: string;
+    phoneNumber: string;
+    address: string;
     sellerName: string;
     buyerName: string;
     unitPrice: number;

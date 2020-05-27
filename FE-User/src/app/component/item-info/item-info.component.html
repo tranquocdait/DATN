@@ -4,12 +4,12 @@
             <div class="col-lg-5 col-md-6">
                 <div class="card">
                     <div class="card-body">
-                    <ngb-carousel class="text-center">
-                        <ng-template ngbSlide *ngFor="let imageURL of dataContent.imageURLs">
-                            <img src="{{imageURL.url}}" alt="Random first slide" style="height: 338px;">
-                        </ng-template>
-                    </ngb-carousel>
-                </div>
+                        <ngb-carousel class="text-center">
+                            <ng-template ngbSlide *ngFor="let imageURL of dataContent.imageURLs">
+                                <img src="{{imageURL.url}}" alt="Random first slide" style="height: 338px;">
+                            </ng-template>
+                        </ngb-carousel>
+                    </div>
                     <!-- <img class="card-img-top img-responsive" src="{{dataContent.imageURLs[0].url}}" alt="Card image cap" style="height: 338px;"> -->
                 </div>
             </div>
@@ -27,10 +27,11 @@
                                 </ng-template>
                             </ngb-rating>
                         </div>
-                        <div class="row ml-2 mb-2"><i class="mr-2">Địa chỉ : </i>{{dataContent.province.nameProvince}}</div>
+                        <div class="row ml-2 mb-2"><i class="mr-2">Địa chỉ : </i>{{dataContent.province.nameProvince}}
+                        </div>
                         <div class="row ml-2 mb-2"><i class="mr-2">Giá : </i>{{dataContent.unitPrice|convertAmount}}/1
                             {{dataContent.calculationUnit.unitName}}</div>
-                        <div class="row mb-2">
+                        <div class="row mb-2" *ngIf="dataContent.userId!==userId">
                             <div class="col">
                                 <a class="btn btn-info" style="width: 8px;padding-right: 20px;"
                                     (click)="changeNumber('sub')">-</a>
@@ -38,7 +39,8 @@
                                 <a class="btn btn-info ml-1" style="width: 8px;padding-right: 20px;"
                                     (click)="changeNumber('add')"><b>+</b></a>
                                 <a class="btn btn-danger ml-2" (click)="purchaseItem()">Mua ngay</a>
-                                <a class="btn btn-success ml-2" (click)="addStorageCart()"><i class="ti-shopping-cart-full"></i>Thêm vào giỏ hàng</a>
+                                <a class="btn btn-success ml-2" (click)="addStorageCart()"><i
+                                        class="ti-shopping-cart-full"></i>Thêm vào giỏ hàng</a>
                             </div>
                         </div>
                     </div>
@@ -72,3 +74,4 @@
             </div>
         </div>
     </div>
+</div>

@@ -174,8 +174,15 @@ public class PurchaseController {
                 return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
             }
             Purchase purchase = purchaseRepository.findById(purchaseUpdateDTO.getPurchaseId()).get();
-            if (purchaseUpdateDTO.getPurchaseNumber() != null)
+            if (purchaseUpdateDTO.getPurchaseNumber() != null) {
                 purchase.setPurchaseNumber(purchaseUpdateDTO.getPurchaseNumber());
+            }
+            if (purchaseUpdateDTO.getAddress() != null && !"".equals(purchaseUpdateDTO.getAddress())) {
+                purchase.setAddress(purchaseUpdateDTO.getAddress());
+            }
+            if (purchaseUpdateDTO.getBuyerName() != null && !"".equals(purchaseUpdateDTO.getBuyerName())) {
+                purchase.setFullName(purchaseUpdateDTO.getBuyerName());
+            }
             if (purchaseUpdateDTO.getStatusPurchaseId() != null) {
                 StatusPurchase statusPurchase = statusPurchaseRepository.findById(purchaseUpdateDTO.getStatusPurchaseId()).get();
                 purchase.setStatusPurchase(statusPurchase);

@@ -6,6 +6,7 @@ export class PostElement {
     postId: string;
     postName: string;
     userName: string;
+    userId: string;
     userElement: UserElement;
     description: string;
     unitPrice: number;

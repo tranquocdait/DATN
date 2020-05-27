@@ -13,7 +13,7 @@
 
         <form [formGroup]="editForm" (ngSubmit)="onSubmit()" class="text-center" style="color: #757575;" action="#!">
             <div class="container md-1 mt-1">
-                <label class="col-md-4 text-right">User Name</label>
+                <label class="col-md-4 text-right">Tài khoản</label>
                 <input class="form-control col-md-8" formControlName="userName" [readonly]="data.type==='edit'"
                     placeholder="User name">
             </div>
@@ -36,11 +36,11 @@
             </div>
 
             <div class="container md-1 mt-1">
-                <label class="col-md-4 text-right">FullName</label>
+                <label class="col-md-4 text-right">Họ tên</label>
                 <input class="form-control col-md-8" formControlName="fullName" placeholder="Your name">
             </div>
             <div class="container md-1 mt-1">
-                <label class="col-md-4 text-right">Phone Number</label>
+                <label class="col-md-4 text-right">Số điện thoại</label>
                 <input class="form-control col-md-8" formControlName="phoneNumber" placeholder="08xx xxx xxx">
             </div>
             <div class="container md-1 mt-1">
@@ -54,9 +54,9 @@
             </div>
             <div class="container md-1 mt-1">
                 <button class="btn btn-outline-info btn-rounded waves-effect
-                    col-md-4" type="submit" id="btn_submit" *ngIf="data.type === 'edit'">Edit</button>
+                    col-md-4" type="submit" id="btn_submit" *ngIf="data.type === 'edit'">Xác nhận</button>
                 <button class="btn btn-outline-danger btn-rounded waves-effect
-                    col-md-4" (click)="clickClose()">Cancel</button>
+                    col-md-4" (click)="clickClose()">Hủy</button>
             </div>
         </form>
     </div>

@@ -26,17 +26,26 @@ export class ItemInfoComponent implements OnInit {
     checkLoadData = false;
     checkUserRate: false;
     checkUserComment: false;
+    userId = 0;
     ngOnInit() {
     }
 
     loadData() {
         this.blockUI.start();
+        if (this.localStoreManager.getToken() !== null || this.localStoreManager.getToken() === "") {
+            this.endpointFactory.postByHeader(null, 'users/information').subscribe(dataInfo => {
+                if (dataInfo.status === 'success') {
+                    this.userId = dataInfo.data.userID;
+                }
+            });
+        }
         this.endpointFactory.getEndPoint('posts/' + this.localStoreManager.getPostSelected()).subscribe(data => {
             if (data.status === 'success') {
                 const post = new PostElement();
                 const element = data.data.post;
                 post.postId = element.id;
                 post.postName = element.postName;
+                post.userId = element.user.userID;
                 post.userName = element.user.userName;
                 post.userElement = element.user;
                 post.unitPrice = element.unitPrice;
@@ -54,8 +63,8 @@ export class ItemInfoComponent implements OnInit {
                 post.averageRate = Number.parseFloat(data.data.averageRate);
                 this.dataComment = data.data.userCommentDTOList;
                 this.dataContent = post;
-                this.checkLoadData = true;
                 this.blockUI.stop();
+                this.checkLoadData = true;
             }
         });
     }
@@ -67,6 +76,23 @@ export class ItemInfoComponent implements OnInit {
             if (this.numberItem > 0) {
                 this.numberItem -= 1;
             }
+        }
+    }
+
+
+
+    createComment(): void {
+        if (this.localStoreManager.getCheckLogin()) {
+            const modalRef =
+                this.modalService.open(CreateCommentComponent, { size: 'lg', windowClass: 'create-comment-dialog', centered: true });
+            modalRef.componentInstance.data = { data: this.dataContent };
+            modalRef.componentInstance.output.subscribe((res) => {
+                if (res === 'success') {
+                    this.loadData();
+                }
+            });
+        } else {
+            this.onLogin();
         }
     }
 
@@ -82,21 +108,6 @@ export class ItemInfoComponent implements OnInit {
         this.localStoreManager.setDataPurchase(dataPurchase.toString());
         this.router.navigateByUrl('/component/confirm-purchase');
 
-    }
-
-    createComment(): void {
-        if (this.localStoreManager.getCheckLogin()) {
-            const modalRef =
-                this.modalService.open(CreateCommentComponent, { size: 'lg', windowClass: 'create-comment-dialog', centered: true });
-            modalRef.componentInstance.data = { data: this.dataContent };
-            modalRef.componentInstance.output.subscribe((res) => {
-                if (res === 'success') {
-                    this.loadData();
-                }
-            });
-        } else {
-            this.onLogin();
-        }
     }
 
     addStorageCart(): void {
