@@ -40,5 +40,15 @@ export const ROUTES: RouteInfo[] = [
         labelClass: '',
         extralink: false,
         submenu: []
+    },
+    {
+        path: '/component/list-comment',
+        title: 'Comments',
+        icon: 'mdi mdi-comment-multiple-outline',
+        class: '',
+        label: '',
+        labelClass: '',
+        extralink: false,
+        submenu: []
     }
 ];

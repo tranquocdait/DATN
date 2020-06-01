@@ -14,7 +14,7 @@ public class ImagePost {
     private String url;
 
     @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    @JoinColumn(name = "post_id", nullable = false)
+    @JoinColumn(name = "post_id")
     @JsonIgnore
     private Post post;
 

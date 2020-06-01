@@ -8,7 +8,7 @@ import { BlockUI, NgBlockUI } from 'ng-block-ui';
 @Component({
     selector: 'app-edit-user',
     templateUrl: './edit-user.component.html',
-    styleUrls: ['./edit-user.component.css']
+    styleUrls: ['./edit-user.component.scss']
 })
 export class EditUserComponent implements OnInit {
     roleList: any;
@@ -41,7 +41,7 @@ export class EditUserComponent implements OnInit {
         this.editForm = this.formBuilder.group({
             userId: [this.data.data.userId, Validators.required],
             userName: [this.data.data.userName, Validators.required],
-            role: [this.data.data.role.roleID, Validators.required],
+            //role: [this.data.data.role.roleID, Validators.required],
             fullName: [this.data.data.fullName, Validators.required],
             password: ['', Validators.required],
             confirmPassword: ['', Validators.required],

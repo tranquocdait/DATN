@@ -12,6 +12,8 @@ public class PostInfoDTO {
 
     private float averageRate;
 
+    private float score;
+
     public List<UserCommentDTO> getUserCommentDTOList() {
         return userCommentDTOList;
     }
@@ -34,5 +36,13 @@ public class PostInfoDTO {
 
     public void setAverageRate(float averageRate) {
         this.averageRate = averageRate;
+    }
+
+    public float getScore() {
+        return score;
+    }
+
+    public void setScore(float score) {
+        this.score = score;
     }
 }

@@ -24,16 +24,7 @@ export class EditPurchaseComponent implements OnInit {
     numberItem = 0;
     isDataLoad = false;
     ngOnInit(): void {
-        this.getRole();
         this.createForm();
-    }
-    getRole() {
-        this.endpointFactory.getEndPoint('roles').subscribe(data => {
-            if (data.status === 'success') {
-                this.roleList = data.data;
-            }
-        }
-        );
     }
 
     createForm() {

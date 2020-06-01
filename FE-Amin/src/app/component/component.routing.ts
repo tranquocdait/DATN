@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { ListItemComponent } from './list-item/list-item.component';
 import { ListPostComponent } from './list-post/list-post.component';
 import { ListUserComponent } from './list-user/list-user.component';
+import { ListCommentComponent } from './list-comment/list-comment.component';
 
 
 
@@ -12,7 +13,7 @@ export const ComponentsRoutes: Routes = [
 			{
 				path: 'list-item',
 				component: ListItemComponent,
-				 pathMatch: 'full'
+				pathMatch: 'full'
 			},
 			{
 				path: 'list-post',
@@ -21,6 +22,10 @@ export const ComponentsRoutes: Routes = [
 			{
 				path: 'list-user',
 				component: ListUserComponent,
+				pathMatch: 'full'
+			}, {
+				path: 'list-comment',
+				component: ListCommentComponent,
 				pathMatch: 'full'
 			}
 		]

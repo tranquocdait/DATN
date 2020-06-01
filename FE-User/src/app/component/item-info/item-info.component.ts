@@ -79,8 +79,6 @@ export class ItemInfoComponent implements OnInit {
         }
     }
 
-
-
     createComment(): void {
         if (this.localStoreManager.getCheckLogin()) {
             const modalRef =

@@ -42,7 +42,7 @@ export class EditItemComponent implements OnInit {
 
   modeEdit() {
     this.editForm = this.formBuilder.group({
-      postId: [this.data.data.postId, Validators.required],
+      postName: [this.data.data.postName, Validators.required],
       purchaseId: [this.data.data.purchaseId, Validators.required],
       sellerName: [this.data.data.sellerName, Validators.required],
       buyerName: [this.data.data.buyerName, Validators.required],

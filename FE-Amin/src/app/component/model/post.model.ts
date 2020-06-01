@@ -1,7 +1,7 @@
 import { UserElement } from "./user.model";
 
 export class PostElement {
-    constructor () {
+    constructor() {
     }
     postId: string;
     postName: string;
@@ -12,7 +12,7 @@ export class PostElement {
     address: string;
     dateOfPost: Date;
     province: string;
-    imageURL:string;
+    imageURL: string;
     category: string;
     calculationUnit: string;
 }

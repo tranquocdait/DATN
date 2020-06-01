@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @RestController
@@ -51,6 +52,9 @@ public class PostController {
     RatePostRepository ratePostRepository;
 
     @Autowired
+    PurchaseRepository purchaseRepository;
+
+    @Autowired
     BaseService baseService;
 
     @Autowired
@@ -59,10 +63,14 @@ public class PostController {
     @GetMapping("/posts/{page}/getAll")
     public ResponseEntity getAllPost(@PathVariable("page") int page) {
         try {
-            Page<Post> postPage = postRepository.findAll(PageRequest.of(page, 40, Sort.by("dateOfPost").descending()));
-            return ResponseEntity.ok().header("total", postPage.getTotalPages()+"")
-                    .header("pageCurrent",postPage.getNumber()+"")
-                    .body(new SuccessfulResponse(convertListPost(postPage.getContent())));
+//            if (page < 0) {
+            List<Post> postList = postRepository.findAll();
+            return new ResponseEntity(new SuccessfulResponse(convertListPost(postList)), HttpStatus.OK);
+//            }
+//            Page<Post> postPage = postRepository.findAll(PageRequest.of(page, 40, Sort.by("dateOfPost").descending()));
+//            return ResponseEntity.ok().header("total", postPage.getTotalPages() + "")
+//                    .header("pageCurrent", postPage.getNumber() + "")
+//                    .body(new SuccessfulResponse(convertListPost(postPage.getContent())));
         } catch (Exception ex) {
             Map<String, String> errors = new HashMap<>();
             errors.put("message", "get data not successfully");
@@ -117,7 +125,7 @@ public class PostController {
     @GetMapping("/posts/search")
     public ResponseEntity getAllTourist(@RequestParam(value = "keySearch", defaultValue = "") String keyword) {
         try {
-            List<Post> postList = postRepository.findByPostNameContains(keyword,PageRequest.of(0, 40, Sort.by("dateOfPost").descending()));
+            List<Post> postList = postRepository.findByPostNameContains(keyword, PageRequest.of(0, 40, Sort.by("dateOfPost").descending()));
             return new ResponseEntity(new SuccessfulResponse(convertListPost(postList)), HttpStatus.OK);
         } catch (Exception ex) {
             Map<String, String> errors = new HashMap<>();
@@ -152,7 +160,7 @@ public class PostController {
             Category category = categoryRepository.findById(postAddDTO.getCategoryID()).get();
             post.setCategory(category);
             if (postAddDTO.getImageBase64s() != null && postAddDTO.getImageBase64s().size() > 0) {
-                List<ImagePost> imagePosts=new ArrayList<>();
+                List<ImagePost> imagePosts = new ArrayList<>();
                 postAddDTO.getImageBase64s().forEach(element -> {
                     ImagePost imagePost = new ImagePost();
                     String newImageUrl = storageService.store(element);
@@ -299,8 +307,20 @@ public class PostController {
             post.getUser().setPassword("");
             postInfoDTO.setAverageRate(averageRate(post));
             postInfoDTO.setPost(post);
+            postInfoDTO.setScore(calculateScore(post));
             postInfoDTOList.add(postInfoDTO);
         }
+        Collections.sort(postInfoDTOList, new Comparator<PostInfoDTO>() {
+            @Override
+            public int compare(PostInfoDTO o1, PostInfoDTO o2) {
+                if (o1.getScore() > (o2.getScore())) {
+                    return -1;
+                } else if (o1.getScore() < (o2.getScore())) {
+                    return 1;
+                }
+                return 0;
+            }
+        });
         return postInfoDTOList;
     }
 
@@ -322,6 +342,7 @@ public class PostController {
         postInfoDTO.setUserCommentDTOList(userCommentDTOList);
         postInfoDTO.setPost(post);
         postInfoDTO.setAverageRate(averageRate(post));
+        postInfoDTO.setScore(calculateScore(post));
         return postInfoDTO;
     }
 
@@ -337,5 +358,31 @@ public class PostController {
             return Float.parseFloat(averageRateStr);
         }
         return 0;
+    }
+
+    private float calculateScore(Post post) {
+        List<RatePost> ratePostList = ratePostRepository.findByPost(post);
+        int s = 0;
+        if (ratePostList.size() > 0) {
+            for (RatePost element : ratePostList) {
+                s += (element.getRateNumber().intValue() - 3);
+            }
+        }
+        List<Purchase> purchasesCancel = purchaseRepository.findPurchaseCancel(post.getId());
+        //List<Purchase> purchasesNotCancel = purchaseRepository.findPurchaseNotCancel(post.getId());
+        List<Purchase> purchases = purchaseRepository.findByPost(post);
+        s += purchases.size() - 2*purchasesCancel.size();
+        int sign = 0;
+        if (s > 0) {
+            sign = 1;
+        } else if (s < 0) {
+            sign = -1;
+        }
+        long seconds = Constants.LOCAL_DATE_TIME_START.until(post.getDateOfPost(), ChronoUnit.MINUTES);
+        int n = 1;
+        if (s >= 1) {
+            n = Math.abs(s);
+        }
+        return (float) Math.log10(n) + (float) (sign * seconds) / 45000;
     }
 }

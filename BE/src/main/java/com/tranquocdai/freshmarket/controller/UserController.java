@@ -108,7 +108,7 @@ public class UserController {
                 errors.put("message", "username has existed");
                 return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
             }
-            RoleUser roleUser = roleResponsitory.findByRoleID(userAddDTO.getRoleID()).get();
+            RoleUser roleUser = roleResponsitory.findByRoleID(Constants.ID_ROLE_DEFAULT).get();
             User user = new User();
             user.setUserName(userAddDTO.getUserName());
             user.setFullName(userAddDTO.getFullName());
@@ -117,7 +117,7 @@ public class UserController {
             user.setPhoneNumber(userAddDTO.getPhoneNumber());
             user.setRoleUser(roleUser);
             Avatar avatar = new Avatar();
-            if (userAddDTO.getImageBase64() != null && "".equals(userAddDTO.getImageBase64())) {
+            if (userAddDTO.getImageBase64() != null && !"".equals(userAddDTO.getImageBase64())) {
                 String newImageUrl = storageService.store(userAddDTO.getImageBase64());
                 avatar.setUrl(newImageUrl);
                 avatarRepository.save(avatar);
@@ -149,8 +149,8 @@ public class UserController {
             user.setPassword(passwordEncoder.encode(updateUserDTO.getPassword()));
             user.setEmail(updateUserDTO.getEmail());
             user.setPhoneNumber(updateUserDTO.getPhoneNumber());
-            RoleUser roleUser = roleResponsitory.findById(updateUserDTO.getRoleID()).get();
-            user.setRoleUser(roleUser);
+//            RoleUser roleUser = roleResponsitory.findById(updateUserDTO.getRoleID()).get();
+//            user.setRoleUser(roleUser);
             if (updateUserDTO.getImageBase64() != null && !"".equals(updateUserDTO.getImageBase64())) {
                 Avatar avatar = user.getAvatar();
                 if (Constants.URL_AVATAR_DEFAULT.equals(avatar.getUrl())) {
@@ -186,13 +186,13 @@ public class UserController {
                 errors.put("message", "authorization has not been registered");
                 return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
             }
-            RoleUser roleUser = roleResponsitory.findByRoleID(updateUserDTO.getRoleID()).get();
+            //RoleUser roleUser = roleResponsitory.findByRoleID(updateUserDTO.getRoleID()).get();
             User user = baseService.getUser(authentication).get();
             user.setFullName(updateUserDTO.getFullName());
             user.setPassword(passwordEncoder.encode(updateUserDTO.getPassword()));
             user.setEmail(updateUserDTO.getEmail());
             user.setPhoneNumber(updateUserDTO.getPhoneNumber());
-            user.setRoleUser(roleUser);
+            //user.setRoleUser(roleUser);
             if (updateUserDTO.getImageBase64() != null && !"".equals(updateUserDTO.getImageBase64())) {
                 Avatar avatar = user.getAvatar();
                 if (Constants.URL_AVATAR_DEFAULT.equals(avatar.getUrl())) {

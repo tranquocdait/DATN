@@ -35,9 +35,9 @@ export class CreateCommentComponent implements OnInit {
             }
             setTimeout(() => {
                 this.blockUI.stop();
-            }, 1000);
-            this.output.emit('success');
+                this.output.emit('success');
             this.activeModal.close();
+            }, 2000);
         }
         this.checkClick = true;
     }

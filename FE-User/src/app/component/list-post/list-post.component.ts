@@ -55,7 +55,7 @@ export class ListPostComponent implements OnInit, AfterContentChecked {
                     }
                     post.calculationUnit = element.calculationUnit;
                     post.averageRate = Number.parseFloat(elementInfo.averageRate);
-                    temp.unshift(post);
+                    temp.push(post);
 
                 });
                 this.dataList = temp;

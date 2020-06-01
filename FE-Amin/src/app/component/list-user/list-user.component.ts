@@ -6,6 +6,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { EditUserComponent } from './edit-user/edit-user.component';
 import { DeleteUserComponent } from './delete-user/delete-user.component';
 import { EndpointFactory } from '../../services/endpoint-factory.service';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-list-user',
@@ -15,6 +16,7 @@ import { EndpointFactory } from '../../services/endpoint-factory.service';
 export class ListUserComponent implements OnInit {
   dataSource: MatTableDataSource<UserElement>;
   dataList: UserElement[] = null;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   displayedColumns: string[] = ['avatar', 'userId', 'userName', 'role', 'fullName', 'phoneNumber', 'email', 'edit', 'delete'];
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   currentRate = 1.5;
@@ -53,6 +55,7 @@ export class ListUserComponent implements OnInit {
     setTimeout(() => {
       this.dataSource = new MatTableDataSource(this.dataList);
       this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
     }, 1000);
 
   }

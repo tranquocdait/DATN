@@ -66,25 +66,29 @@ public class DataLoader implements CommandLineRunner {
         imagePostRepository.save(imagePost);
 
         //add role
-        RoleUser dn=new RoleUser();
-        dn.setRoleName("Doanh nghiệp");
-        roleResponsitory.save(dn);
+//        RoleUser dn=new RoleUser();
+//        dn.setRoleName("Doanh nghiệp");
+//        roleResponsitory.save(dn);
+//
+//        RoleUser htx=new RoleUser();
+//        htx.setRoleName("Hợp tác xã");
+//        roleResponsitory.save(htx);
+//
+//        RoleUser nd=new RoleUser();
+//        nd.setRoleName("Nông dân");
+//        roleResponsitory.save(nd);
+//
+//        RoleUser ntd=new RoleUser();
+//        ntd.setRoleName("Người tiêu dùng");
+//        roleResponsitory.save(nd);
+//
+//        RoleUser diff=new RoleUser();
+//        diff.setRoleName("khác");
+//        roleResponsitory.save(diff);
 
-        RoleUser htx=new RoleUser();
-        htx.setRoleName("Hợp tác xã");
-        roleResponsitory.save(htx);
-
-        RoleUser nd=new RoleUser();
-        nd.setRoleName("Nông dân");
-        roleResponsitory.save(nd);
-
-        RoleUser ntd=new RoleUser();
-        ntd.setRoleName("Người tiêu dùng");
-        roleResponsitory.save(nd);
-
-        RoleUser diff=new RoleUser();
-        diff.setRoleName("khác");
-        roleResponsitory.save(diff);
+        RoleUser userRole=new RoleUser();
+        userRole.setRoleName("User");
+        roleResponsitory.save(userRole);
 
         //add status purchase
         StatusPurchase pending= new StatusPurchase();

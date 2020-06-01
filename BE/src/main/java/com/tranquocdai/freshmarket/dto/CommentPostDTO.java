@@ -56,7 +56,7 @@ public class CommentPostDTO {
         ArrayList<CommentPost> postArrayList=new ArrayList<>(posts);
         postArrayList.forEach((element)->{
             element.getUser().setPassword("");
-            element.setPost(null);
+            //element.setPost(null);
         });
         return postArrayList;
     }
