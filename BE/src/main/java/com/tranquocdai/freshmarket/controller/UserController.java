@@ -62,6 +62,29 @@ public class UserController {
         }
     }
 
+    @GetMapping("/users/{userId}/info")
+    public ResponseEntity getUserById(@PathVariable("userId") Long userId) {
+        try {
+            User user = userRepository.findById(userId).get();
+            return new ResponseEntity(new SuccessfulResponse(user), HttpStatus.OK);
+        } catch (Exception ex) {
+            Map<String, String> errors = new HashMap<>();
+            errors.put("message", "get data not successfully");
+            return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/users/{userName}/byUserName")
+    public ResponseEntity getUserByUserName(@PathVariable("userName") String userName) {
+        try {
+            User user = userRepository.findByUserName(userName).get();
+            return new ResponseEntity(new SuccessfulResponse(user), HttpStatus.OK);
+        } catch (Exception ex) {
+            Map<String, String> errors = new HashMap<>();
+            errors.put("message", "get data not successfully");
+            return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
+        }
+    }
     @GetMapping("/users/search")
     public ResponseEntity getAllUserBySearch(@RequestParam(value = "keySearch", defaultValue = "") String keyword) {
         try {
@@ -82,7 +105,7 @@ public class UserController {
                 errors.put("message", "username has existed");
                 return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
             }
-            RoleUser roleUser = roleResponsitory.findByRoleID(Constants.ID_ROLE_DEFAULT).get();
+            RoleUser roleUser = roleResponsitory.findByRoleID(Constants.ID_USER_DEFAULT).get();
             User user = new User();
             user.setUserName(userDTO.getUserName());
             user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
@@ -108,7 +131,7 @@ public class UserController {
                 errors.put("message", "username has existed");
                 return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
             }
-            RoleUser roleUser = roleResponsitory.findByRoleID(Constants.ID_ROLE_DEFAULT).get();
+            RoleUser roleUser = roleResponsitory.findByRoleID(Constants.ID_USER_DEFAULT).get();
             User user = new User();
             user.setUserName(userAddDTO.getUserName());
             user.setFullName(userAddDTO.getFullName());

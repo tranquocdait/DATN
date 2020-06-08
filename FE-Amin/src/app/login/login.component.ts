@@ -12,7 +12,7 @@ import { EndpointFactory } from '../services/endpoint-factory.service';
 })
 
 export class LoginComponent implements OnInit {
-  roleAdmin: string = "admin";
+  roleAdmin: string = 'Admin';
   loginStatus:boolean=false;
   @ViewChild('tt', { static: true }) ttUsername: NgbTooltip;
   constructor(private formBuilder: FormBuilder, private router: Router, private localStoreManager: LocalStoreManager, private endpointFactory: EndpointFactory) {
@@ -42,8 +42,8 @@ export class LoginComponent implements OnInit {
     this.endpointFactory.postEndPoint(params, 'login').subscribe(data => {
       if (data.status === 'success') {
         this.localStoreManager.setToken(data.data);
-        this.endpointFactory.postByHeader(null,"users/information").subscribe(dataInfor => {
-          if (dataInfor.status === "success") {
+        this.endpointFactory.postByHeader(null,'users/information').subscribe(dataInfor => {
+          if (dataInfor.status === 'success') {
             if (dataInfor.data.roleUser.roleName === this.roleAdmin) {
               this.router.navigateByUrl('');
             }
@@ -56,7 +56,7 @@ export class LoginComponent implements OnInit {
     }
     );
     this.loginFailed();
-    //this.ttUsername.ngbTooltip = "aaaaaaaaaaaaaaaaa";
+    //this.ttUsername.ngbTooltip = 'aaaaaaaaaaaaaaaaa';
     //this.ttUsername.close();
   }
   loginFailed(){

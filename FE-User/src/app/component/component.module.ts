@@ -29,6 +29,7 @@ import { ListBuyItemComponent } from './list-buy-item/list-buy-item.component';
 import { PurchaseBuyInfoComponent } from './list-buy-item/purchase-buy-info/purchase-buy-info.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { EditPurchaseComponent } from './list-buy-item/edit-purchase/edit-purchase.component';
+import { ProfileUserComponent } from './profile-user/profile-user.component';
 @NgModule({
     imports: [
         CommonModule,
@@ -86,7 +87,8 @@ import { EditPurchaseComponent } from './list-buy-item/edit-purchase/edit-purcha
         ListBuyItemComponent,
         PurchaseBuyInfoComponent,
         EditPurchaseComponent,
-        EditPurchaseComponent
+        EditPurchaseComponent,
+        ProfileUserComponent
     ]
 })
 export class ComponentsModule { }

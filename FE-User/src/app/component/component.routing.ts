@@ -8,6 +8,7 @@ import { ListUserPostComponent } from './list-user-post/list-user-post.component
 import { StorageCartComponent } from './storage-cart/storage-cart.component';
 import { PaymentCartComponent } from './storage-cart/payment-cart/payment-cart.component';
 import { ListBuyItemComponent } from './list-buy-item/list-buy-item.component';
+import { ProfileUserComponent } from './profile-user/profile-user.component';
 
 export const ComponentsRoutes: Routes = [{
     path: '',
@@ -54,6 +55,11 @@ export const ComponentsRoutes: Routes = [{
         {
             path: 'payment-cart',
             component: PaymentCartComponent,
+            pathMatch: 'full'
+        },
+        {
+            path: 'profile-user',
+            component: ProfileUserComponent,
             pathMatch: 'full'
         }
     ]

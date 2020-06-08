@@ -1,36 +1,56 @@
-
-import { Component, OnInit, ChangeDetectorRef, AfterContentChecked } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Component, OnInit } from '@angular/core';
 import { EndpointFactory } from '../../services/endpoint-factory.service';
-import { PostElement } from '../model/post.model';
+import { UserElement } from '../model/user.model';
 import { LocalStoreManager } from '../../services/local-store-manager.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { PostElement } from '../model/post.model';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { Router } from '@angular/router';
 
 @Component({
-    selector: 'app-list-post',
-    templateUrl: './list-post.component.html',
-    styleUrls: ['./list-post.component.scss']
+    selector: 'app-profile-user',
+    templateUrl: './profile-user.component.html',
+    styleUrls: ['./profile-user.component.css']
 })
-export class ListPostComponent implements OnInit, AfterContentChecked {
-    dataList: PostElement[] = null;
+export class ProfileUserComponent implements OnInit {
+
+    constructor(private router: Router, private modalService: NgbModal, private endpointFactory: EndpointFactory,
+        private localStoreManager: LocalStoreManager) {
+        this.loadData();
+        this.setUrl(0);
+    }
+    @BlockUI() blockUI: NgBlockUI;
+    data = new UserElement();
+    isLoadData = false;
+    dataList: any;
     getUrl = '';
     categoryId = 0;
     page = 1;
     totalPage = 1;
     change = false;
-    constructor(private router: Router, private modalService: NgbModal, private changeDetectorRefs: ChangeDetectorRef,
-        private endpointFactory: EndpointFactory, private localStoreManager: LocalStoreManager) {
-        this.loadFisrtData();
-    }
     ngOnInit() {
     }
-
-    loadFisrtData(): void {
-        this.setUrl(0);
-        this.loadData();
+    setUrl(page: number): void {
+        const userName = this.localStoreManager.getUserNameSelected();
+        this.getUrl = 'posts/' + page + '/getByUser?userName=' + userName;
     }
-    loadData(): void {
+    loadData() {
+        this.blockUI.start();
+        const userName = this.localStoreManager.getUserNameSelected();
+        this.endpointFactory.getEndPoint('users/' + userName + '/byUserName').subscribe(dataInfo => {
+            if (dataInfo.status === 'success') {
+                const dataElement = dataInfo.data;
+                this.data.userId = dataElement.userID;
+                this.data.userName = dataElement.userName;
+                this.data.avatarURL = dataElement.avatar.url;
+                this.data.fullName = dataElement.fullName;
+                this.data.email = dataElement.email;
+                this.data.phoneNumber = dataElement.phoneNumber;
+                this.data.role = dataElement.roleUser;
+            }
+        });
         this.endpointFactory.getEndPointWithResponeHeader(this.getUrl).subscribe(data => {
+            const aaa = data;
             if (data.body.status === 'success') {
                 const temp = [];
                 data.body.data.forEach((elementInfo) => {
@@ -62,28 +82,12 @@ export class ListPostComponent implements OnInit, AfterContentChecked {
                     this.page = data.headers.get('pageCurrent') + 1;
                 });
                 this.dataList = temp;
+                this.isLoadData = true;
             }
         });
-    }
-
-    setUrl(page: number): void {
-        this.categoryId = this.localStoreManager.getCategoryId();
-        if (this.localStoreManager.getCategoryId() === 0) {
-            this.getUrl = 'posts/' + page + '/getAll';
-        } else {
-            this.getUrl = 'posts/' + this.localStoreManager.getCategoryId() + '/category';
-        }
-    }
-
-    ngAfterContentChecked(): void {
-        if (this.localStoreManager.getCategoryId() !== this.categoryId) {
-            this.loadFisrtData();
-        }
-    }
-
-    searchPost(search: string): void {
-        this.getUrl = 'posts/search?keySearch=' + search;
-        this.loadData();
+        setTimeout(() => {
+            this.blockUI.stop();
+        }, 500);
     }
 
     showInfo(post: PostElement): void {
@@ -98,5 +102,5 @@ export class ListPostComponent implements OnInit, AfterContentChecked {
         this.setUrl(pageChange - 1);
         this.loadData();
     }
-}
 
+}

@@ -17,6 +17,8 @@ public class Purchase {
 
     private Double purchaseNumber;
 
+    private Double transportCost;
+
     @Size(min = 2)
     @Column(name = "full_name")
     private String fullName;
@@ -34,6 +36,14 @@ public class Purchase {
 
     @OneToOne(targetEntity = TransportationType.class)
     private TransportationType transportationType;
+
+    public Double getTransportCost() {
+        return transportCost;
+    }
+
+    public void setTransportCost(Double transportCost) {
+        this.transportCost = transportCost;
+    }
 
     public TransportationType getTransportationType() {
         return transportationType;

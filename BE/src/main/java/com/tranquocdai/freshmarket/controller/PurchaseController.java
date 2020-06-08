@@ -33,6 +33,9 @@ public class PurchaseController {
     StatusPurchaseRepository statusPurchaseRepository;
 
     @Autowired
+    TransportationTypeRepository transportationTypeRepository;
+
+    @Autowired
     BaseService baseService;
 
     @GetMapping("/purchases")
@@ -156,6 +159,7 @@ public class PurchaseController {
             purchase.setFullName(purchaseAddDTO.getFullName());
             purchase.setPhoneNumber(purchaseAddDTO.getPhoneNumber());
             purchase.setAddress(purchaseAddDTO.getAddress());
+            purchase.setTransportCost(0D);
             purchaseRepository.save(purchase);
             return new ResponseEntity(new SuccessfulResponse(purchase), HttpStatus.OK);
         } catch (Exception ex) {
@@ -186,6 +190,13 @@ public class PurchaseController {
             if (purchaseUpdateDTO.getStatusPurchaseId() != null) {
                 StatusPurchase statusPurchase = statusPurchaseRepository.findById(purchaseUpdateDTO.getStatusPurchaseId()).get();
                 purchase.setStatusPurchase(statusPurchase);
+            }
+            if (purchaseUpdateDTO.getTransportationTypeId() != null) {
+                TransportationType transportationType = transportationTypeRepository.findById(purchaseUpdateDTO.getTransportationTypeId()).get();
+                purchase.setTransportationType(transportationType);
+            }
+            if (purchaseUpdateDTO.getTransportCost() != null && !"".equals(purchaseUpdateDTO.getTransportCost())) {
+                purchase.setTransportCost(purchaseUpdateDTO.getTransportCost());
             }
             purchaseRepository.save(purchase);
             return new ResponseEntity(new SuccessfulResponse(purchase), HttpStatus.OK);

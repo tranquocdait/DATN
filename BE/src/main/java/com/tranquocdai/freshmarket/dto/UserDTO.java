@@ -4,21 +4,14 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 public class UserDTO {
-    @NotEmpty
-    @Size(min = 2)
     private String userName;
 
-    @NotEmpty
-    @Size(min = 8)
     private String password;
 
-    @NotEmpty
     private String fullName;
 
-    @Size(min = 9)
     private String phoneNumber;
 
-    @Size(min = 2)
     private String email;
 
     private Long roleID;

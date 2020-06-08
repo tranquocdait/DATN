@@ -4,6 +4,7 @@ import com.tranquocdai.freshmarket.config.Constants;
 import com.tranquocdai.freshmarket.dto.PostDTO;
 import com.tranquocdai.freshmarket.dto.PostInfoDTO;
 import com.tranquocdai.freshmarket.dto.UserCommentDTO;
+import com.tranquocdai.freshmarket.dto.UserDTO;
 import com.tranquocdai.freshmarket.model.*;
 import com.tranquocdai.freshmarket.repository.*;
 import com.tranquocdai.freshmarket.response.ErrorResponse;
@@ -55,6 +56,9 @@ public class PostController {
     PurchaseRepository purchaseRepository;
 
     @Autowired
+    UserRepository userRepository;
+
+    @Autowired
     BaseService baseService;
 
     @Autowired
@@ -63,14 +67,63 @@ public class PostController {
     @GetMapping("/posts/{page}/getAll")
     public ResponseEntity getAllPost(@PathVariable("page") int page) {
         try {
-//            if (page < 0) {
+            if (page < 0) {
+                List<Post> postList = postRepository.findAll();
+                return new ResponseEntity(new SuccessfulResponse(convertListPost(postList)), HttpStatus.OK);
+            }
             List<Post> postList = postRepository.findAll();
-            return new ResponseEntity(new SuccessfulResponse(convertListPost(postList)), HttpStatus.OK);
-//            }
-//            Page<Post> postPage = postRepository.findAll(PageRequest.of(page, 40, Sort.by("dateOfPost").descending()));
-//            return ResponseEntity.ok().header("total", postPage.getTotalPages() + "")
-//                    .header("pageCurrent", postPage.getNumber() + "")
-//                    .body(new SuccessfulResponse(convertListPost(postPage.getContent())));
+            List<PostInfoDTO> postInfoDTOS = convertListPost(postList);
+            List<PostInfoDTO> postInfoDTOSResult = new ArrayList<>();
+            for (int i = 40 * page; i < (page + 1) * 40; i++) {
+                if (i < postInfoDTOS.size()) {
+                    postInfoDTOSResult.add(postInfoDTOS.get(i));
+                } else {
+                    break;
+                }
+            }
+            int totalPage = 0;
+            if (postInfoDTOS.size() % 40 == 0) {
+                totalPage = postInfoDTOS.size() / 40;
+            } else {
+                totalPage = postInfoDTOS.size() / 40 + 1;
+            }
+            return ResponseEntity.ok().header("totalPage", totalPage + "")
+                    .header("pageCurrent", page + "")
+                    .body(new SuccessfulResponse(postInfoDTOSResult));
+        } catch (Exception ex) {
+            Map<String, String> errors = new HashMap<>();
+            errors.put("message", "get data not successfully");
+            return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/posts/{page}/getByUser")
+    public ResponseEntity getPostByUserId(@RequestParam String userName, @PathVariable("page") int page) {
+        try {
+            User user = userRepository.findByUserName(userName).get();
+            if (page < 0) {
+                List<Post> postList = postRepository.findByUser(user);
+                return new ResponseEntity(new SuccessfulResponse(convertListPost(postList)), HttpStatus.OK);
+            }
+            List<Post> postList = postRepository.findByUser(user);
+            List<PostInfoDTO> postInfoDTOS = convertListPost(postList);
+            List<PostInfoDTO> postInfoDTOSResult = new ArrayList<>();
+            for (int i = 40 * page; i < (page + 1) * 40; i++) {
+                if (i < postInfoDTOS.size()) {
+                    postInfoDTOSResult.add(postInfoDTOS.get(i));
+                } else {
+                    break;
+                }
+            }
+            int totalPage = 0;
+            if (postInfoDTOS.size() % 40 == 0) {
+                totalPage = postInfoDTOS.size() / 40;
+            } else {
+                totalPage = postInfoDTOS.size() / 40 + 1;
+            }
+            return ResponseEntity.ok().header("totalPage", totalPage + "")
+                    .header("pageCurrent", page + "")
+                    .body(new SuccessfulResponse(postInfoDTOSResult));
         } catch (Exception ex) {
             Map<String, String> errors = new HashMap<>();
             errors.put("message", "get data not successfully");
@@ -149,9 +202,9 @@ public class PostController {
             post.setAddress(postAddDTO.getAddress());
             post.setUnitPrice(postAddDTO.getUnitPrice());
             post.setDateOfPost(LocalDateTime.now());
-            post.setDistrictId(postAddDTO.getDistrictId());
+            //post.setDistrictId(postAddDTO.getDistrictId());
             post.setDateOfPost(LocalDateTime.now());
-            post.setWeightOfItem(postAddDTO.getWeightOfItem());
+            //post.setWeightOfItem(postAddDTO.getWeightOfItem());
             post.setDescription(postAddDTO.getDescription());
             Province province = provinceRepository.findById(postAddDTO.getProvinceID()).get();
             post.setProvince(province);
@@ -202,9 +255,9 @@ public class PostController {
             post.setAddress(postUpdateDTO.getAddress());
             post.setUnitPrice(postUpdateDTO.getUnitPrice());
             post.setDateOfPost(LocalDateTime.now());
-            post.setDistrictId(postUpdateDTO.getDistrictId());
+            //post.setDistrictId(postUpdateDTO.getDistrictId());
             post.setDescription(postUpdateDTO.getDescription());
-            post.setWeightOfItem(postUpdateDTO.getWeightOfItem());
+            //post.setWeightOfItem(postUpdateDTO.getWeightOfItem());
             //TypePost typePost = typePostRepository.findById(addPostDTO.getTypePostID()).get();
             // post.setTypePost(typePost);
             Province province = provinceRepository.findById(postUpdateDTO.getProvinceID()).get();
@@ -249,9 +302,9 @@ public class PostController {
             post.setAddress(postUpdateDTO.getAddress());
             post.setUnitPrice(postUpdateDTO.getUnitPrice());
             post.setDateOfPost(LocalDateTime.now());
-            post.setDistrictId(postUpdateDTO.getDistrictId());
+            //post.setDistrictId(postUpdateDTO.getDistrictId());
             post.setDescription(postUpdateDTO.getDescription());
-            post.setWeightOfItem(postUpdateDTO.getWeightOfItem());
+            //post.setWeightOfItem(postUpdateDTO.getWeightOfItem());
             //TypePost typePost = typePostRepository.findById(addPostDTO.getTypePostID()).get();
             // post.setTypePost(typePost);
             Province province = provinceRepository.findById(postUpdateDTO.getProvinceID()).get();
@@ -371,7 +424,7 @@ public class PostController {
         List<Purchase> purchasesCancel = purchaseRepository.findPurchaseCancel(post.getId());
         //List<Purchase> purchasesNotCancel = purchaseRepository.findPurchaseNotCancel(post.getId());
         List<Purchase> purchases = purchaseRepository.findByPost(post);
-        s += purchases.size() - 2*purchasesCancel.size();
+        s += purchases.size() - 2 * purchasesCancel.size();
         int sign = 0;
         if (s > 0) {
             sign = 1;

@@ -15,6 +15,26 @@ public class PurchaseUpdateDTO {
 
     private Long statusPurchaseId;
 
+    private Double transportCost;
+
+    private Long transportationTypeId;
+
+    public Long getTransportationTypeId() {
+        return transportationTypeId;
+    }
+
+    public void setTransportationTypeId(Long transportationTypeId) {
+        this.transportationTypeId = transportationTypeId;
+    }
+
+    public Double getTransportCost() {
+        return transportCost;
+    }
+
+    public void setTransportCost(Double transportCost) {
+        this.transportCost = transportCost;
+    }
+
     public Long getPurchaseId() {
         return purchaseId;
     }

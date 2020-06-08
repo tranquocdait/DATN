@@ -14,4 +14,5 @@ export class PurchaseElement {
     statusPurchase: string;
     imageURL: string;
     statusPurchaseName: string;
+    transportCost: string;
 }

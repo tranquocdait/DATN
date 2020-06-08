@@ -58,6 +58,7 @@ export class ListBuyItemComponent implements OnInit {
                     purchase.address = element.address;
                     purchase.unitPrice = element.post.unitPrice;
                     purchase.purchaseNumber = element.purchaseNumber;
+                    purchase.transportCost = element.transportCost;
                     purchase.statusPurchaseName = element.statusPurchase.status;
                     purchase.statusPurchase = element.statusPurchase;
                     purchase.dateOfOrder = new Date(element.dateOfOrder[0], element.dateOfOrder[1] - 1, element.dateOfOrder[2]);

@@ -78,8 +78,8 @@ export class ListCommentComponent implements OnInit {
                 data.data.forEach((element, index) => {
                     const comment = new CommentPost();
                     comment.id = element.id;
-                    comment.username = element.username;
-                    comment.postID = element.postID;
+                    comment.user = element.user;
+                    comment.post = element.post;
                     comment.content = element.content;
                     temp.push(comment);
                 });

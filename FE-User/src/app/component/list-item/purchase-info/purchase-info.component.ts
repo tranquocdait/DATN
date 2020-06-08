@@ -11,7 +11,11 @@ import { EndpointFactory } from '../../../services/endpoint-factory.service';
 })
 export class PurchaseInfoComponent implements OnInit {
     purchaseList: any;
-
+    transportTypeList: any;
+    transportType: any;
+    isTransport = false;
+    transportCost: string;
+    isPending = false;
     constructor(public activeModal: NgbActiveModal, private formBuilder: FormBuilder, private endpointFactory: EndpointFactory) {
     }
 
@@ -20,13 +24,23 @@ export class PurchaseInfoComponent implements OnInit {
 
     ngOnInit(): void {
         this.getPurchase();
+        this.gettransportType();
         this.createForm();
     }
 
-    getPurchase() {
+    getPurchase(): void {
         this.endpointFactory.getEndPoint('statusPurchases').subscribe(data => {
             if (data.status === 'success') {
                 this.purchaseList = data.data;
+            }
+        }
+        );
+    }
+
+    gettransportType(): void {
+        this.endpointFactory.getEndPoint('transportationTypes').subscribe(data => {
+            if (data.status === 'success') {
+                this.transportTypeList = data.data;
             }
         }
         );
@@ -41,10 +55,17 @@ export class PurchaseInfoComponent implements OnInit {
     }
 
     onSubmit(statusPurchaseId: number): void {
-        const params: any = {
+        let params: any = {
             purchaseId: this.data.data.purchaseId,
-            statusPurchaseId: statusPurchaseId + 1
+            statusPurchaseId: statusPurchaseId + 1,
+            transportationTypeId: this.transportType
         };
+        if (this.transportCost !== null && this.transportCost !== '') {
+            params = {
+                ...params,
+                transportCost: this.transportCost
+            };
+        }
         this.endpointFactory.putByHeader(params, 'purchases/update').subscribe(data => {
             if (data.status === 'success') {
                 this.output.emit('success');
@@ -52,5 +73,11 @@ export class PurchaseInfoComponent implements OnInit {
             }
         }
         );
+    }
+
+    onChangeTransportType(): void {
+        if (this.transportType !== '1') {
+            this.isTransport = true;
+        }
     }
 }

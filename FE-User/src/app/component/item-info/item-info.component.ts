@@ -32,7 +32,7 @@ export class ItemInfoComponent implements OnInit {
 
     loadData() {
         this.blockUI.start();
-        if (this.localStoreManager.getToken() !== null || this.localStoreManager.getToken() === "") {
+        if (this.localStoreManager.getToken() !== null || this.localStoreManager.getToken() === '') {
             this.endpointFactory.postByHeader(null, 'users/information').subscribe(dataInfo => {
                 if (dataInfo.status === 'success') {
                     this.userId = dataInfo.data.userID;
@@ -125,5 +125,10 @@ export class ItemInfoComponent implements OnInit {
 
     onLogin(): void {
         this.modalService.open(LoginComponent, { size: 'lg', windowClass: 'login-modal', centered: true });
+    }
+
+    viewProfileUser(): void {
+        this.localStoreManager.setUserNameSelected(this.dataContent.userName);
+        this.router.navigateByUrl('/component/profile-user');
     }
 }

@@ -15,14 +15,25 @@ export class LocalStoreManager {
             urlAvatar: 'urlAvatar',
             storageCart: 'storageCart',
             checkLogin: 'checkLogin',
+            userNameSelected: 'userNameSelected',
         };
+
+    public getUserNameSelected(): string {
+        return localStorage.getItem(this.reservedKeys.userNameSelected);
+    }
+
+    public setUserNameSelected(userName: string): void {
+        localStorage.setItem(this.reservedKeys.userNameSelected, userName);
+    }
+
     public getCheckLogin(): boolean {
         return localStorage.getItem(this.reservedKeys.checkLogin) === 'true';
     }
+
     public setCheckLogin(checkLogin: boolean): void {
-        const aaa = checkLogin.toString();
         localStorage.setItem(this.reservedKeys.checkLogin, checkLogin.toString());
     }
+
     public setStorageCart(storageCart: string): void {
         if (this.getStorageCart() === null) {
             localStorage.setItem(this.reservedKeys.storageCart, '[' + storageCart + ']');
@@ -92,6 +103,7 @@ export class LocalStoreManager {
     public getCategoryId(): number {
         return this.categoryId;
     }
+
     public setPageProfile(pageProfile: string): void {
         this.pageProfile = pageProfile;
     }

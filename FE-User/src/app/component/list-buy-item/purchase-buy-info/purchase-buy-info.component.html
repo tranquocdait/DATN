@@ -25,9 +25,11 @@
                         </div>
                         <div class="row ml-2 mb-2"><i class="mr-2">Đơn giá : </i><b>{{data.data.unitPrice|convertAmount}}
                                 VND/{{data.data.post.calculationUnit.unitName}}</b></div>
-                        <div class="row ml-2 mb-2"><i class="mr-2">Sô Lượng : </i><b>{{data.data.purchaseNumber}}</b></div><br>
+                        <div class="row ml-2 mb-2"><i class="mr-2">Sô Lượng : </i><b>{{data.data.purchaseNumber}}</b></div>
+                        <div class="row ml-2 mb-2" *ngIf="data.data.statusPurchase.id!==1"><i class="mr-2">Chi phí vận
+                            chuyển : </i><b>{{data.data.transportCost|convertAmount}}</b></div><br>
                         <div class="row ml-2 mb-2" style="border-top:black outset ;"><i class="mr-2">Tổng tiền :
-                            </i><b>{{data.data.unitPrice*data.data.purchaseNumber|convertAmount}}</b></div>
+                            </i><b>{{data.data.unitPrice*data.data.purchaseNumber+data.data.transportCost|convertAmount}}</b></div>
                         <div class="row mb-2 justify-content-center">
                             <a class="btn btn-danger ml-2" (click)="clickClose()">Cancel</a>
                         </div>

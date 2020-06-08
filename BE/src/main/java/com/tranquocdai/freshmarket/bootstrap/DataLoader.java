@@ -39,6 +39,8 @@ public class DataLoader implements CommandLineRunner {
     @Autowired
     StatusPurchaseRepository statusPurchaseRepository;
 
+    @Autowired
+    TransportationTypeRepository transportationTypeRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -115,6 +117,15 @@ public class DataLoader implements CommandLineRunner {
         TypePost buy= new TypePost();
         buy.setTypePostName("Buy");
         typePostRepository.save(buy);
+
+        //add type transportion
+        TransportationType transportationType1= new TransportationType();
+        transportationType1.setTransportationName("Trao đổi trực tiếp");
+        transportationTypeRepository.save(transportationType1);
+
+        TransportationType transportationType2= new TransportationType();
+        transportationType2.setTransportationName("Chuyển phát");
+        transportationTypeRepository.save(transportationType2);
 
         //add calculationUnit
         CalculationUnit kg=new CalculationUnit();

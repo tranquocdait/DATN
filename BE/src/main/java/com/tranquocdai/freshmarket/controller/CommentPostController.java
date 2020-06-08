@@ -64,6 +64,7 @@ public class CommentPostController {
             return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
         }
     }
+
     @PostMapping("/posts/{postId}/comments")
     public ResponseEntity createCommentByID(@PathVariable("postId") Long id, @Valid @RequestBody CommentPostDTO commentPostDTO) {
         try {

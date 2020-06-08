@@ -51,6 +51,15 @@ export class EndpointFactory {
             })
         );
     }
+    public getEndPointByParam<T>(endpointUrl, params: any): Observable<any> {
+        const url: string = this.baseUrl + endpointUrl;
+        return this.httpclient.post<T>(url, params).pipe<T>(
+            catchError((error) => {
+                return this.handleError(error, () => this.getEndPointByParam(params, endpointUrl));
+            })
+        );
+    }
+
     public postByHeader<T>(params: any, suburl: string): Observable<any> {
         const url: string = this.baseUrl + suburl;
         const httpOptions = {

@@ -20,11 +20,11 @@ public class Post {
 
     private Double unitPrice;
 
-    private Long districtId;
+    //private Long districtId;
 
     private String address;
 
-    private Double weightOfItem;
+   // private Double weightOfItem;
 
     private LocalDateTime dateOfPost;
 
@@ -53,13 +53,13 @@ public class Post {
         this.imagePosts = imagePosts;
     }
 
-    public Double getWeightOfItem() {
-        return weightOfItem;
-    }
-
-    public void setWeightOfItem(Double weightOfItem) {
-        this.weightOfItem = weightOfItem;
-    }
+//    public Double getWeightOfItem() {
+//        return weightOfItem;
+//    }
+//
+//    public void setWeightOfItem(Double weightOfItem) {
+//        this.weightOfItem = weightOfItem;
+//    }
 
     public Province getProvince() {
         return province;
@@ -109,13 +109,13 @@ public class Post {
         this.unitPrice = unitPrice;
     }
 
-    public Long getDistrictId() {
-        return districtId;
-    }
-
-    public void setDistrictId(Long districtId) {
-        this.districtId = districtId;
-    }
+//    public Long getDistrictId() {
+//        return districtId;
+//    }
+//
+//    public void setDistrictId(Long districtId) {
+//        this.districtId = districtId;
+//    }
 
     public String getAddress() {
         return address;

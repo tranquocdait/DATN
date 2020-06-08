@@ -1,14 +1,42 @@
+<div class="card-body col-12" *ngIf="isLoadData">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-6">
+            <div class="card">
+                <div class="text-center">
+                    <img class="card-img-top img-responsive round" src="{{data.avatarURL}}">
+                </div>
+                <h2 class="text-center">Thông tin cá nhân</h2>
+                <div class="card-body">
+                    <div class="container md-1 mt-1">
+                        <label class="col-md-6 text-right">Tài khoản : </label>
+                        <label class="col-md-6"><b>{{data.userName}}</b></label>
+                    </div>
+                    <div class="container md-1 mt-1">
+                        <label class="col-md-6 text-right">Họ tên: </label>
+                        <label class="col-md-6"><b>{{data.fullName}}</b></label>
+                    </div>
+                    <div class="container md-1 mt-1">
+                        <label class="col-md-6 text-right">Số điện thoại : </label>
+                        <label class="col-md-6"><b>{{data.phoneNumber}}</b></label>
+                    </div>
+                    <div class="container md-1 mt-1">
+                        <label class="col-md-6 text-right">Email : </label>
+                        <label class="col-md-6"><b>{{data.email}}</b></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="row">
     <div class="col-12">
         <div class="container">
-            <input #search class="form-control col-md-5" type="text" placeholder="Tìm kiếm sản phẩm mong muốn..."
-                aria-label="Search" (keyup.enter)="searchPost(search.value)">
-            <button class="btn" (click)="searchPost(search.value)"><i class="fa fa-search fa-lg pb-2"></i></button>
+            DANH SÁCH SẢN PHẨM
         </div>
         <div class="row mt-2">
             <div class="col-md-5ths col-xs-6" *ngFor="let post of dataList">
                 <div class="card" style="cursor: pointer;" (click)="showInfo(post)">
-                    <img class="card-img-top img-responsive" src="{{post.imageURLs[0].url|convertUrlImage}}"
+                    <img class="card-img-top img-responsive img-cus" src="{{post.imageURLs[0].url|convertUrlImage}}"
                         alt="Card image cap">
                     <div class="card-body">
                         <h4 class="card-title">{{post.postName}}</h4>

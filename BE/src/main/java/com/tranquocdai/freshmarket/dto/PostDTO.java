@@ -12,7 +12,7 @@ public class PostDTO {
 
     private Double unitPrice;
 
-    private Long districtId;
+    //private Long districtId;
 
     private String address;
 
@@ -22,7 +22,7 @@ public class PostDTO {
 
     private Long provinceID;
 
-    private Double weightOfItem;
+    //private Double weightOfItem;
 
     private List<String> imageBase64s;
 
@@ -34,13 +34,13 @@ public class PostDTO {
         this.id = id;
     }
 
-    public Double getWeightOfItem() {
-        return weightOfItem;
-    }
-
-    public void setWeightOfItem(Double weightOfItem) {
-        this.weightOfItem = weightOfItem;
-    }
+//    public Double getWeightOfItem() {
+//        return weightOfItem;
+//    }
+//
+//    public void setWeightOfItem(Double weightOfItem) {
+//        this.weightOfItem = weightOfItem;
+//    }
 
     public Long getProvinceID() {
         return provinceID;
@@ -98,13 +98,13 @@ public class PostDTO {
         this.unitPrice = unitPrice;
     }
 
-    public Long getDistrictId() {
-        return districtId;
-    }
-
-    public void setDistrictId(Long districtId) {
-        this.districtId = districtId;
-    }
+//    public Long getDistrictId() {
+//        return districtId;
+//    }
+//
+//    public void setDistrictId(Long districtId) {
+//        this.districtId = districtId;
+//    }
 
     public String getAddress() {
         return address;

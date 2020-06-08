@@ -18,6 +18,10 @@
                     <div class="card-body">
                         <h4 class="card-title">{{dataContent.postName}}</h4>
                         <p class="card-text">{{dataContent.description}}</p>
+                        <div class="row ml-2 mb-2"><i class="mr-2">Cung cấp bởi : </i>
+                            <div class="text-primary">{{dataContent.userName}}</div>
+                            <button type="button" class="btn btn-info cus-view-infor" (click)="viewProfileUser()">Xem thông tin</button>
+                        </div>
                         <div class="row ml-2 mb-2">
                             <i class="mr-2">Đánh giá : </i>
                             <ngb-rating [(rate)]="dataContent.averageRate" max='5' [readonly]="true">
