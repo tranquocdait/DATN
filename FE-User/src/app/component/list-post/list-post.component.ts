@@ -71,7 +71,7 @@ export class ListPostComponent implements OnInit, AfterContentChecked {
         if (this.localStoreManager.getCategoryId() === 0) {
             this.getUrl = 'posts/' + page + '/getAll';
         } else {
-            this.getUrl = 'posts/' + this.localStoreManager.getCategoryId() + '/category';
+            this.getUrl = 'posts/' + this.localStoreManager.getCategoryId() + '/' + page + '/category';
         }
     }
 

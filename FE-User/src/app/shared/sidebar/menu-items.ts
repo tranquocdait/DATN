@@ -2,11 +2,11 @@ import { RouteInfo } from './sidebar.metadata';
 
 export const ROUTES: RouteInfo[] = [
     {
-        path: 'mdi mdi-home',
+        path: '',
         title: 'Danh mục',
-        icon: '',
+        icon: 'mdi mdi-menu',
         categoryId: 0,
-        class: 'nav-small-cap',
+        class: '',
         label: '',
         labelClass: '',
         extralink: true,
@@ -15,7 +15,7 @@ export const ROUTES: RouteInfo[] = [
     {
         path: '/component/list-post',
         title: 'Tất cả các sản phẩm',
-        icon: 'mdi-arrow-collapse-all',
+        icon: '',
         categoryId: 0,
         class: '',
         label: '',

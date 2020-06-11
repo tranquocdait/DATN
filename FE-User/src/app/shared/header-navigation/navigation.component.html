@@ -7,15 +7,18 @@
             <i class="ti-menu"></i></a> </li>
 </ul>
 <ul class="navbar-nav my-lg-0 float-right">
-    <li class="nav-item" id="cart"><span class="mdi mdi-cart mdi-24px" (click)="toStorageCart()">
-        </span>{{number}} đơn hàng</li>
+    <li class="nav-item" id="cart"> <button type="button" class="btn btn-info cus-but" (click)="toStorageCart()"><span
+                class="mdi mdi-cart mdi-24px"></span>
+            đơn hàng<span class="badge badge-light">{{number}}</span>
+        </button></li>
     <li class="nav-item dropdown" ngbDropdown placement="bottom-right" *ngIf="checkLogin">
         <a ngbDropdownToggle class="nav-link dropdown-toggle text-muted waves-effect waves-dark"
             href="javascript:void(0)" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img
                 src="{{urlAvatar}}" alt="user" class="profile-pic"></a>
         <div class="dropdown-menu" ngbDropdownMenu>
             <ul class="dropdown-user">
-                <li><a (click)="onMyProfile()" style="cursor: pointer;"><i class="ti-user"></i> Thông tin cá nhân</a></li>
+                <li><a (click)="onMyProfile()" style="cursor: pointer;"><i class="ti-user"></i> Thông tin cá nhân</a>
+                </li>
                 <li><a (click)="onAction('/component/list-user-post')" style="cursor: pointer;"><i
                             class="ti-shopping-cart"></i>
                         Bài đăng</a></li>
@@ -27,9 +30,11 @@
                         <i class="ti-angle-up" *ngIf="!checkDown" (click)="changeDown('false')"></i> Đơn hàng</a>
                     <div class="dropdown-menu" ngbDropdownMenu style="left: 115px !important;">
                         <ul class="dropdown-user" style="min-width: 120px !important;">
-                            <li><a (click)="onAction('/component/list-item')" style="cursor: pointer;"><i class="fa fa-cart-arrow-down"></i> Bán</a>
+                            <li><a (click)="onAction('/component/list-item')" style="cursor: pointer;"><i
+                                        class="fa fa-cart-arrow-down"></i> Bán</a>
                             </li>
-                            <li><a (click)="onAction('/component/list-buy-item')" style="cursor: pointer;"><i class="fa fa-cart-plus"></i> Mua</a></li>
+                            <li><a (click)="onAction('/component/list-buy-item')" style="cursor: pointer;"><i
+                                        class="fa fa-cart-plus"></i> Mua</a></li>
                         </ul>
                     </div>
                 </li>

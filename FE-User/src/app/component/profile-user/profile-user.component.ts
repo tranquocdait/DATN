@@ -16,8 +16,8 @@ export class ProfileUserComponent implements OnInit {
 
     constructor(private router: Router, private modalService: NgbModal, private endpointFactory: EndpointFactory,
         private localStoreManager: LocalStoreManager) {
-        this.loadData();
         this.setUrl(0);
+        this.loadData();
     }
     @BlockUI() blockUI: NgBlockUI;
     data = new UserElement();

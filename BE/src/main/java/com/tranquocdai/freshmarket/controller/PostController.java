@@ -101,11 +101,10 @@ public class PostController {
     public ResponseEntity getPostByUserId(@RequestParam String userName, @PathVariable("page") int page) {
         try {
             User user = userRepository.findByUserName(userName).get();
+            List<Post> postList = postRepository.findByUser(user);
             if (page < 0) {
-                List<Post> postList = postRepository.findByUser(user);
                 return new ResponseEntity(new SuccessfulResponse(convertListPost(postList)), HttpStatus.OK);
             }
-            List<Post> postList = postRepository.findByUser(user);
             List<PostInfoDTO> postInfoDTOS = convertListPost(postList);
             List<PostInfoDTO> postInfoDTOSResult = new ArrayList<>();
             for (int i = 40 * page; i < (page + 1) * 40; i++) {
@@ -131,12 +130,32 @@ public class PostController {
         }
     }
 
-    @GetMapping("/posts/{id}/category")
-    public ResponseEntity getAllPostByCategory(@PathVariable("id") Long id) {
+    @GetMapping("/posts/{id}/{page}/category")
+    public ResponseEntity getAllPostByCategory(@PathVariable("id") Long id, @PathVariable("page") int page) {
         try {
             Category category = categoryRepository.findById(id).get();
             List<Post> postList = postRepository.findByCategory(category);
-            return new ResponseEntity(new SuccessfulResponse(convertListPost(postList)), HttpStatus.OK);
+            if (page < 0) {
+                return new ResponseEntity(new SuccessfulResponse(convertListPost(postList)), HttpStatus.OK);
+            }
+            List<PostInfoDTO> postInfoDTOS = convertListPost(postList);
+            List<PostInfoDTO> postInfoDTOSResult = new ArrayList<>();
+            for (int i = 40 * page; i < (page + 1) * 40; i++) {
+                if (i < postInfoDTOS.size()) {
+                    postInfoDTOSResult.add(postInfoDTOS.get(i));
+                } else {
+                    break;
+                }
+            }
+            int totalPage = 0;
+            if (postInfoDTOS.size() % 40 == 0) {
+                totalPage = postInfoDTOS.size() / 40;
+            } else {
+                totalPage = postInfoDTOS.size() / 40 + 1;
+            }
+            return ResponseEntity.ok().header("totalPage", totalPage + "")
+                    .header("pageCurrent", page + "")
+                    .body(new SuccessfulResponse(postInfoDTOSResult));
         } catch (Exception ex) {
             Map<String, String> errors = new HashMap<>();
             errors.put("message", "get data not successfully");
