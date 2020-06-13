@@ -34,7 +34,7 @@ public class Post {
     @OneToOne(targetEntity = CalculationUnit.class)
     private CalculationUnit calculationUnit;
 
-    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER,cascade = CascadeType.ALL,targetEntity = ImagePost.class)
+    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER,targetEntity = ImagePost.class)
     private List<ImagePost> imagePosts;
     /*@OneToOne(targetEntity = TypePost.class)
     private TypePost typePost;*/

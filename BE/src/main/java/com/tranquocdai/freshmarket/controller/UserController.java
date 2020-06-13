@@ -183,7 +183,7 @@ public class UserController {
                     avatarRepository.save(avatarNew);
                     user.setAvatar(avatarNew);
                 } else {
-                    storageService.delete(avatar.getUrl());
+                    storageService.delete(user.getAvatar().getUrl());
                     String newImageUrl = storageService.store(updateUserDTO.getImageBase64());
                     avatar.setUrl(newImageUrl);
                     avatarRepository.save(avatar);

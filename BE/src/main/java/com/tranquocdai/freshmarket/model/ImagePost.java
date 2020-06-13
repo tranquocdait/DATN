@@ -13,7 +13,7 @@ public class ImagePost {
 
     private String url;
 
-    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "post_id")
     @JsonIgnore
     private Post post;

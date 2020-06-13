@@ -231,6 +231,7 @@ public class PostController {
             post.setCalculationUnit(calculationUnit);
             Category category = categoryRepository.findById(postAddDTO.getCategoryID()).get();
             post.setCategory(category);
+            postRepository.save(post);
             if (postAddDTO.getImageBase64s() != null && postAddDTO.getImageBase64s().size() > 0) {
                 List<ImagePost> imagePosts = new ArrayList<>();
                 postAddDTO.getImageBase64s().forEach(element -> {
@@ -287,13 +288,18 @@ public class PostController {
             post.setCategory(category);
             postRepository.save(post);
             if (postUpdateDTO.getImageBase64s() != null && postUpdateDTO.getImageBase64s().size() > 0) {
+                post.getImagePosts().forEach(imagePost -> {
+                    storageService.delete(imagePost.getUrl());
+                });
+                List<ImagePost> imagePosts = new ArrayList<>();
                 postUpdateDTO.getImageBase64s().forEach(element -> {
                     ImagePost imagePost = new ImagePost();
                     String newImageUrl = storageService.store(element);
                     imagePost.setUrl(newImageUrl);
                     imagePost.setPost(post);
-                    imagePostRepository.save(imagePost);
+                    imagePosts.add(imagePost);
                 });
+                imagePostRepository.saveAll(imagePosts);
             } else {
                 ImagePost imagePost = new ImagePost();
                 imagePost.setUrl(Constants.URL_POST_DEFAULT);
@@ -334,13 +340,18 @@ public class PostController {
             post.setCategory(category);
             postRepository.save(post);
             if (postUpdateDTO.getImageBase64s() != null && postUpdateDTO.getImageBase64s().size() > 0) {
+                post.getImagePosts().forEach(imagePost -> {
+                    storageService.delete(imagePost.getUrl());
+                });
+                List<ImagePost> imagePosts = new ArrayList<>();
                 postUpdateDTO.getImageBase64s().forEach(element -> {
                     ImagePost imagePost = new ImagePost();
                     String newImageUrl = storageService.store(element);
                     imagePost.setUrl(newImageUrl);
                     imagePost.setPost(post);
-                    imagePostRepository.save(imagePost);
+                    imagePosts.add(imagePost);
                 });
+                imagePostRepository.saveAll(imagePosts);
             } else {
                 ImagePost imagePost = new ImagePost();
                 imagePost.setUrl(Constants.URL_POST_DEFAULT);
