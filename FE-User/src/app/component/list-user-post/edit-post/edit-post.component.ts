@@ -123,7 +123,7 @@ export class EditPostComponent implements OnInit {
     createPost(): void {
         this.blockUI.start();
         const params: any = {
-            //postId: this.editForm.value['postId'],
+            postId: this.editForm.value['postId'],
             postName: this.editForm.value['postName'],
             userName: this.editForm.value['userName'],
             unitPrice: Number.parseFloat(this.editForm.value['unitPrice']),
@@ -187,7 +187,7 @@ export class EditPostComponent implements OnInit {
             const filesAmount = event.target.files.length;
             for (let i = 0; i < filesAmount; i++) {
                 const reader = new FileReader();
-                reader.onload = (event: any) => {
+                reader.onload = () => {
                     this.urls.push(event.target.result);
                 };
                 reader.readAsDataURL(event.target.files[i]);
