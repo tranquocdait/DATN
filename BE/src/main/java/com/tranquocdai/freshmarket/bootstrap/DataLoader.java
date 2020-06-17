@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 
-@Component
+//@Component
 public class DataLoader implements CommandLineRunner {
     @Autowired
     private UserRepository adminRepository;
