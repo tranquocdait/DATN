@@ -3,6 +3,7 @@ package com.tranquocdai.freshmarket.model;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "rate_posts")
 public class RatePost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

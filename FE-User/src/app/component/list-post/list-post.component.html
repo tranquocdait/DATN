@@ -7,9 +7,9 @@
         </div>
         <div class="row mt-2">
             <div class="col-md-5ths col-xs-6" *ngFor="let post of dataList">
-                <div class="card" style="cursor: pointer;" (click)="showInfo(post)">
+                <div class="card shadow" style="cursor: pointer;" (click)="showInfo(post)">
                     <img class="card-img-top img-responsive" src="{{post.imageURLs[0].url|convertUrlImage}}"
-                        alt="Card image cap">
+                        alt="Card image cap" >
                     <div class="card-body">
                         <h4 class="card-title">{{post.postName|convertString:18}}</h4>
                         <!-- <p class="card-text">{{post.description}}</p> -->

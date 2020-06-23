@@ -17,5 +17,7 @@ public interface PostRepository extends JpaRepository<Post,Long> {
     List<Post> findByUser(User user);
     Optional<Post> findByUserAndId(User user,Long id);
     List<Post> findByCategory(Category category);
-    List<Post> findByPostNameContains(String keySearch, Pageable pageable);
+    List<Post> findByPostNameContains(String keySearch);
+    @Query(value = "SELECT * FROM posts where status_post_id=1;",nativeQuery = true)
+    List<Post> findPostActive();
 }

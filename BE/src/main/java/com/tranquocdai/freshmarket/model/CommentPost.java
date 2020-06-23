@@ -5,6 +5,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "comment_posts")
 public class CommentPost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

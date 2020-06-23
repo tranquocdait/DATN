@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Table(name = "Post")
+@Table(name = "posts")
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +24,7 @@ public class Post {
 
     private String address;
 
-   // private Double weightOfItem;
+    // private Double weightOfItem;
 
     private LocalDateTime dateOfPost;
 
@@ -34,7 +34,10 @@ public class Post {
     @OneToOne(targetEntity = CalculationUnit.class)
     private CalculationUnit calculationUnit;
 
-    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER,targetEntity = ImagePost.class)
+    @OneToOne(targetEntity = StatusPost.class)
+    private StatusPost statusPost;
+
+    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER, targetEntity = ImagePost.class)
     private List<ImagePost> imagePosts;
     /*@OneToOne(targetEntity = TypePost.class)
     private TypePost typePost;*/
@@ -53,6 +56,13 @@ public class Post {
         this.imagePosts = imagePosts;
     }
 
+    public StatusPost getStatusPost() {
+        return statusPost;
+    }
+
+    public void setStatusPost(StatusPost statusPost) {
+        this.statusPost = statusPost;
+    }
 //    public Double getWeightOfItem() {
 //        return weightOfItem;
 //    }

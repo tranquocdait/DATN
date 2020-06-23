@@ -5,6 +5,7 @@ import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "purchases")
 public class Purchase {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

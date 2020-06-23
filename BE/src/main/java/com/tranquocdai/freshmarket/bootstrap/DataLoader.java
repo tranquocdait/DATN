@@ -40,6 +40,9 @@ public class DataLoader implements CommandLineRunner {
     StatusPurchaseRepository statusPurchaseRepository;
 
     @Autowired
+    StatusPostRepository statusPostRepository;
+
+    @Autowired
     TransportationTypeRepository transportationTypeRepository;
 
     @Override
@@ -108,6 +111,14 @@ public class DataLoader implements CommandLineRunner {
         StatusPurchase cancel= new StatusPurchase();
         cancel.setStatus("Cancel");
         statusPurchaseRepository.save(cancel);
+
+        StatusPost acvtive= new StatusPost();
+        done.setStatus("Acvtive");
+        statusPostRepository.save(acvtive);
+
+        StatusPost inactive= new StatusPost();
+        cancel.setStatus("Inactive");
+        statusPostRepository.save(inactive);
 
         //add type post
         TypePost sell= new TypePost();

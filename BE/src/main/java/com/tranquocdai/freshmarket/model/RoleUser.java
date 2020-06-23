@@ -7,7 +7,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name="Role_User")
+@Table(name="role_users")
 public class RoleUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

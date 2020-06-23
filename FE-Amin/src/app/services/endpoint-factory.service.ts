@@ -1,15 +1,16 @@
-import { Injectable } from "@angular/core";
-import { Observable, throwError } from "rxjs";
-import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
+import { Injectable } from '@angular/core';
+import { Observable, throwError } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
-import { LocalStoreManager } from "./local-store-manager.service";
-import { stringify } from "querystring";
+import { LocalStoreManager } from './local-store-manager.service';
+import { stringify } from 'querystring';
 @Injectable({
     providedIn: 'root'
 })
 
 export class EndpointFactory {
-    baseUrl: string = "http://localhost:8080/";
+    //baseUrl = 'http://localhost:8080/';
+    baseUrl = 'https://freshmarket-app.herokuapp.com/';
     constructor(private httpclient: HttpClient, private localStoreManager: LocalStoreManager) {
 
     }
@@ -17,16 +18,16 @@ export class EndpointFactory {
         return {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json',
-                "Authorization": this.localStoreManager.getToken()
+                'Authorization': this.localStoreManager.getToken()
             })
-        };;
+        };
     }
 
     public getEndPointByHeader<T>(endpointUrl): Observable<any> {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json',
-                "Authorization": this.localStoreManager.getToken()
+                'Authorization': this.localStoreManager.getToken()
             })
         };
         return this.httpclient.get<T>(this.baseUrl + endpointUrl, httpOptions).pipe<T>(
@@ -42,17 +43,17 @@ export class EndpointFactory {
             })
         );
     }
-    public postByHeader<T>(params: any,suburl: string): Observable<any> {
-        let url: string = this.baseUrl + suburl;
+    public postByHeader<T>(params: any, suburl: string): Observable<any> {
+        const url: string = this.baseUrl + suburl;
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json',
-                "Authorization": this.localStoreManager.getToken()
+                'Authorization': this.localStoreManager.getToken()
             })
         };
-        return this.httpclient.post<T>(url,params, httpOptions).pipe<T>(
+        return this.httpclient.post<T>(url, params, httpOptions).pipe<T>(
             catchError((error) => {
-                return this.handleError(error, () => this.postByHeader(params,suburl));
+                return this.handleError(error, () => this.postByHeader(params, suburl));
             })
         );
     }

@@ -3,7 +3,7 @@ package com.tranquocdai.freshmarket.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Calculation_Unit")
+@Table(name = "calculation_units")
 public class CalculationUnit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -9,6 +9,8 @@ public class Constants {
     public static final Long ID_IMAGE_DEFAULT = 1L;
     public static final Long ID_ROLE_ADMIN = 1L;
     public static final Long ID_USER_DEFAULT = 2L;
+    public static final Long ID_STATUS_DEFAULT = 1L;
+    public static final Long ID_STATUS_DELETE = 2L;
     public static final LocalDateTime LOCAL_DATE_TIME_START = LocalDateTime.of(2020, Month.APRIL,26,0,0);
     private Constants() {
     }

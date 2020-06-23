@@ -3,13 +3,12 @@ package com.tranquocdai.freshmarket.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "avatars")
-public class Avatar {
+@Table(name = "status_posts")
+public class StatusPost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String url;
+    private String status;
 
     public Long getId() {
         return id;
@@ -19,11 +18,11 @@ public class Avatar {
         this.id = id;
     }
 
-    public String getUrl() {
-        return url;
+    public String getStatus() {
+        return status;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

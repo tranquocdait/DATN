@@ -4,7 +4,6 @@ import com.tranquocdai.freshmarket.config.Constants;
 import com.tranquocdai.freshmarket.dto.PostDTO;
 import com.tranquocdai.freshmarket.dto.PostInfoDTO;
 import com.tranquocdai.freshmarket.dto.UserCommentDTO;
-import com.tranquocdai.freshmarket.dto.UserDTO;
 import com.tranquocdai.freshmarket.model.*;
 import com.tranquocdai.freshmarket.repository.*;
 import com.tranquocdai.freshmarket.response.ErrorResponse;
@@ -12,14 +11,10 @@ import com.tranquocdai.freshmarket.response.SuccessfulResponse;
 import com.tranquocdai.freshmarket.service.BaseService;
 import com.tranquocdai.freshmarket.service.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
@@ -64,14 +59,17 @@ public class PostController {
     @Autowired
     StorageService storageService;
 
+    @Autowired
+    StatusPostRepository statusPostRepository;
+
     @GetMapping("/posts/{page}/getAll")
     public ResponseEntity getAllPost(@PathVariable("page") int page) {
         try {
             if (page < 0) {
-                List<Post> postList = postRepository.findAll();
+                List<Post> postList = postRepository.findPostActive();
                 return new ResponseEntity(new SuccessfulResponse(convertListPost(postList)), HttpStatus.OK);
             }
-            List<Post> postList = postRepository.findAll();
+            List<Post> postList = postRepository.findPostActive();
             List<PostInfoDTO> postInfoDTOS = convertListPost(postList);
             List<PostInfoDTO> postInfoDTOSResult = new ArrayList<>();
             for (int i = 40 * page; i < (page + 1) * 40; i++) {
@@ -102,10 +100,18 @@ public class PostController {
         try {
             User user = userRepository.findByUserName(userName).get();
             List<Post> postList = postRepository.findByUser(user);
-            if (page < 0) {
-                return new ResponseEntity(new SuccessfulResponse(convertListPost(postList)), HttpStatus.OK);
+            List<Post> postActive = new ArrayList<>();
+            if (postList != null) {
+                postList.forEach(post -> {
+                    if (post.getStatusPost().getId() != Constants.ID_STATUS_DELETE) {
+                        postActive.add(post);
+                    }
+                });
             }
-            List<PostInfoDTO> postInfoDTOS = convertListPost(postList);
+            if (page < 0) {
+                return new ResponseEntity(new SuccessfulResponse(convertListPost(postActive)), HttpStatus.OK);
+            }
+            List<PostInfoDTO> postInfoDTOS = convertListPost(postActive);
             List<PostInfoDTO> postInfoDTOSResult = new ArrayList<>();
             for (int i = 40 * page; i < (page + 1) * 40; i++) {
                 if (i < postInfoDTOS.size()) {
@@ -135,10 +141,18 @@ public class PostController {
         try {
             Category category = categoryRepository.findById(id).get();
             List<Post> postList = postRepository.findByCategory(category);
-            if (page < 0) {
-                return new ResponseEntity(new SuccessfulResponse(convertListPost(postList)), HttpStatus.OK);
+            List<Post> postActive = new ArrayList<>();
+            if (postList != null) {
+                postList.forEach(post -> {
+                    if (post.getStatusPost().getId() != Constants.ID_STATUS_DELETE) {
+                        postActive.add(post);
+                    }
+                });
             }
-            List<PostInfoDTO> postInfoDTOS = convertListPost(postList);
+            if (page < 0) {
+                return new ResponseEntity(new SuccessfulResponse(convertListPost(postActive)), HttpStatus.OK);
+            }
+            List<PostInfoDTO> postInfoDTOS = convertListPost(postActive);
             List<PostInfoDTO> postInfoDTOSResult = new ArrayList<>();
             for (int i = 40 * page; i < (page + 1) * 40; i++) {
                 if (i < postInfoDTOS.size()) {
@@ -164,11 +178,19 @@ public class PostController {
     }
 
     @GetMapping("/users/posts")
-    public ResponseEntity readPost(Authentication authentication) {
+    public ResponseEntity readPostByUser(Authentication authentication) {
         try {
             User user = baseService.getUser(authentication).get();
             List<Post> postList = postRepository.findByUser(user);
-            return new ResponseEntity(new SuccessfulResponse(convertListPost(postList)), HttpStatus.OK);
+            List<Post> postActive = new ArrayList<>();
+            if (postList != null) {
+                postList.forEach(post -> {
+                    if (post.getStatusPost().getId() != Constants.ID_STATUS_DELETE) {
+                        postActive.add(post);
+                    }
+                });
+            }
+            return new ResponseEntity(new SuccessfulResponse(convertListPost(postActive)), HttpStatus.OK);
         } catch (Exception ex) {
             Map<String, String> errors = new HashMap<>();
             errors.put("message", "get data not successfully");
@@ -195,10 +217,30 @@ public class PostController {
     }
 
     @GetMapping("/posts/search")
-    public ResponseEntity getAllTourist(@RequestParam(value = "keySearch", defaultValue = "") String keyword) {
+    public ResponseEntity getAllPostSearch(@RequestParam(value = "keySearch", defaultValue = "") String keyword) {
         try {
-            List<Post> postList = postRepository.findByPostNameContains(keyword, PageRequest.of(0, 40, Sort.by("dateOfPost").descending()));
-            return new ResponseEntity(new SuccessfulResponse(convertListPost(postList)), HttpStatus.OK);
+            List<Post> postList = postRepository.findByPostNameContains(keyword);
+            List<Post> postActive = new ArrayList<>();
+            if (postList != null) {
+                postList.forEach(post -> {
+                    if (post.getStatusPost().getId() != Constants.ID_STATUS_DELETE) {
+                        postActive.add(post);
+                    }
+                });
+            }
+            List<PostInfoDTO> postInfoDTOS = convertListPost(postActive);
+            List<PostInfoDTO> postInfoDTOSResult = new ArrayList<>();
+            for (int i = 0; i < 40; i++) {
+                if (i < postInfoDTOS.size()) {
+                    postInfoDTOSResult.add(postInfoDTOS.get(i));
+                } else {
+                    break;
+                }
+            }
+            //return new ResponseEntity(new SuccessfulResponse(postInfoDTOSResult), HttpStatus.OK);
+            return ResponseEntity.ok().header("totalPage", 1L + "")
+                    .header("pageCurrent", 0L + "")
+                    .body(new SuccessfulResponse(postInfoDTOSResult));
         } catch (Exception ex) {
             Map<String, String> errors = new HashMap<>();
             errors.put("message", "get data not successfully");
@@ -231,6 +273,8 @@ public class PostController {
             post.setCalculationUnit(calculationUnit);
             Category category = categoryRepository.findById(postAddDTO.getCategoryID()).get();
             post.setCategory(category);
+            StatusPost statusPost = statusPostRepository.findById(Constants.ID_STATUS_DEFAULT).get();
+            post.setStatusPost(statusPost);
             postRepository.save(post);
             if (postAddDTO.getImageBase64s() != null && postAddDTO.getImageBase64s().size() > 0) {
                 List<ImagePost> imagePosts = new ArrayList<>();
@@ -374,7 +418,11 @@ public class PostController {
                 errors.put("message", "id has not existed");
                 return new ResponseEntity(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
             }
-            postRepository.deleteById(postID);
+            //postRepository.deleteById(postID);
+            Post post = postRepository.findById(postID).get();
+            StatusPost statusPost = statusPostRepository.findById(Constants.ID_STATUS_DELETE).get();
+            post.setStatusPost(statusPost);
+            postRepository.save(post);
             return new ResponseEntity(new SuccessfulResponse("delete successfully"), HttpStatus.OK);
         } catch (Exception ex) {
             Map<String, String> errors = new HashMap<>();
@@ -446,15 +494,19 @@ public class PostController {
     private float calculateScore(Post post) {
         List<RatePost> ratePostList = ratePostRepository.findByPost(post);
         int s = 0;
+        int cancel = 0;
         if (ratePostList.size() > 0) {
             for (RatePost element : ratePostList) {
                 s += (element.getRateNumber().intValue() - 3);
             }
         }
-        List<Purchase> purchasesCancel = purchaseRepository.findPurchaseCancel(post.getId());
-        //List<Purchase> purchasesNotCancel = purchaseRepository.findPurchaseNotCancel(post.getId());
         List<Purchase> purchases = purchaseRepository.findByPost(post);
-        s += purchases.size() - 2 * purchasesCancel.size();
+        if (purchases.size() > 0) {
+            for (Purchase element : purchases) {
+                cancel++;
+            }
+        }
+        s += purchases.size() - 2 * cancel;
         int sign = 0;
         if (s > 0) {
             sign = 1;
@@ -468,4 +520,5 @@ public class PostController {
         }
         return (float) Math.log10(n) + (float) (sign * seconds) / 45000;
     }
+
 }

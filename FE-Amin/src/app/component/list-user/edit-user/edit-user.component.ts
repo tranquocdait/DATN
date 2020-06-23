@@ -44,7 +44,6 @@ export class EditUserComponent implements OnInit {
     }
 
     modeAdd(): void {
-        console.log(this.roleList);
         this.editForm = this.formBuilder.group({
             userId: ['', Validators.required],
             userName: ['', Validators.required],
@@ -115,7 +114,6 @@ export class EditUserComponent implements OnInit {
         }
     }
     checkForm(): boolean {
-        console.log(this.editForm.value['confirmPassword'].length);
         if (this.editForm.value['confirmPassword'].length > 6) {
             if (this.editForm.value['password'] !== this.editForm.value['confirmPassword']) {
                 this.messageError = this.messageErrorArray.corfirmPassword;

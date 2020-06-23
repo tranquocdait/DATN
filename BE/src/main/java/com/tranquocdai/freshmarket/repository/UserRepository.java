@@ -13,11 +13,11 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUserName(String username);
-    List<User> findByFullNameContains(String keySearch);
+    //List<User> findByFullNameContains(String keySearch);
 
-    @Query(value = "SELECT * FROM freshmarket.user where role_user_id!=1 ORDER BY full_name DESC;",nativeQuery = true)
+    @Query(value = "SELECT * FROM users where role_user_id!=1 ORDER BY full_name DESC;",nativeQuery = true)
     List<User> findUsers();
 
-    @Query(value = "SELECT * FROM user WHERE full_name LIKE ?1 and role_user_id!=1 ORDER BY full_name DESC;",nativeQuery = true)
+    @Query(value = "SELECT * FROM users WHERE full_name LIKE ?1 and role_user_id!=1 ORDER BY full_name DESC;",nativeQuery = true)
     List<User> findSearchUsers(String search);
 }
