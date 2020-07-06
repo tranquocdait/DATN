@@ -334,6 +334,7 @@ public class PostController {
             if (postUpdateDTO.getImageBase64s() != null && postUpdateDTO.getImageBase64s().size() > 0) {
                 post.getImagePosts().forEach(imagePost -> {
                     storageService.delete(imagePost.getUrl());
+                    imagePostRepository.delete(imagePost);
                 });
                 List<ImagePost> imagePosts = new ArrayList<>();
                 postUpdateDTO.getImageBase64s().forEach(element -> {
@@ -344,12 +345,13 @@ public class PostController {
                     imagePosts.add(imagePost);
                 });
                 imagePostRepository.saveAll(imagePosts);
-            } else {
-                ImagePost imagePost = new ImagePost();
-                imagePost.setUrl(Constants.URL_POST_DEFAULT);
-                imagePost.setPost(post);
-                imagePostRepository.save(imagePost);
             }
+//            else {
+//                ImagePost imagePost = new ImagePost();
+//                imagePost.setUrl(Constants.URL_POST_DEFAULT);
+//                imagePost.setPost(post);
+//                imagePostRepository.save(imagePost);
+//            }
             return new ResponseEntity(new SuccessfulResponse(post), HttpStatus.OK);
         } catch (Exception ex) {
             Map<String, String> errors = new HashMap<>();
@@ -386,6 +388,7 @@ public class PostController {
             if (postUpdateDTO.getImageBase64s() != null && postUpdateDTO.getImageBase64s().size() > 0) {
                 post.getImagePosts().forEach(imagePost -> {
                     storageService.delete(imagePost.getUrl());
+                    imagePostRepository.delete(imagePost);
                 });
                 List<ImagePost> imagePosts = new ArrayList<>();
                 postUpdateDTO.getImageBase64s().forEach(element -> {
@@ -396,12 +399,13 @@ public class PostController {
                     imagePosts.add(imagePost);
                 });
                 imagePostRepository.saveAll(imagePosts);
-            } else {
-                ImagePost imagePost = new ImagePost();
-                imagePost.setUrl(Constants.URL_POST_DEFAULT);
-                imagePost.setPost(post);
-                imagePostRepository.save(imagePost);
             }
+//            else {
+//                ImagePost imagePost = new ImagePost();
+//                imagePost.setUrl(Constants.URL_POST_DEFAULT);
+//                imagePost.setPost(post);
+//                imagePostRepository.save(imagePost);
+//            }
             return new ResponseEntity(new SuccessfulResponse(post), HttpStatus.OK);
         } catch (Exception ex) {
             Map<String, String> errors = new HashMap<>();

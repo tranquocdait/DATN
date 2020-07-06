@@ -1,6 +1,7 @@
 package com.tranquocdai.freshmarket.model;
 
 import org.hibernate.annotations.Fetch;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -16,6 +17,7 @@ public class Post {
 
     private String postName;
 
+    @Column(length = 2550)
     private String description;
 
     private Double unitPrice;
